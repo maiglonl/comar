@@ -12,9 +12,17 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+	return view('welcome');
 });
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::group(['prefix' => 'app', 'as' => 'app.'], function () {
+	/* Views */
+	Route::get('products/list', 'ProductController@listProducts')->name('products.list');
+
+	/* Data */
+	Route::resource('products', 'ProductController');
+});
