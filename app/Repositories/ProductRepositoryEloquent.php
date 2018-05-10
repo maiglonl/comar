@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use App\Repositories\productRepository;
+use App\Repositories\ProductRepository;
 use App\Models\Product;
 use App\Validators\ProductValidator;
 
@@ -25,7 +25,17 @@ class ProductRepositoryEloquent extends BaseRepository implements ProductReposit
         return Product::class;
     }
 
-    
+    /**
+    * Specify Validator class name
+    *
+    * @return mixed
+    */
+    public function validator()
+    {
+
+        return ProductValidator::class;
+    }
+
 
     /**
      * Boot up the repository, pushing criteria
@@ -33,6 +43,15 @@ class ProductRepositoryEloquent extends BaseRepository implements ProductReposit
     public function boot()
     {
         $this->pushCriteria(app(RequestCriteria::class));
+    }
+    
+
+    /**
+     * Count files 
+     */
+    public function countFiles(){
+    	$path = env('FILES_PATH_PRODUCTS')."/".$this->model->id;
+        return count();
     }
     
 }

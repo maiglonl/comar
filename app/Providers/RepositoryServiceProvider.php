@@ -7,7 +7,7 @@ use Illuminate\Support\ServiceProvider;
 class RepositoryServiceProvider extends ServiceProvider
 {
     /**
-     * Bootstrap the application services.
+     * Bootstrap services.
      *
      * @return void
      */
@@ -17,13 +17,13 @@ class RepositoryServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the application services.
+     * Register services.
      *
      * @return void
      */
     public function register()
     {
-		$this->app->bind(\App\Repository\ProductRepository::class, \App\Repository\ProductRepositoryEloquent::class);
+        $this->app->bind(\App\Repositories\ProductRepository::class, \App\Repositories\ProductRepositoryEloquent::class);
         //:end-bindings:
     }
 }

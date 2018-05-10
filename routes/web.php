@@ -19,10 +19,10 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::group(['prefix' => 'app', 'as' => 'app.'], function () {
-	/* Views */
-	Route::get('products/list', 'ProductController@listProducts')->name('products.list');
-
-	/* Data */
-	Route::resource('products', 'ProductController');
+Route::group(['prefix' => 'app', 'as' => 'app.', 'middleware' => ['auth']], function () {
+	Route::get('/home', 'HomeController@appIndex')->name('home');
+	
+	Route::get('products/find', 'ProductsController@find')->name('products.find');
+	Route::get('products/all', 'ProductsController@all')->name('products.all');
+	Route::resource('products', 'ProductsController');
 });

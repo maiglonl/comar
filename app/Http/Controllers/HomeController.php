@@ -17,12 +17,22 @@ class HomeController extends Controller
     }
 
     /**
-     * Show the application dashboard.
+     * Show the static dashboard.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
         return view('home');
+    }
+
+    /**
+     * Show the app dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function appIndex()
+    {
+        return view('app.home');
     }
 }

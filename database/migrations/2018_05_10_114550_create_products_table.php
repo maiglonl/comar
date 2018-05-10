@@ -16,12 +16,12 @@ class CreateProductsTable extends Migration
 	public function up()
 	{
 		Schema::create('products', function(Blueprint $table) {
-			$table->increments('id');
-			$table->string('name');
-			$table->text('description');
-			$table->float('value', 12, 2)->nullable();
-			$table->boolean('status')->nullable()->default(true);
-			$table->timestamps();
+            $table->increments('id');
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->float('value', 9, 2)->nullable();
+            $table->boolean('status')->nullable()->default(true);
+            $table->timestamps();
 		});
 	}
 

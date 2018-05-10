@@ -8,7 +8,27 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
-.navbar-laravel {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-}
+// DataTable
+@import "node_modules/datatables.net-bs4/css/dataTables.bootstrap4";
+@import "node_modules/datatables.net-buttons-bs4/css/buttons.bootstrap4";
+@import "node_modules/datatables.net-responsive-bs4/css/responsive.bootstrap4";
+@import "node_modules/datatables.net-select-bs4/css/select.bootstrap4";
+
+// Custom
+@import "custom";
+
+// FontAwasome
+$fa-font-path: "../../../node_modules/font-awesome/fonts" !default;
+@import 'node_modules/font-awesome/scss/font-awesome.scss';
+
+// Simple-line-icons
+@import 'node_modules/simple-line-icons/scss/simple-line-icons.scss';
+
+// Fancyapps
+@import "node_modules/@fancyapps/fancybox/dist/jquery.fancybox.min";
+
+// Sweetalert2
+@import "node_modules/sweetalert2/dist/sweetalert2.min";
+
+// Toastr
+@import "node_modules/toastr/toastr.scss";
