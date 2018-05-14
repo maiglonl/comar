@@ -24,7 +24,9 @@
     <div id="app">
 		@include('app.menu')
         <main class="py-4">
-            @yield('content')
+        	<div class="container">
+            	@yield('content')
+        	</div>
 
             @yield('scripts')
         </main>

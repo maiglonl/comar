@@ -45,13 +45,4 @@ class ProductRepositoryEloquent extends BaseRepository implements ProductReposit
         $this->pushCriteria(app(RequestCriteria::class));
     }
     
-
-    /**
-     * Count files 
-     */
-    public function countFiles(){
-    	$path = env('FILES_PATH_PRODUCTS')."/".$this->model->id;
-        return count();
-    }
-    
 }

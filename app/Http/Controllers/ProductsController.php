@@ -103,15 +103,7 @@ class ProductsController extends Controller {
 	 */
 	public function show($id) {
 		$product = $this->repository->find($id);
-
-		if (request()->wantsJson()) {
-
-			return response()->json([
-				'data' => $product,
-			]);
-		}
-
-		return view('products.show', compact('product'));
+		return view('app.products.show', compact('product'));
 	}
 
 	/**
@@ -132,7 +124,6 @@ class ProductsController extends Controller {
 	 */
 	public function edit($id) {
 		$product = $this->repository->find($id);
-
 		return view('app.products.edit', compact('product'));
 	}
 

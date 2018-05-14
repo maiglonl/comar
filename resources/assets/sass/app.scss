@@ -18,11 +18,20 @@
 @import "custom";
 
 // FontAwasome
-$fa-font-path: "../../../node_modules/font-awesome/fonts" !default;
-@import 'node_modules/font-awesome/scss/font-awesome.scss';
+//$fa-font-path: "../fonts/font-awesome/fonts" !default;
+
+@import '../fonts/fontawesome-free-5.0.13/web-fonts-with-css/scss/fa-brands';
+@import '../fonts/fontawesome-free-5.0.13/web-fonts-with-css/scss/fa-regular';
+@import '../fonts/fontawesome-free-5.0.13/web-fonts-with-css/scss/fa-solid';
+@import '../fonts/fontawesome-free-5.0.13/web-fonts-with-css/scss/fontawesome';
+//$fa-font-path:   "../webfonts";
+//https://fontawesome.com/how-to-use/web-fonts-with-css#additional-styling
 
 // Simple-line-icons
 @import 'node_modules/simple-line-icons/scss/simple-line-icons.scss';
+
+// Material-design-icons
+@import 'node_modules/material-design-icons/iconfont/material-icons';
 
 // Fancyapps
 @import "node_modules/@fancyapps/fancybox/dist/jquery.fancybox.min";

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Class Product.
@@ -20,6 +21,13 @@ class Product extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = [	'name', 'value', 'descroption', 'status'];
+    protected $fillable = [	'name', 'value', 'description', 'status'];
+
+	protected $appends = ['files'];
+
+    public function getFilesAttribute(){
+    	$path = env('FILES_PATH_PRODUCTS')."/".$this->id;
+        return Storage::files($path);
+    }
 
 }
