@@ -25,4 +25,8 @@ Route::group(['prefix' => 'app', 'as' => 'app.', 'middleware' => ['auth']], func
 	Route::get('products/find', 'ProductsController@find')->name('products.find');
 	Route::get('products/all', 'ProductsController@all')->name('products.all');
 	Route::resource('products', 'ProductsController');
+
+	Route::get('users/find', 'UsersController@find')->name('users.find');
+	Route::get('users/all', 'UsersController@all')->name('users.all');
+	Route::resource('users', 'UsersController');
 });

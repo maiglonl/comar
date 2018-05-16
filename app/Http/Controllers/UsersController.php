@@ -7,34 +7,34 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
-use App\Http\Requests\ProductCreateRequest;
-use App\Http\Requests\ProductUpdateRequest;
-use App\Repositories\ProductRepository;
-use App\Validators\ProductValidator;
+use App\Http\Requests\UserCreateRequest;
+use App\Http\Requests\UserUpdateRequest;
+use App\Repositories\UserRepository;
+use App\Validators\UserValidator;
 
 /**
- * Class ProductsController.
+ * Class UsersController.
  *
  * @package namespace App\Http\Controllers;
  */
-class ProductsController extends Controller {
+class UsersController extends Controller {
 	/**
-	 * @var ProductRepository
+	 * @var UserRepository
 	 */
 	protected $repository;
 
 	/**
-	 * @var ProductValidator
+	 * @var UserValidator
 	 */
 	protected $validator;
 
 	/**
-	 * ProductsController constructor.
+	 * UsersController constructor.
 	 *
-	 * @param ProductRepository $repository
-	 * @param ProductValidator $validator
+	 * @param UserRepository $repository
+	 * @param UserValidator $validator
 	 */
-	public function __construct(ProductRepository $repository, ProductValidator $validator) {
+	public function __construct(UserRepository $repository, UserValidator $validator) {
 		$this->repository = $repository;
 		$this->validator  = $validator;
 	}
@@ -46,9 +46,9 @@ class ProductsController extends Controller {
 	 */
 	public function index() {
 		$this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-		$products = $this->repository->all();
+		$users = $this->repository->all();
 
-		return view('app.products.index', compact('products'));
+		return view('app.users.index', compact('users'));
 	}
 
 	/**
@@ -59,8 +59,8 @@ class ProductsController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show($id) {
-		$product = $this->repository->find($id);
-		return view('app.products.show', compact('product'));
+		$user = $this->repository->find($id);
+		return view('app.users.show', compact('user'));
 	}
 
 	/**
@@ -69,7 +69,7 @@ class ProductsController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function create() {
-		return view('app.products.create', compact('product'));
+		return view('app.users.create', compact('user'));
 	}
 
 	/**
@@ -80,26 +80,26 @@ class ProductsController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function edit($id) {
-		$product = $this->repository->find($id);
-		return view('app.products.edit', compact('product'));
+		$user = $this->repository->find($id);
+		return view('app.users.edit', compact('user'));
 	}
 
 	/**
 	 * Store a newly created resource in storage.
 	 *
-	 * @param  ProductCreateRequest $request
+	 * @param  UserCreateRequest $request
 	 *
 	 * @return \Illuminate\Http\Response
 	 *
 	 * @throws \Prettus\Validator\Exceptions\ValidatorException
 	 */
-	public function store(ProductCreateRequest $request) {
+	public function store(UserCreateRequest $request) {
 		try {
 			$this->validator->with($request->except('_token'))->passesOrFail(ValidatorInterface::RULE_CREATE);
-			$product = $this->repository->create($request->except('_token'));
+			$user = $this->repository->create($request->except('_token'));
 			$response = [
-				'message' => 'Product created.',
-				'data'    => $product->toArray(),
+				'message' => 'User created.',
+				'data'    => $user->toArray(),
 			];
 			return response()->json($response);
 		} catch (ValidatorException $e) {
@@ -113,20 +113,20 @@ class ProductsController extends Controller {
 	/**
 	 * Update the specified resource in storage.
 	 *
-	 * @param  ProductUpdateRequest $request
+	 * @param  UserUpdateRequest $request
 	 * @param  string            $id
 	 *
 	 * @return Response
 	 *
 	 * @throws \Prettus\Validator\Exceptions\ValidatorException
 	 */
-	public function update(ProductUpdateRequest $request, $id) {
+	public function update(UserUpdateRequest $request, $id) {
 		try {
 			$this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
-			$product = $this->repository->update($request->all(), $id);
+			$user = $this->repository->update($request->all(), $id);
 			$response = [
-				'message' => 'Product updated.',
-				'data'    => $product->toArray(),
+				'message' => 'User updated.',
+				'data'    => $user->toArray(),
 			];
 			return response()->json($response);
 		} catch (ValidatorException $e) {
@@ -147,13 +147,13 @@ class ProductsController extends Controller {
 	public function destroy($id) {
 		$deleted = $this->repository->delete($id);
 		return response()->json([
-			'message' => 'Product deleted.',
+			'message' => 'User deleted.',
 			'deleted' => $deleted,
 		]);
 	}
 
 	/**
-	 * Return the specified product.
+	 * Return the specified user.
 	 *
 	 * @param  int $id
 	 */
@@ -162,7 +162,7 @@ class ProductsController extends Controller {
 	}
 
 	/**
-	 * Return list with all products.
+	 * Return list with all users.
 	 */
 	public function all(){
 		return $this->repository->all();

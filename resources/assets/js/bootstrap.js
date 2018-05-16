@@ -1,8 +1,13 @@
-
+/* Lodash */
 window._ = require('lodash');
+
+/* Popper */
 window.Popper = require('popper.js').default;
 
+/* jQuery*/
 window.$ = window.jQuery = require('jquery');
+
+/* Bootstrap */
 require('bootstrap');
 
 /* DataTables */
@@ -26,13 +31,13 @@ require('jquery-match-height');
 
 /* Toastr */
 window.toastr = require('toastr');
+toastr.options.timeOut = 5000;
 
+/* Axios */
 window.axios = require('axios');
-
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 let token = document.head.querySelector('meta[name="csrf-token"]');
-
 if (token) {
     window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
 } else {

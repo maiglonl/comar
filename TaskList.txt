@@ -1,0 +1,26 @@
+TODO
+	CRUD Distribuidor - Criar view para admin registrar/editar
+	CRUD Distribuidor - Criar view para distribuidor registrar/editar
+	CRUD Distribuidor - Criar view do User
+	CRUD Distribuidor - Função para alterar senha
+	CRUD Vendedor - 
+	CRUD Contas Bancarias - 
+	CRUD Produtos - 
+	CRUD Pedidos - 
+	Gerenciamento Imagens - 
+	Controle Vendas - 
+	Controle Envio - 
+	Controle Financeiro - 
+	Controle Preço Entrega - 
+	Dashboard Vendedor/Distribuidor - 
+	Dashboard Admin - 
+	Integrar Pagamento - 
+	Layout Interno - 
+	Layout Externo - 
+
+
+DOING
+	CRUD Distribuidor - Criar e corrigir entity User
+
+
+DONE

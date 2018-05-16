@@ -78307,11 +78307,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_jquery_validation_dist_additional_methods___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_jquery_validation_dist_additional_methods__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_jquery_validation_dist_localization_messages_pt_BR__ = __webpack_require__("./node_modules/jquery-validation/dist/localization/messages_pt_BR.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_jquery_validation_dist_localization_messages_pt_BR___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_jquery_validation_dist_localization_messages_pt_BR__);
-
+/* Lodash */
 window._ = __webpack_require__("./node_modules/lodash/lodash.js");
+
+/* Popper */
 window.Popper = __webpack_require__("./node_modules/popper.js/dist/esm/popper.js").default;
 
+/* jQuery*/
 window.$ = window.jQuery = __webpack_require__("./node_modules/jquery/dist/jquery.js");
+
+/* Bootstrap */
 __webpack_require__("./node_modules/bootstrap/dist/js/bootstrap.js");
 
 /* DataTables */
@@ -78335,13 +78340,13 @@ __webpack_require__("./node_modules/jquery-match-height/dist/jquery.matchHeight.
 
 /* Toastr */
 window.toastr = __webpack_require__("./node_modules/toastr/toastr.js");
+toastr.options.timeOut = 5000;
 
+/* Axios */
 window.axios = __webpack_require__("./node_modules/axios/index.js");
-
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 var token = document.head.querySelector('meta[name="csrf-token"]');
-
 if (token) {
     window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
 } else {

@@ -1,2 +1,2 @@
-require('blueimp-file-upload/js/jquery.fileupload');
+//require('blueimp-file-upload/js/jquery.fileupload');
 
