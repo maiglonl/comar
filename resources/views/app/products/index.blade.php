@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
 	<div class="page-title">
 		<h3>
 			Produtos | <small class="text-muted">Listagem de Produtos cadastrados</small>

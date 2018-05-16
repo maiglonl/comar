@@ -68,29 +68,18 @@ class ProductsController extends Controller {
 	 */
 	public function store(ProductCreateRequest $request) {
 		try {
-
 			$this->validator->with($request->except('_token'))->passesOrFail(ValidatorInterface::RULE_CREATE);
-
 			$product = $this->repository->create($request->except('_token'));
 			$response = [
 				'message' => 'Product created.',
 				'data'    => $product->toArray(),
 			];
-
-			if ($request->wantsJson()) {
-				return response()->json($response);
-			}
-
-			return redirect()->back()->with('message', $response['message']);
+			return response()->json($response);
 		} catch (ValidatorException $e) {
-			if ($request->wantsJson()) {
-				return response()->json([
-					'error'   => true,
-					'message' => $e->getMessageBag()
-				]);
-			}
-
-			return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+			return response()->json([
+				'error'   => true,
+				'message' => $e->getMessageBag()
+			]);
 		}
 	}
 
@@ -139,33 +128,18 @@ class ProductsController extends Controller {
 	 */
 	public function update(ProductUpdateRequest $request, $id) {
 		try {
-
 			$this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
-
 			$product = $this->repository->update($request->all(), $id);
-
 			$response = [
 				'message' => 'Product updated.',
 				'data'    => $product->toArray(),
 			];
-
-			if ($request->wantsJson()) {
-
-				return response()->json($response);
-			}
-
-			return redirect()->back()->with('message', $response['message']);
+			return response()->json($response);
 		} catch (ValidatorException $e) {
-
-			if ($request->wantsJson()) {
-
-				return response()->json([
-					'error'   => true,
-					'message' => $e->getMessageBag()
-				]);
-			}
-
-			return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+			return response()->json([
+				'error'   => true,
+				'message' => $e->getMessageBag()
+			]);
 		}
 	}
 
@@ -178,16 +152,10 @@ class ProductsController extends Controller {
 	 */
 	public function destroy($id) {
 		$deleted = $this->repository->delete($id);
-
-		if (request()->wantsJson()) {
-
-			return response()->json([
-				'message' => 'Product deleted.',
-				'deleted' => $deleted,
-			]);
-		}
-
-		return redirect()->back()->with('message', 'Product deleted.');
+		return response()->json([
+			'message' => 'Product deleted.',
+			'deleted' => $deleted,
+		]);
 	}
 
 	/**
