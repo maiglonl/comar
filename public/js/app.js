@@ -78544,6 +78544,10 @@ $(function () {
 	$(document).on('click', '.closeFancybox', function () {
 		$.fancybox.close();
 	});
+	$().fancybox({
+		selector: '[data-fancybox="gallery"]',
+		loop: true
+	});
 });
 
 /*

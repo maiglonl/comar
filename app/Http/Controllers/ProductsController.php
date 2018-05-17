@@ -11,6 +11,8 @@ use App\Http\Requests\ProductCreateRequest;
 use App\Http\Requests\ProductUpdateRequest;
 use App\Repositories\ProductRepository;
 use App\Validators\ProductValidator;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 /**
  * Class ProductsController.
@@ -166,5 +168,52 @@ class ProductsController extends Controller {
 	 */
 	public function all(){
 		return $this->repository->all();
+	}
+
+	/**
+	 * Delete specific image from Product.
+	 */
+	public function deleteImage($id, $index){
+		$path = env('FILES_PATH_PRODUCTS')."/".$id."/";
+		$files = Storage::files($path);
+		Storage::delete($files[$index]);
+		$this->refreshImageNames($id);
+		return response()->json([
+			'message' => 'Image deleted.'
+		]);
+	}
+
+	/**
+	 * Upload specific image to Product.
+	 */
+	public function uploadImage(Request $request, $id){
+		$path = env('FILES_PATH_PRODUCTS')."/".$id."/";
+		foreach ($request->file('fileInput') as $key => $file) {
+			$files = Storage::files($path);
+			$store = Storage::putFileAs($path, $file, count($files)."_".date('YmdHis').".".$file->getClientOriginalExtension());
+		}
+		return response()->json([
+			'message' => 'Images uploaded.'
+		]);
+	}
+
+	/* Altera o indice da imagem para servid de capa */
+	public function reindexImage(Request $request, $id, $index){
+		$path = env('FILES_PATH_PRODUCTS')."/".$id."/";
+		$files = Storage::files($path);
+		Storage::move($file, "000_".date('YmdHis').".".File::extension($file));
+		$this->refreshImageNames($id);
+		return response()->json([
+			'message' => 'Images uploaded.'
+		]);
+	}
+
+	private function refreshImageNames($id){
+		$path = env('FILES_PATH_PRODUCTS')."/".$id."/";
+		$files = Storage::files($path);
+		foreach ($files as $key => $file) {
+			Storage::move($file, $path.$key."_".date('YmdHis').".".File::extension($file));
+		}
+		return true;
 	}
 }
