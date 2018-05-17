@@ -1,8 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-	<script type="text/javascript" src="{{ mix('js/fileinput.js') }}"></script>
-	
 	<div class="page-title">
 		<h3>
 			Produtos | <small class="text-muted">Descrição do produto</small>
@@ -50,8 +48,15 @@
 		<div class="col-sm-8">
 			<div class="card">
 				<div class="card-body">
+					@if(count($product->files) > 0)
+						<div class="row">
+							@foreach ($product->files as $file)
+								<img src="{{ asset(trim($file)) }}">
+							@endforeach
+						</div>
+					@endif
 					<div class="form-controler">
-						<label>Imagens:</label>
+						{{count($product->files)}}
 						<div class="files-input">
 							<input id="fileupload" type="file" name="files[]" data-url="server/php/" multiple>
 						</div>
@@ -61,14 +66,8 @@
 		</div>
 	</div>
 	<script type="text/javascript">
-		$(document).ready(function() {$('#fileupload').fileupload({
-        dataType: 'json',
-        done: function (e, data) {
-            $.each(data.result.files, function (index, file) {
-                $('<p/>').text(file.name).appendTo(document.body);
-            });
-        }
-    });
+		$(document).ready(function() {
+			
 		});
 
 		function openFormEditProduct(){

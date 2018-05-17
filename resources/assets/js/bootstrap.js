@@ -6,6 +6,7 @@ window.Popper = require('popper.js').default;
 
 /* jQuery*/
 window.$ = window.jQuery = require('jquery');
+//require('jquery-ui');
 
 /* Bootstrap */
 require('bootstrap');

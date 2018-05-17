@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-	<script type="text/javascript" src="{{ mix('js/fileinput.js') }}"></script>
 	
 	<div class="page-title">
 		<h3>

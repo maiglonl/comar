@@ -26,7 +26,7 @@ class Product extends Model implements Transformable
 	protected $appends = ['files'];
 
     public function getFilesAttribute(){
-    	$path = env('FILES_PATH_PRODUCTS')."/".$this->id;
+    	$path = env('FILES_PATH_PRODUCTS')."/".$this->id."/";
         return Storage::files($path);
     }
 
