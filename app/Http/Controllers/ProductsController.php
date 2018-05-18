@@ -197,14 +197,26 @@ class ProductsController extends Controller {
 		]);
 	}
 
-	/* Altera o indice da imagem para servid de capa */
-	public function reindexImage(Request $request, $id, $index){
+	/* Altera o indice da imagem */
+	public function pullImage(Request $request, $id, $index){
 		$path = env('FILES_PATH_PRODUCTS')."/".$id."/";
 		$files = Storage::files($path);
-		Storage::move($file, "000_".date('YmdHis').".".File::extension($file));
+		$minIndex = $index < 1 ? 0 : $index-1;
+		Storage::move($files[$index], $path.$minIndex.".".File::extension($files[$index]));
 		$this->refreshImageNames($id);
 		return response()->json([
-			'message' => 'Images uploaded.'
+			'message' => 'Image updated.'
+		]);
+	}
+	/* Altera o indice da imagem */
+	public function pushImage(Request $request, $id, $index){
+		$path = env('FILES_PATH_PRODUCTS')."/".$id."/";
+		$files = Storage::files($path);
+		$newIndex = $index+1;
+		Storage::move($files[$index], $path.$newIndex."_99999999999999.".File::extension($files[$index]));
+		$this->refreshImageNames($id);
+		return response()->json([
+			'message' => 'Image updated.'
 		]);
 	}
 

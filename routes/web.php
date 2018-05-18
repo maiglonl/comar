@@ -25,7 +25,8 @@ Route::group(['prefix' => 'app', 'as' => 'app.', 'middleware' => ['auth']], func
 	Route::get('products/find/{id}', 'ProductsController@find')->name('products.find');
 	Route::get('products/all', 'ProductsController@all')->name('products.all');
 	Route::post('products/image/{id}', 'ProductsController@uploadImage')->name('products.image.upload');
-	Route::put('products/image/{id}/{index}', 'ProductsController@reindexImage')->name('products.image.reindex');
+	Route::put('products/image/pull/{id}/{index}', 'ProductsController@pullImage')->name('products.image.pull');
+	Route::put('products/image/push/{id}/{index}', 'ProductsController@pushImage')->name('products.image.push');
 	Route::delete('products/image/{id}/{index}', 'ProductsController@deleteImage')->name('products.image.delete');
 	Route::resource('products', 'ProductsController');
 

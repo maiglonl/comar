@@ -60,44 +60,46 @@
 			<div class="col-sm-9">
 				<div class="card">
 					<div class="card-body">
-						<div class="row" v-if="product.files.length > 0">
-							<div class="col-sm-4" v-for="(file, key) in product.files">
-								<div class="bs_hovereffect rounded">
-									<img :src="product.thumbnails[key]" class="img-fluid img-thumbnail rounded">
-									<div class="overlay">
-										<div class="rotate text-center">
-											<p class="bs_group1">
-												<a :href="file" data-fancybox="gallery" title="Visualizar Imagem">
-													{!! ICONS_SEARCH !!}
-												</a>
-												<a href="#" onclick="location.reload()" title="Atualizar Imagem">
-													{!! ICONS_REFRESH !!}
-												</a>
-											</p>
-											<hr><hr>
-											<p class="bs_group2">
-												<a href="#" title="Opções da Imagem">
-													{!! ICONS_OPTIONS !!}
-												</a>
-												<a href="#" @click.prevent="removeFile(product.id, key)" title="Remover Imagem">
-													{!! ICONS_REMOVE !!}
-												</a>
-											</p>
+						<div class="col">
+							<div class="row" v-if="product.files.length > 0">
+								<div class="col-xs-6 col-md-6 col-lg-4 col-xl-3" style="padding: 10px;" v-for="(file, key) in product.files">
+									<div class="bs_hovereffect rounded">
+										<img :src="product.thumbnails[key]" class="img-fluid img-thumbnail rounded">
+										<div class="overlay">
+											<div class="rotate text-center">
+												<p class="bs_group1">
+													<a href="#" @click.prevent="imagePull(product.id, key)" title="Atualizar Imagem">
+														{!! ICONS_ARROW_LEFT !!}
+													</a>
+													<a href="#" @click.prevent="imagePush(product.id, key)" title="Opções da Imagem">
+														{!! ICONS_ARROW_RIGHT !!}
+													</a>
+												</p>
+												<hr><hr>
+												<p class="bs_group2">
+													<a :href="file" data-fancybox="gallery" title="Visualizar Imagem">
+														{!! ICONS_SEARCH !!}
+													</a>
+													<a href="#" @click.prevent="removeFile(product.id, key)" title="Remover Imagem">
+														{!! ICONS_REMOVE !!}
+													</a>
+												</p>
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-						<div class="row" v-else>
-							<div class="col text-center">
-								<h5>Nenhuma imagem encontrada!<br><small class="text-muted">Adicione novas imagens para visualizá-las aqui.</small></h5>
+							<div class="row" v-else>
+								<div class="col text-center">
+									<h5>Nenhuma imagem encontrada!<br><small class="text-muted">Adicione novas imagens para visualizá-las aqui.</small></h5>
+								</div>
 							</div>
 						</div>
 						<form method="POST" id="formImageUpload" class="d-none">
 							<input type="file" name="fileInput[]" id="fileInput" multiple>
 							{{ csrf_field() }}
 						</form>
-						<button type="button" class="btn btn-sm btn-primary float-right" title="Editar Produto" @click="openFormImage()">{!! ICONS_ADD !!}</button>
+						<button type="button" class="btn btn-primary float-right" title="Adicionar Imagens" @click="openFormImage()">{!! ICONS_UPLOAD !!}</button>
 					</div>
 				</div>
 			</div>
@@ -166,6 +168,18 @@
 					var self = this;
 					$.delete('{{ route('app.products.image.delete', ['', '']) }}/'+id+'/'+index, { '_token': "{{ csrf_token() }}" }, function(data) {
 						toastr.success('Imagem removida com sucesso!');
+						self.reloadData();
+					});
+				},
+				imagePull: function(id, index){
+					var self = this;
+					$.put('{{ route('app.products.image.pull', ['', '']) }}/'+id+'/'+index, { '_token': "{{ csrf_token() }}" }, function(data) {
+						self.reloadData();
+					});
+				},
+				imagePush: function(id, index){
+					var self = this;
+					$.put('{{ route('app.products.image.push', ['', '']) }}/'+id+'/'+index, { '_token': "{{ csrf_token() }}" }, function(data) {
 						self.reloadData();
 					});
 				}

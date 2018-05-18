@@ -19632,41 +19632,12 @@ button.toast-close-button {
   -webkit-filter: brightness(0.7);
 }
 
-.bs_hovereffect h2 {
-  text-transform: uppercase;
-  color: #fff;
-  text-align: center;
-  font-size: 17px;
-  padding: 10px;
-  width: 100%;
-}
-
-.bs_hovereffect:hover h2 {
-  opacity: 0;
-  filter: alpha(opacity=0);
-  -webkit-transform: translate3d(-50%, -50%, 0) scale3d(0.8, 0.8, 1);
-  transform: translate3d(-50%, -50%, 0) scale3d(0.8, 0.8, 1);
-}
-
-.bs_hovereffect a.info {
-  display: inline-block;
-  text-decoration: none;
-  padding: 7px 14px;
-  text-transform: uppercase;
-  color: #fff;
-  border: 1px solid #fff;
-  margin: 50px 0 0 0;
-  background-color: transparent;
-}
-
 .bs_hovereffect a.info:hover {
   -webkit-box-shadow: 0 0 5px #fff;
           box-shadow: 0 0 5px #fff;
 }
 
 .bs_hovereffect .rotate {
-  -webkit-transform: rotate(-45deg);
-  transform: rotate(-45deg);
   width: 100%;
   height: 100%;
   position: absolute;
@@ -19724,18 +19695,18 @@ button.toast-close-button {
 }
 
 .bs_group1 {
-  top: 40%;
+  top: 37%;
 }
 
 .bs_group2 {
-  top: 60%;
+  top: 63%;
 }
 
 .bs_hovereffect p {
-  width: 50%;
+  width: 100%;
   text-transform: none;
-  font-size: 15px;
-  line-height: 2;
+  font-size: 13px;
+  line-height: 1;
 }
 
 .bs_hovereffect p a {
@@ -19756,28 +19727,28 @@ button.toast-close-button {
   transition: opacity 0.35s, -webkit-transform 0.35s;
   transition: opacity 0.35s, transform 0.35s;
   transition: opacity 0.35s, transform 0.35s, -webkit-transform 0.35s;
-  padding: 13px;
   font-size: 20px;
+  padding: 7%;
 }
 
 .bs_group1 a:first-child i {
-  -webkit-transform: translate3d(-60px, -60px, 0) rotate(45deg) scale(2);
-  transform: translate3d(-60px, -60px, 0) rotate(45deg) scale(2);
+  -webkit-transform: translate3d(-60px, -60px, 0) scale(2);
+  transform: translate3d(-60px, -60px, 0) scale(2);
 }
 
 .bs_group1 a:nth-child(2) i {
-  -webkit-transform: translate3d(60px, -60px, 0) rotate(45deg) scale(2);
-  transform: translate3d(60px, -60px, 0) rotate(45deg) scale(2);
+  -webkit-transform: translate3d(60px, -60px, 0) scale(2);
+  transform: translate3d(60px, -60px, 0) scale(2);
 }
 
 .bs_group2 a:first-child i {
-  -webkit-transform: translate3d(-60px, 60px, 0) rotate(45deg) scale(2);
-  transform: translate3d(-60px, 60px, 0) rotate(45deg) scale(2);
+  -webkit-transform: translate3d(-60px, 60px, 0) scale(2);
+  transform: translate3d(-60px, 60px, 0) scale(2);
 }
 
 .bs_group2 a:nth-child(2) i {
-  -webkit-transform: translate3d(60px, 60px, 0) rotate(45deg) scale(2);
-  transform: translate3d(60px, 60px, 0) rotate(45deg) scale(2);
+  -webkit-transform: translate3d(60px, 60px, 0) scale(2);
+  transform: translate3d(60px, 60px, 0) scale(2);
 }
 
 .bs_hovereffect:hover hr:nth-child(2) {
@@ -19797,7 +19768,7 @@ button.toast-close-button {
 .bs_hovereffect:hover .bs_group1 i:empty,
 .bs_hovereffect:hover .bs_group2 i:empty {
   -webkit-transform: translate3d(0, 0, 0);
-  transform: translate3d(0, 0, 0) rotate(45deg) scale(1);
+  transform: translate3d(0, 0, 0) scale(1);
   opacity: 1;
   filter: alpha(opacity=100);
 }
