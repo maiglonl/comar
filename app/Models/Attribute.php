@@ -20,6 +20,6 @@ class Attribute extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = ['name', 'value', 'product_id'];
 
 }

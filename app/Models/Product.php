@@ -7,6 +7,7 @@ use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 use Illuminate\Support\Facades\Storage;
 use Folklore\Image\Facades\Image;
+use App\Models\Attribute;
 
 /**
  * Class Product.
@@ -24,6 +25,12 @@ class Product extends Model implements Transformable {
 	protected $fillable = [	'name', 'value', 'description', 'status'];
 
 	protected $appends = ['files', 'thumbnails'];
+
+	protected $with = ['attributes'];
+
+	public function attributes(){
+		return $this->hasMany(Attribute::class);
+	}
 
 	public function getFilesAttribute(){
 		$path = env('FILES_PATH_PRODUCTS')."/".$this->id."/";

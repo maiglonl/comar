@@ -71,7 +71,7 @@ class ProductsController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function create() {
-		return view('app.products.create', compact('product'));
+		return view('app.products.create');
 	}
 
 	/**

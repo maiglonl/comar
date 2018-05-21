@@ -11243,6 +11243,18 @@ table.dataTable tbody td.selected a {
   color: #a2d4ed;
 }
 
+.att_overlay:hover {
+  -webkit-transition: all 0.35s;
+  transition: all 0.35s;
+  filter: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg"><filter id="filter"><feComponentTransfer color-interpolation-filters="sRGB"><feFuncR type="linear" slope="0.7" /><feFuncG type="linear" slope="0.7" /><feFuncB type="linear" slope="0.7" /></feComponentTransfer></filter></svg>#filter');
+  filter: brightness(0.7);
+  -webkit-filter: brightness(0.7);
+  background-color: #f5f8fa;
+  opacity: 0.7;
+  filter: alpha(opacity=70);
+  cursor: pointer;
+}
+
 .form-control-plaintext {
   margin-top: -6px;
   padding-top: 0px;

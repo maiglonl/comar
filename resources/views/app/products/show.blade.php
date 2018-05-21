@@ -54,6 +54,13 @@
 								<p class="form-control-plaintext" id="description">@{{ product.description | default }}</p>
 							</div>
 						</div>
+						<div class="row att_overlay rounded" v-if="product.attributes" v-for="attribute in product.attributes" @click="openFormEditAttribute(attribute.id)">
+							<div class="col">	
+								<label class="label-plaintext label-sm">@{{ attribute.name | name }}:</label>
+								<p class="form-control-plaintext">@{{ attribute.value | default }}</p>
+							</div>
+						</div>
+						<button type="button" class="btn btn-sm btn-primary float-right" title="Adicionar Atributo" @click="openFormAddAttribute()">{!! ICONS_ADD !!}</button>
 					</div>
 				</div>
 			</div>
@@ -106,7 +113,6 @@
 		</div>
 	</div>
 	<script type="text/javascript">
-		//products.image.upload
 		new Vue({
 			el: '#productShowApp',
 			data: {
@@ -114,7 +120,6 @@
 			},
 			mounted: function(){
 				var self = this;
-				console.log(1321);
 				validaForm("#formImageUpload", function() {
 					var formData = new FormData($('#formImageUpload')[0]);
 					$.ajax({
@@ -154,6 +159,34 @@
 					var self = this;
 					$.fancybox.open({
 						src: '{{ route('app.products.edit', [$product->id]) }}',
+						type: 'ajax',
+						opts: { 
+							clickOutside: false,
+							clickSlide: false,
+							afterClose : function(){
+								self.reloadData(); 
+							},
+						}
+					});
+				},
+				openFormAddAttribute: function(){
+					var self = this;
+					$.fancybox.open({
+						src: '{{ route('app.attributes.create', [$product->id]) }}',
+						type: 'ajax',
+						opts: { 
+							clickOutside: false,
+							clickSlide: false,
+							afterClose : function(){
+								self.reloadData(); 
+							},
+						}
+					});
+				},
+				openFormEditAttribute: function(id){
+					var self = this;
+					$.fancybox.open({
+						src: '{{ route('app.attributes.edit', ['']) }}/'+id,
 						type: 'ajax',
 						opts: { 
 							clickOutside: false,

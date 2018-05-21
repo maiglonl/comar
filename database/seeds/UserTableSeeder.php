@@ -12,7 +12,7 @@ class UserTableSeeder extends Seeder {
 		$repository = app(UserRepository::class);
 		$repository->create([
 			'name' => 'Maiglon Lubacheuski',
-			'username' => 'maiglonl',
+			'username' => 'maiglon',
 			'password' => bcrypt('948571'),
 			'email' => 'maiglonl@gmail.com',
 			'phone' => '51997398991',

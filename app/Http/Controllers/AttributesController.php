@@ -28,6 +28,26 @@ class AttributesController extends Controller{
 	}
 
 	/**
+	 * Show the form for create resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function create($product_id) {
+		return view('app.attributes.create', compact('product_id'));
+	}
+
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param  int $id
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function edit($id) {
+		$attribute = $this->repository->find($id);
+		return view('app.attributes.edit', compact('attribute'));
+	}
+	/**
 	 * Store a newly created resource in storage.
 	 *
 	 * @param  AttributeCreateRequest $request
