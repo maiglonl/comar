@@ -16,6 +16,7 @@
         "bootstrap": "^4.1.*",
         "bootstrap-float-label": "^3.0.1",
         "bootstrap-material-design": "^4.1.1",
+        "bootstrap-select": "^1.13.1",
         "cross-env": "^5.1.5",
         "datatables.net-bs4": "^1.10.16",
         "datatables.net-buttons-bs4": "^1.5.1",

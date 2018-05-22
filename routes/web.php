@@ -23,7 +23,8 @@ Route::group(['prefix' => 'app', 'as' => 'app.', 'middleware' => ['auth']], func
 	Route::get('/home', 'HomeController@appIndex')->name('home');
 
 	Route::get('attributes/create/{product_id}', 'AttributesController@create')->name('attributes.create');
-	Route::resource('attributes', 'AttributesController')->except(['index','show','create']);
+	Route::get('attributes/edit/{id}', 'AttributesController@edit')->name('attributes.edit');
+	Route::resource('attributes', 'AttributesController')->except(['index','show','create','edit']);
 
 	Route::get('products/find/{id}', 'ProductsController@find')->name('products.find');
 	Route::get('products/all', 'ProductsController@all')->name('products.all');

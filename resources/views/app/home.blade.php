@@ -14,7 +14,12 @@
                         </div>
                     @endif
 
-                    You are logged in!
+                    <select class="form-control selectpicker">
+						<option>Mustard</option>
+						<option>Ketchup</option>
+						<option>Relish</option>
+					</select>
+					<input type="text" placeholder="teste input" class="form-control">
                 </div>
             </div>
         </div>

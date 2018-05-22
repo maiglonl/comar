@@ -9,8 +9,22 @@
 <div class="row">
 	<div class="col">
 		<div class="form-label-group">
-			<input type="number" step="0.01" class="form-control" id="prod_value" name="prod_value" placeholder="Valor" v-model="product.value">
+			<input type="number" step="0.01" class="form-control" id="prod_value" name="prod_value" placeholder="Nome" v-model="product.value">
 			<label for="prod_value">Valor</label>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col">
+		<div class="form-label-group">
+			<select class="form-control" id="prod_category" name="prod_category" v-model="product.category">
+				<option value="1">Categ 1</option>
+				<option value="2">Categ 2</option>
+				<option value="3">Categ 3</option>
+				<option value="4">Categ 4</option>
+				<option value="5">Categ 5</option>
+			</select>
+			<label for="prod_category">Categoria</label>
 		</div>
 	</div>
 </div>

@@ -1,12 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-/**
- * Class CreateAttributesTable.
- */
-class CreateAttributesTable extends Migration{
+class CreateAttributesTable extends Migration {
 	/**
 	 * Run the migrations.
 	 *

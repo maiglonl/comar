@@ -30,6 +30,9 @@ window.swal = require('sweetalert2');
 /* jsMatchHeight */
 require('jquery-match-height');
 
+/* bootstrap-select */
+require('bootstrap-select');
+
 /* Toastr */
 window.toastr = require('toastr');
 toastr.options.timeOut = 5000;
