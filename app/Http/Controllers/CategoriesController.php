@@ -110,4 +110,11 @@ class CategoriesController extends Controller{
         ]);
     }
 
+	/**
+	 * Return list with all products.
+	 */
+	public function all(){
+		return $this->repository->all();
+	}
+
 }

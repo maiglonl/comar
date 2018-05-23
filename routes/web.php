@@ -26,6 +26,7 @@ Route::group(['prefix' => 'app', 'as' => 'app.', 'middleware' => ['auth']], func
 	Route::get('attributes/edit/{id}', 'AttributesController@edit')->name('attributes.edit');
 	Route::resource('attributes', 'AttributesController')->except(['index','show','create','edit']);
 
+	Route::get('categories/all', 'CategoriesController@all')->name('categories.all');
 	Route::get('categories/edit/{id}', 'CategoriesController@edit')->name('categories.edit');
 	Route::resource('categories', 'CategoriesController')->only(['create','store','update']);
 

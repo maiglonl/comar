@@ -11290,8 +11290,36 @@ table.table-pointer > tbody > tr {
 }
 
 .form-label-group {
-  position: relative;
   margin-bottom: 1rem;
+}
+
+div.form-label-group.form-control {
+  padding: 0px;
+}
+
+div.form-label-group.form-control > input {
+  border: none;
+  width: 100%;
+}
+
+div.form-label-group.form-control > input::-ms-expand {
+  background-color: transparent;
+  border: 0;
+}
+
+div.form-label-group.form-control > input:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #80bdff;
+  outline: 0;
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+          box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+div.form-label-group.form-control > input:disabled,
+div.form-label-group.form-control > input[readonly] {
+  background-color: #e9ecef;
+  opacity: 1;
 }
 
 .form-label-group select {
@@ -11300,7 +11328,6 @@ table.table-pointer > tbody > tr {
   appearance: none;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-  text-indent: 5px;
   height: 49px !important;
 }
 
@@ -11314,7 +11341,7 @@ table.table-pointer > tbody > tr {
 .form-label-group > label {
   position: absolute;
   top: 0;
-  left: 0;
+  left: 4;
   display: block;
   width: 100%;
   margin-bottom: 0;
@@ -11364,7 +11391,7 @@ table.table-pointer > tbody > tr {
   padding-bottom: calc(var(--input-padding-y) / 3);
 }
 
-.form-label-group select:not(:empty) {
+.form-label-group select:not([value='']) {
   padding-top: calc(var(--input-padding-y) + var(--input-padding-y) * (2 / 3));
   padding-bottom: calc(var(--input-padding-y) / 3);
 }
@@ -11381,7 +11408,7 @@ table.table-pointer > tbody > tr {
   color: #777;
 }
 
-.form-label-group select:not(:empty) ~ label {
+.form-label-group select:not([value='']) ~ label {
   padding-top: calc(var(--input-padding-y) / 3);
   padding-bottom: calc(var(--input-padding-y) / 3);
   font-size: 12px;

@@ -22,7 +22,14 @@
 			data: {
 				product: {
 					_token: "{{ csrf_token() }}"
-				}
+				},
+				categories: []
+			},
+			created: function(){
+				var self = this;
+				$.get('{{ route('app.categories.all') }}', function(data) {
+					self.categories = data;
+				});
 			},
 			methods:{
 				submitFormCreateProduct: function (){ 

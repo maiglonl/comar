@@ -20,7 +20,13 @@
 		new Vue({
 			el: '#productEditApp',
 			data: {
-				product: {!! $product->toJson() !!}
+				product: {!! $product->toJson() !!},
+				categories: []
+			},
+			created: function(){
+				$.get('{{ route('app.categories.all') }}', function(data) {
+					self.categories = data;
+				});
 			},
 			methods:{
 				submitFormEditProduct: function (){ 
