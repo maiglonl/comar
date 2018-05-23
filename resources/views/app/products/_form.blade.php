@@ -9,8 +9,14 @@
 <div class="row">
 	<div class="col">
 		<div class="form-label-group">
-			<input type="number" step="0.01" class="form-control" id="prod_value" name="prod_value" placeholder="Nome" v-model="product.value">
-			<label for="prod_value">Valor</label>
+			<input type="number" step="0.01" class="form-control" id="prod_value_seller" name="prod_value_seller" placeholder="Valor - Vendedor" v-model="product.value_seller">
+			<label for="prod_value_seller">Valor - Vendedor</label>
+		</div>
+	</div>
+	<div class="col">
+		<div class="form-label-group">
+			<input type="number" step="0.01" class="form-control" id="prod_value_partner" name="prod_value_partner" placeholder="Valor - Parceiro" v-model="product.value_partner">
+			<label for="prod_value_partner">Valor - Parceiro</label>
 		</div>
 	</div>
 </div>
@@ -18,11 +24,7 @@
 	<div class="col">
 		<div class="form-label-group">
 			<select class="form-control" id="prod_category" name="prod_category" v-model="product.category">
-				<option value="1">Categ 1</option>
-				<option value="2">Categ 2</option>
-				<option value="3">Categ 3</option>
-				<option value="4">Categ 4</option>
-				<option value="5">Categ 5</option>
+				<option v-for="category in categories" value="category.ir">@{{ category.name }}</option>
 			</select>
 			<label for="prod_category">Categoria</label>
 		</div>

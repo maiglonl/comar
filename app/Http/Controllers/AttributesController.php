@@ -59,7 +59,7 @@ class AttributesController extends Controller{
 			$this->validator->with($request->except('_token'))->passesOrFail(ValidatorInterface::RULE_CREATE);
 			$product = $this->repository->create($request->except('_token'));
 			$response = [
-				'message' => 'Product created.',
+				'message' => 'Attribute created.',
 				'data'    => $product->toArray(),
 			];
 			return response()->json($response);
@@ -84,7 +84,7 @@ class AttributesController extends Controller{
 			$this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
 			$product = $this->repository->update($request->all(), $id);
 			$response = [
-				'message' => 'Product updated.',
+				'message' => 'Attribute updated.',
 				'data'    => $product->toArray(),
 			];
 			return response()->json($response);
@@ -94,20 +94,6 @@ class AttributesController extends Controller{
 				'message' => $e->getMessageBag()
 			]);
 		}
-	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function destroy($id) {
-		$deleted = $this->repository->delete($id);
-		return response()->json([
-			'message' => 'Attribute deleted.',
-			'deleted' => $deleted,
-		]);
 	}
 
 }

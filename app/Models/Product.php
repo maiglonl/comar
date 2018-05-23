@@ -22,14 +22,29 @@ class Product extends Model implements Transformable {
 	 *
 	 * @var array
 	 */
-	protected $fillable = [	'name', 'value', 'description', 'status'];
+	protected $fillable = [
+		'name',
+		'description',
+		'category_id',
+		'value_partner',
+		'value_seller',
+		'weight',
+		'height',
+		'width',
+		'length',
+		'diameter',
+		'status'
+	];
 
 	protected $appends = ['files', 'thumbnails'];
-
-	protected $with = ['attributes'];
+	protected $with = ['attributes', 'category'];
 
 	public function attributes(){
 		return $this->hasMany(Attribute::class);
+	}
+
+	public function category(){
+		return $this->belongsTo(Category::class);
 	}
 
 	public function getFilesAttribute(){

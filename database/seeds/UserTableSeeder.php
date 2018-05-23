@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\Repositories\UserRepository;
+
 class UserTableSeeder extends Seeder {
 	/**
 	 * Run the database seeds.
