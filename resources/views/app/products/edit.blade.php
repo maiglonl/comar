@@ -24,9 +24,13 @@
 				categories: []
 			},
 			created: function(){
+				var self = this;
 				$.get('{{ route('app.categories.all') }}', function(data) {
 					self.categories = data;
 				});
+			},
+			updated: function(){
+				$("select").trigger('change');
 			},
 			methods:{
 				submitFormEditProduct: function (){ 

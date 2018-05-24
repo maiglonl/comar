@@ -32,26 +32,39 @@
 						</div>
 						<div class="row">
 							<div class="col">
-								<label class="label-plaintext label-sm" for="id">Id:</label>
-								<p class="form-control-plaintext" id="id">@{{ product.id | default }}</p>
+								<label class="label-plaintext label-sm" for="prod_id">Id:</label>
+								<p class="form-control-plaintext" id="prod_id">@{{ product.id | default }}</p>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								<label class="label-plaintext label-sm" for="name">Nome:</label>
-								<p class="form-control-plaintext" id="name">@{{ product.name | name }}</p>
+								<label class="label-plaintext label-sm" for="prod_name">Nome:</label>
+								<p class="form-control-plaintext" id="prod_name">@{{ product.name | name }}</p>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								<label class="label-plaintext label-sm" for="value">Valor:</label>
-								<p class="form-control-plaintext" id="value">@{{ product.value | currency(true) }}</p>
+								<label class="label-plaintext label-sm" for="prod_categ_name">Categoria:</label>
+								<p class="form-control-plaintext" id="prod_categ_name" v-if="product.category">@{{ product.category.name | name }}</p>
+								<p class="form-control-plaintext" id="prod_categ_name" v-else>-</p>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								<label class="label-plaintext label-sm" for="description">Descrição:</label>
-								<p class="form-control-plaintext" id="description">@{{ product.description | default }}</p>
+								<label class="label-plaintext label-sm" for="prod_value">Valores:</label>
+								<p class="form-control-plaintext" id="prod_value">@{{ product.value_seller | currency(true) }} / @{{ product.value_partner | currency(true) }}</p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<label class="label-plaintext label-sm" for="prod_value">Medidas: <small>(P | D | AxLxC)</small></label>
+								<p class="form-control-plaintext" id="prod_value">@{{ product.weight }}Kg | @{{ product.diameter }}cm | @{{ product.height }}x@{{ product.width }}x@{{ product.length }}cm</p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<label class="label-plaintext label-sm" for="prod_description">Descrição:</label>
+								<p class="form-control-plaintext" id="prod_description">@{{ product.description | default }}</p>
 							</div>
 						</div>
 						<div class="row att_overlay rounded" v-if="product.attributes" v-for="attribute in product.attributes" @click="openFormEditAttribute(attribute.id)">

@@ -96,6 +96,24 @@ $(function(){
 });
 
 /*
+ * Função auxiliar para form-labels
+ */
+$(function(){
+	if($(".float-label-select").val() == null || $(".float-label-select").val() == ''){
+		$(".float-label-select").removeClass('selected');
+	}else{
+		$(".float-label-select").addClass('selected');
+	}
+
+	$(document).on('change', '.float-label-select', function() {
+		if($(this).val() == null || $(this).val() == ''){
+			$(this).removeClass('selected');
+		}else{
+			$(this).addClass('selected');
+		}
+	});
+});
+/*
  * Métodos adicionais para mask
  */
 //$.mask.definitions['h'] = "[A-Za-z]";

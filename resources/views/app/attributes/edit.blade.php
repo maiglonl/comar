@@ -7,8 +7,9 @@
 
 			<div class="row">
 				<div class="col-sm-12">
-					<div class="form-group">
+					<div class="form-group text-center">
 						<button class="btn btn-success float-right" @click.prevent="submitFormEditAttribute" title="Salvar">{!! ICONS_OK !!}</i></button>
+						<button type="button" class="btn btn-outline-danger center" @click.prevent="submitFormDeleteAttribute"  title="Excluir">{!! ICONS_REMOVE !!}</i></button>
 						<button type="button" class="btn btn-danger float-left closeFancybox" title="Cancelar">{!! ICONS_CANCEL !!}</i></button>
 					</div>
 				</div>
@@ -37,6 +38,13 @@
 						});
 					});
 					$("#formEditAttribute").submit();
+				},
+				submitFormDeleteAttribute: function (){ 
+					var token = {'_token': "{{ csrf_token() }}"};
+					$.delete('{{ route('app.attributes.destroy', [$attribute->id]) }}', token, function(data) {
+						toastr.success('Atributo removido com sucesso');
+						parent.jQuery.fancybox.close();
+					});
 				}
 			}
 		});

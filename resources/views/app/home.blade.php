@@ -60,14 +60,18 @@
 							</div>
 						</div>
 					</div>
-					<div class="row">
-						<div class="col">
-							<div class="form-label-group">
-								<input type="text" class="form-control" id="prod_name2" name="prod_name2" placeholder="Nome" v-model="product.name" required>
-								<label for="prod_name2">Nome</label>
-							</div>
-						</div>
-					</div>
+<div class="row">
+	<div class="col">
+		<div class="form-label-group">
+			<select class="form-control float-label-select" id="prod_category" name="prod_category" v-model="product.category_id">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+			</select>
+			<label for="prod_category">Categoria</label>
+		</div>
+	</div>
+</div>
 				</div>
 			</div>
 		</div>

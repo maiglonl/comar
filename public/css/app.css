@@ -11246,12 +11246,8 @@ table.dataTable tbody td.selected a {
 .att_overlay:hover {
   -webkit-transition: all 0.35s;
   transition: all 0.35s;
-  filter: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg"><filter id="filter"><feComponentTransfer color-interpolation-filters="sRGB"><feFuncR type="linear" slope="0.7" /><feFuncG type="linear" slope="0.7" /><feFuncB type="linear" slope="0.7" /></feComponentTransfer></filter></svg>#filter');
-  filter: brightness(0.7);
-  -webkit-filter: brightness(0.7);
-  background-color: #f5f8fa;
-  opacity: 0.7;
-  filter: alpha(opacity=70);
+  border-radius: 0.25rem;
+  background-color: #f1f4f7;
   cursor: pointer;
 }
 
@@ -11289,6 +11285,10 @@ table.table-pointer > tbody > tr {
   --input-padding-y: .75rem;
 }
 
+.input-group.appends {
+  margin-bottom: 1rem;
+}
+
 .form-label-group {
   margin-bottom: 1rem;
 }
@@ -11323,15 +11323,14 @@ div.form-label-group.form-control > input[readonly] {
 }
 
 .form-label-group select {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   height: 49px !important;
+  margin-right: 10px;
+  padding-right: 10px;
+  padding-left: 9px;
 }
 
-.form-label-group > select,
 .form-label-group > input,
 .form-label-group > textarea,
 .form-label-group > label {
@@ -11343,7 +11342,6 @@ div.form-label-group.form-control > input[readonly] {
   top: 0;
   left: 4;
   display: block;
-  width: 100%;
   margin-bottom: 0;
   /* Override default `<label>` margin */
   line-height: 1.5;
@@ -11391,7 +11389,7 @@ div.form-label-group.form-control > input[readonly] {
   padding-bottom: calc(var(--input-padding-y) / 3);
 }
 
-.form-label-group select:not([value='']) {
+.form-label-group select.selected {
   padding-top: calc(var(--input-padding-y) + var(--input-padding-y) * (2 / 3));
   padding-bottom: calc(var(--input-padding-y) / 3);
 }
@@ -11408,7 +11406,7 @@ div.form-label-group.form-control > input[readonly] {
   color: #777;
 }
 
-.form-label-group select:not([value='']) ~ label {
+.form-label-group select.selected ~ label {
   padding-top: calc(var(--input-padding-y) / 3);
   padding-bottom: calc(var(--input-padding-y) / 3);
   font-size: 12px;
