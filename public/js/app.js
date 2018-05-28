@@ -81044,13 +81044,23 @@ window.filters = {
 	},
 	name: function name(value) {
 		if (value == null || value == '') return '-';
-		return value.toLowerCase().replace(/\b./g, function (a) {
-			return a.toUpperCase();
+		return (value + '').replace(/^([a-z])|\s+([a-z])/g, function ($1) {
+			return $1.toUpperCase();
 		});
 	},
 	default: function _default(value) {
 		if (value == null || value == '') return '-';
 		return value;
+	},
+	gender: function gender(value) {
+		value = parseInt(value);
+		if (value == null) return '-';
+		switch (value) {
+			case 1:
+				return "Masculino";break;
+			default:
+				return "Feminino";break;
+		}
 	},
 	yn: function yn(value) {
 		value = parseInt(value);
@@ -81068,7 +81078,7 @@ window.filters = {
 	},
 	phone: function phone(value) {
 		if (!value) return '-';
-		return value.replace(/^(\d{2})(\d{4})(\d{5}).*/, '($1)$2-$3');
+		return value.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1)$2-$3');
 	},
 	date: function (_date) {
 		function date(_x2) {
@@ -81107,6 +81117,17 @@ window.filters = {
 /***/ "./resources/assets/js/helpers.js":
 /***/ (function(module, exports) {
 
+/**
+ * Dispatch event when radio button group change
+ */
+/*
+	$(this).val(ui.item[options.searchAttr]);
+	var $input = $(idField).val(ui.item[options.idAttr]);
+	var e = document.createEvent('HTMLEvents');
+	e.initEvent('input', true, true);
+	$input[0].dispatchEvent(e);
+	return false;
+ */
 
 /**
  * Busca view e atribui ao elemento
@@ -81136,14 +81157,33 @@ window.dateBetween = function (date, start, end) {
  */
 window.validaForm = function (form, submitFunc) {
 	$(form).validate({
-		errorClass: 'error-message',
+		errorClass: 'invalid-feedback',
+		submitHandler: submitFunc,
+		errorElement: 'div',
 		highlight: function highlight(element) {
-			$(element).parent().addClass('has-error');
+			if (element.type === "radio") {
+				$(element).parent().parent().addClass('is-invalid').removeClass('is-valid');
+			} else {
+				$(element).addClass('is-invalid').removeClass('is-valid');
+			}
 		},
 		unhighlight: function unhighlight(element) {
-			$(element).parent().removeClass('has-error');
+			if (element.type === "radio") {
+				$(element).parent().parent().removeClass('is-invalid').addClass('is-valid');
+			} else {
+				$(element).removeClass('is-invalid').addClass('is-valid');
+			}
 		},
-		submitHandler: submitFunc
+		errorPlacement: function errorPlacement(error, element) {
+			console.log(element);
+			if (element[0].type == "radio" && element.parent("label").hasClass('btn')) {
+				console.log(1);
+				error.insertAfter(element.parent().parent());
+			} else {
+				console.log(2);
+				error.insertAfter(element[0]);
+			}
+		}
 	});
 };
 

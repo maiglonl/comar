@@ -1,3 +1,15 @@
+/**
+ * Dispatch event when radio button group change
+ */
+/*
+	$(this).val(ui.item[options.searchAttr]);
+	var $input = $(idField).val(ui.item[options.idAttr]);
+	var e = document.createEvent('HTMLEvents');
+	e.initEvent('input', true, true);
+	$input[0].dispatchEvent(e);
+	return false;
+ */
+
 
 /**
  * Busca view e atribui ao elemento
@@ -27,10 +39,33 @@ window.dateBetween = function(date, start, end) {
  */
 window.validaForm = function(form, submitFunc){
 	$(form).validate({
-		errorClass: 'error-message',
-		highlight: function (element) { $(element).parent().addClass('has-error'); },
-		unhighlight: function (element) { $(element).parent().removeClass('has-error'); },
-		submitHandler: submitFunc
+		errorClass: 'invalid-feedback',
+		submitHandler: submitFunc,
+		errorElement: 'div',
+		highlight: function(element) {
+			if ( element.type === "radio" ) {
+				$( element ).parent().parent().addClass('is-invalid').removeClass('is-valid');
+			} else {
+				$( element ).addClass('is-invalid').removeClass('is-valid');
+			}
+		},
+		unhighlight: function(element) {
+			if ( element.type === "radio" ) {
+				$( element ).parent().parent().removeClass('is-invalid').addClass('is-valid');
+			} else {
+				$( element ).removeClass('is-invalid').addClass('is-valid');
+			}
+		},
+		errorPlacement: function(error, element) {
+			console.log(element);
+			if ( element[0].type == "radio" && element.parent("label").hasClass('btn')) {
+				console.log(1);
+				error.insertAfter(element.parent().parent());
+			}else{
+				console.log(2);
+				error.insertAfter(element[0]);
+			}
+		}
 	});
 }
 

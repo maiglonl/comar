@@ -23,6 +23,7 @@ class User extends Authenticatable implements Transformable{
 		'password',
 		'email',
 		'phone',
+		'gender',
 		'birthdate',
 		'zipcode',
 		'state',

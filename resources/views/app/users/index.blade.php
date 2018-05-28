@@ -23,6 +23,7 @@
 								<th>Nome</th>
 								<th>E-mail</th>
 								<th>Nascimento</th>
+								<th>Categoria</th>
 								<th>Status</th>
 							</tr>
 						</thead>
@@ -31,6 +32,7 @@
 								<th>Nome</th>
 								<th>E-mail</th>
 								<th>Nascimento</th>
+								<th>Categoria</th>
 								<th>Status</th>
 							</tr>
 						</tfoot>
@@ -50,6 +52,7 @@
 					{ data: function(data){ return filters.name(data.name); }},
 					{ data: function(data){ return filters.default(data.email); }},
 					{ data: function(data){ return filters.date(data.birthdate); }},
+					{ data: function(data){ return filters.default(data.role); }},
 					{ data: function(data){ return filters.yn(data.status); }}
 				],
 				processing: true,

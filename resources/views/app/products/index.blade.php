@@ -21,7 +21,7 @@
 						<thead>
 							<tr>
 								<th>Nome</th>
-								<th>Valor</th>
+								<th>Valores</th>
 								<th>Status</th>
 								<th>Imagens</th>
 							</tr>
@@ -29,7 +29,7 @@
 						<tfoot>
 							<tr>
 								<th>Nome</th>
-								<th>Valor</th>
+								<th>Valores</th>
 								<th>Status</th>
 								<th>Imagens</th>
 							</tr>
@@ -48,7 +48,7 @@
 				},
 				columns: [
 					{ data: function(data){ return filters.name(data.name); }},
-					{ data: function(data){ return filters.currency(data.value, true); }},
+					{ data: function(data){ return filters.currency(data.value_seller, true)+" / "+filters.currency(data.value_partner, true); }},
 					{ data: function(data){ return filters.yn(data.status); }},
 					{ data: function(data){ return data.files.length; }}
 				],

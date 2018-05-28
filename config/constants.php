@@ -21,3 +21,5 @@
 
 	/* DEFAULT_IMAGES */
 	define('DEFAULT_IMAGE_PRODUCTS', 	'/storage/products/default.png');
+	define('DEFAULT_IMAGE_USERS_FEMALE','/storage/users/user_female.png');
+	define('DEFAULT_IMAGE_USERS_MALE', 	'/storage/users/user_male.png');

@@ -148,6 +148,7 @@ class ProductsController extends Controller {
 	 */
 	public function destroy($id) {
 		$deleted = $this->repository->delete($id);
+		$this->deleteAllImages($id);
 		return response()->json([
 			'message' => 'Product deleted.',
 			'deleted' => $deleted,
@@ -168,6 +169,17 @@ class ProductsController extends Controller {
 	 */
 	public function all(){
 		return $this->repository->all();
+	}
+
+	/**
+	 * Delete specific image from Product.
+	 */
+	private function deleteAllImages($id){
+		$path = env('FILES_PATH_PRODUCTS')."/".$id."/";
+		$files = Storage::files($path);
+		foreach ($files as $file) {
+			Storage::delete($file);
+		}
 	}
 
 	/**

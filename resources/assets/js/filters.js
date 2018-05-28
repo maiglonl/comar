@@ -13,11 +13,21 @@ window.filters = {
 	},
 	name: function(value){
 		if (value == null || value == '') return '-';
-		return value.toLowerCase().replace( /\b./g, function(a){ return a.toUpperCase(); } );
+		return (value + '').replace(/^([a-z])|\s+([a-z])/g, function ($1) {
+			return $1.toUpperCase();
+		});
 	},
 	default: function(value) {
 		if (value == null || value == '') return '-';
 		return value;
+	},
+	gender: function(value) {
+		value = parseInt(value);
+		if (value == null) return '-';
+		switch(value){
+			case 1: return "Masculino"; break;
+			default: return "Feminino"; break;
+		}
 	},
 	yn: function(value) {
 		value = parseInt(value);
@@ -33,7 +43,7 @@ window.filters = {
 	},
 	phone: function(value) {
 		if (!value) return '-';
-		return value.replace(/^(\d{2})(\d{4})(\d{5}).*/, '($1)$2-$3');
+		return value.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1)$2-$3');
 	},
 	date: function (value) {
 		if (!value) return '-';
