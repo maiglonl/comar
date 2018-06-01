@@ -30,6 +30,7 @@ Route::group(['prefix' => 'app', 'as' => 'app.', 'middleware' => ['auth']], func
 	Route::get('categories/edit/{id}', 'CategoriesController@edit')->name('categories.edit');
 	Route::resource('categories', 'CategoriesController')->only(['create','store','update']);
 
+	Route::get('products/shop', 'ProductsController@shop')->name('products.shop');
 	Route::get('products/find/{id}', 'ProductsController@find')->name('products.find');
 	Route::get('products/all', 'ProductsController@all')->name('products.all');
 	Route::post('products/image/{id}', 'ProductsController@uploadImage')->name('products.image.upload');

@@ -30,7 +30,7 @@
 						self.attribute._token = "{{ csrf_token() }}";
 						$.put('{{ route('app.attributes.update', [$attribute->id]) }}', self.attribute, function(data) {
 							if(data.error){
-								toastr.danger('Falha ao atualizar atributo!');
+								toastr.error('Falha ao atualizar atributo!');
 							}else{
 								toastr.success('Atributo atualizado com sucesso');
 							}

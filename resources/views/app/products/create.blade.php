@@ -37,7 +37,7 @@
 					validaForm("#formCreateProduct", function(){
 						$.post('{{ route('app.products.store') }}', self.product, function(data) {	
 							if(data.error){
-								toastr.danger('Falha ao criar produto!');
+								toastr.error('Falha ao criar produto!');
 							}else{
 								toastr.success('Produto criado com sucesso');
 							}

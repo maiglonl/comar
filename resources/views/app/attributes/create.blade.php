@@ -31,7 +31,7 @@
 					validaForm("#formCreateAttribute", function(){
 						$.post('{{ route('app.attributes.store') }}', self.attribute, function(data) {	
 							if(data.error){
-								toastr.danger('Falha ao criar atributo!');
+								toastr.error('Falha ao criar atributo!');
 							}else{
 								toastr.success('Produto criado com sucesso');
 							}

@@ -159,7 +159,7 @@
 					var self = this;
 					$.get('{{ route('app.products.find', [$product->id]) }}', function(data) {
 						if(data.error){
-							toastr.danger('Falha ao atualizar produto!');
+							toastr.error('Falha ao atualizar produto!');
 						}else{
 							self.product = data;
 						}

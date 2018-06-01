@@ -39,7 +39,7 @@
 						self.product._token = "{{ csrf_token() }}";
 						$.put('{{ route('app.products.update', [$product->id]) }}', self.product, function(data) {
 							if(data.error){
-								toastr.danger('Falha ao atualizar produto!');
+								toastr.error('Falha ao atualizar produto!');
 							}else{
 								toastr.success('Produto atualizado com sucesso');
 							}

@@ -54,6 +54,18 @@ class ProductsController extends Controller {
 	}
 
 	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function shop() {
+		$this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
+		$products = $this->repository->all();
+
+		return view('app.products.shop', compact('products'));
+	}
+
+	/**
 	 * Display the specified resource.
 	 *
 	 * @param  int $id

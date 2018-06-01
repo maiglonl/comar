@@ -22,6 +22,13 @@
 			data: {
 				user: {!! $user->toJson() !!}
 			},
+			mounted: function(){
+				var self = this;
+				$("label.btn").click(function(event) {
+					var child = $(this).children().first();
+					self[child.attr('table')][child.attr('field')] = child.val();
+				});
+			},
 			methods:{
 				submitFormEditUser: function (){ 
 					var self = this;
@@ -29,7 +36,7 @@
 						self.user._token = "{{ csrf_token() }}";
 						$.put('{{ route('app.users.update', [$user->id]) }}', self.user, function(data) {
 							if(data.error){
-								toastr.danger('Falha ao atualizar usuário!');
+								toastr.error('Falha ao atualizar usuário!');
 							}else{
 								toastr.success('Usuário atualizado com sucesso');
 							}

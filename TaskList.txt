@@ -20,3 +20,15 @@ DONE
 	CRUD Produtos - Cadastro do produto
 	CRUD Produtos - Cadastro de atributos
 	CRUD Produtos - Gerenciamento de imagens
+
+REFERENCE
+	http://themehats.com/themes/jango/demos/default/shop-product-list.html#
+	http://themehats.com/themes/jango/demos/default/shop-checkout-complete.html
+	http://themehats.com/themes/jango/demos/default/shop-product-details.html
+	http://themehats.com/themes/jango/demos/default/shop-product-details-2.html
+	http://themehats.com/themes/jango/demos/default/shop-cart.html
+	http://themehats.com/themes/jango/demos/default/shop-checkout.html
+	http://coderthemes.com/ubold/light/extra-invoice.html
+	http://coderthemes.com/ubold/light/ecommerce-products.html
+	http://coderthemes.com/ubold/light/ecommerce-product-detail.html
+	

@@ -36,19 +36,12 @@
 						</div>
 						<div class="row">
 							<div class="col">
-								<h5 class="text-center">[ @{{ user.role | name }} ] - @{{ user.username }}</h5>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-2">
-								<label class="label-plaintext label-sm" for="usr_id">Id:</label>
-								<p class="form-control-plaintext" id="usr_id">@{{ user.id | default }}</p>
+								<h5 class="text-center">[ @{{ user.id | default }} ] @{{ user.name | name }}<br><small>[ @{{ user.role | name }} ] @{{ user.username }}<br></small></h5>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								<label class="label-plaintext label-sm" for="usr_name">Nome:</label>
-								<p class="form-control-plaintext" id="usr_name">@{{ user.name | name }}</p>
+								<hr>
 							</div>
 						</div>
 						<div class="row">
@@ -144,7 +137,7 @@
 					var self = this;
 					$.get('{{ route('app.users.find', [$user->id]) }}', function(data) {
 						if(data.error){
-							toastr.danger('Falha ao atualizar usuário!');
+							toastr.error('Falha ao atualizar usuário!');
 						}else{
 							self.user = data;
 						}
@@ -166,13 +159,6 @@
 				},
 				openFormImage: function(){
 					$('#fileInput').click();
-				},
-				removeFile: function(id, index){
-					var self = this;
-					/*$.delete('{ { route('app.users.image.delete', ['', '']) }}/'+id+'/'+index, { '_token': "{{ csrf_token() }}" }, function(data) {
-						toastr.success('Imagem removida com sucesso!');
-						self.reloadData();
-					}); */
 				}
 			},
 			filters: filters

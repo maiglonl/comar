@@ -25,17 +25,24 @@
 					_token: "{{ csrf_token() }}"
 				}
 			},
+			mounted: function(){
+				var self = this;
+				$("label.btn").click(function(event) {
+					var child = $(this).children().first();
+					self[child.attr('table')][child.attr('field')] = child.val();
+				});
+			},
 			methods:{
 				submitFormCreateUser: function (){ 
 					var self = this;
 					validaForm("#formCreateUser", function(){
 						$.post('{{ route('app.users.store') }}', self.user, function(data) {	
 							if(data.error){
-								toastr.danger('Falha ao criar usuário!');
+								toastr.error('Falha ao criar usuário!');
 							}else{
+								parent.jQuery.fancybox.close();
 								toastr.success('Usuário criado com sucesso');
 							}
-							parent.jQuery.fancybox.close();
 						});
 					});
 					$("#formCreateUser").submit();
