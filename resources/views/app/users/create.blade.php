@@ -21,6 +21,7 @@
 			el: '#userCreateApp',
 			data: {
 				user: {
+					role: 'partner',
 					_token: "{{ csrf_token() }}"
 				}
 			},
