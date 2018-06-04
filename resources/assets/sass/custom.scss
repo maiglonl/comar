@@ -1,3 +1,12 @@
+.card-footer-btn:last-child {
+	border-radius: 0 0 calc(0.25rem - 1px) calc(0.25rem - 1px);
+}
+
+.card-footer-btn {
+	padding: 0.75rem 1.25rem;
+	border-top: 1px solid $border-color;
+}
+
 .btn-group.is-invalid{
 	border: 1px $danger solid !important;
 }
@@ -6,22 +15,22 @@
 }
 
 .border-2 {
-    border-width:2px !important;
+	border-width:2px !important;
 }
 .border-3 {
-    border-width:3px !important;
+	border-width:3px !important;
 }
 .border-4 {
-    border-width:4px !important;
+	border-width:4px !important;
 }
 .border-5 {
-    border-width:5px !important;
+	border-width:5px !important;
 }
 
 .att_overlay:hover {
 	-webkit-transition: all 0.35s;
 	transition: all 0.35s;
-    border-radius: 0.25rem;
+	border-radius: 0.25rem;
 	background-color: #f1f4f7;
 	cursor: pointer;
 }

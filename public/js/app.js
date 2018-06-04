@@ -81042,6 +81042,18 @@ window.filters = {
 		    v = (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
 		return z > 0 ? s + x + v : '---';
 	},
+	limit_words: function limit_words(text, n) {
+		var words = text.split(' ');
+		if (words.length <= n) {
+			return text;
+		}
+		var t = "";
+		for (var i = 0; i < n - 1; i++) {
+			t += words[i] + " ";
+		}
+		t += words[n - 1] + "...";
+		return t;
+	},
 	name: function name(value) {
 		if (value == null || value == '') return '-';
 		return (value + '').replace(/^([a-z])|\s+([a-z])/g, function ($1) {
