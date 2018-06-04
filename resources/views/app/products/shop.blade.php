@@ -27,7 +27,8 @@
 												<a :href="product.files[0]" :data-fancybox="'gallery_'+product.id" title="Visualizar Imagem">
 													{!! ICONS_ADD !!}
 												</a>
-												<img v-for="file in product.files" :src="file" :data-fancybox="'gallery_'+product.id" style="display: none">
+												<a :href="file" data-fancybox="gallery" title="Visualizar Imagem">
+												<a v-for="(file, i) in product.files" v-if="i > 0" :href="file" :data-fancybox="'gallery_'+product.id" style="display: none"></a>
 											</p>
 										</div>
 									</div>
@@ -36,7 +37,7 @@
 									<img src="{{ DEFAULT_IMAGE_PRODUCTS }}" class="img-fluid img-thumbnail rounded">
 								</div>
 								<div class="card-body">
-									<h5 class="card-title mt_height_name"><a href="qwe">@{{ product.name }}</a> <br> <small>@{{ product.category.name }}</small></h5>
+									<h4 class="card-title mt_height_name"><a href="" title="Mais informações" class="link-unstyled">@{{ product.name }}</a> <br> <small>@{{ product.category.name }}</small></h4>
 									<p class="card-text mt_height_description">@{{ product.description | limit_words(15) }}</p>
 								</div>
 								<ul class="list-group list-group-flush">
@@ -84,6 +85,5 @@
 			},
 			filters: filters
 		});
-	</script>
 	</script>
 @endsection
