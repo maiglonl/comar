@@ -37,7 +37,7 @@
 									<img src="{{ DEFAULT_IMAGE_PRODUCTS }}" class="img-fluid img-thumbnail rounded">
 								</div>
 								<div class="card-body">
-									<h4 class="card-title mt_height_name"><a href="" title="Mais informações" class="link-unstyled">@{{ product.name }}</a> <br> <small>@{{ product.category.name }}</small></h4>
+									<h4 class="card-title mt_height_name"><a :href="'{{ route('app.products.desc', []) }}/'+product.id" title="Mais informações" class="link-unstyled"><strong>@{{ product.name }}</strong></a> <br> <small>@{{ product.category.name }}</small></h4>
 									<p class="card-text mt_height_description">@{{ product.description | limit_words(15) }}</p>
 								</div>
 								<ul class="list-group list-group-flush">

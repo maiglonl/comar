@@ -30,7 +30,7 @@ Route::group(['prefix' => 'app', 'as' => 'app.', 'middleware' => ['auth']], func
 	Route::get('categories/edit/{id}', 'CategoriesController@edit')->name('categories.edit');
 	Route::resource('categories', 'CategoriesController')->only(['create','store','update']);
 
-	Route::get('products/desc', 'ProductsController@desc')->name('products.desc');
+	Route::get('products/desc/{id}', 'ProductsController@desc')->name('products.desc');
 	Route::get('products/shop', 'ProductsController@shop')->name('products.shop');
 	Route::get('products/find/{id}', 'ProductsController@find')->name('products.find');
 	Route::get('products/all', 'ProductsController@all')->name('products.all');

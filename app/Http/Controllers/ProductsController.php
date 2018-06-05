@@ -66,6 +66,16 @@ class ProductsController extends Controller {
 	}
 
 	/**
+	 * Display a description of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function desc($id) {
+		$product = $this->repository->find($id);
+		return view('app.products.desc', compact('product'));
+	}
+
+	/**
 	 * Display the specified resource.
 	 *
 	 * @param  int $id

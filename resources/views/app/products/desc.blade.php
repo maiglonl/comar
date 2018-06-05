@@ -1,11 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-	<div id="productShowApp">
+	<div id="productDescApp">
 		<div class="page-title">
 			<h3>
 				Produtos | <small class="text-muted">Descrição do produto</small>
-				<button type="button" class="btn btn-sm btn-primary float-right" title="Editar Produto" @click="openFormEditProduct()">{!! ICONS_EDIT !!}</button>
 			</h3>
 		</div>
 		<nav aria-label="breadcrumb">
@@ -127,7 +126,7 @@
 	</div>
 	<script type="text/javascript">
 		new Vue({
-			el: '#productShowApp',
+			el: '#productDescApp',
 			data: {
 				product: {!! $product->toJson() !!}
 			},
