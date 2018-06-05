@@ -32,3 +32,65 @@ REFERENCE
 	http://coderthemes.com/ubold/light/ecommerce-products.html
 	http://coderthemes.com/ubold/light/ecommerce-product-detail.html
 	
+
+
+
+- Página com listagem de produtos com valor original
+	- Fazer Login
+	- Fazer Cadastro
+- Dashboard Vendedor/Parceiro
+	- Ambiente de compras
+		- Descrição do produto
+			- Adicionar ao carrinho
+			- Calcular frete
+			- Produtos semelhantes
+		- Adicionar ao carrinho
+		- Busca e filtro de produtos
+	- Pedidos
+		- Listagem de pedidos realizados
+			- Informações sobre o pedido
+			- Informações sobre a entrega 
+	- Usuários cadastrados
+		- Link para descrição do usuário
+			- Pedidos realizados pelo usuário
+			- Árvore de usuários registrados pelo usuário
+		- Informação do valor a receber dos usuários cadastrados
+		- Informação do valor recebido dos usuários cadastrados
+		- Opção para cadastrar novo usuário
+	- Carrinho de compras
+		- Concluir pedido
+			- Confirmar endereço de entrega
+			- Calcular frete
+			- Confirmar forma de pagamento
+			- Volta para Dashboard
+		- Opção para calcular frete
+		- Opção para alterar quantidade dos produtos
+		- opção para remover produto do carrinho
+		- Ambiente de compras
+	- Dados cadastrais
+		- Logout
+		- Alterar dados
+		- Alterar senha
+		- Cadastro de contas bancárias
+	- Gráficos visuais
+
+- Dashboard Admin
+	- Cadastro de Usuários
+		- Gerenciar usuários
+		- Histórico de compras
+	- Cadastro de Produtos
+		- Gerenciar atributos
+		- Gerenciar imagens
+		- Histórico de vendas
+	- Controle de Pedidos
+		- Registrar novo pedido
+		- Pedidos pendentes
+		- Pedidos enviados
+		- Pedidos entregues
+	- Controle Financeiro
+		- Contas a receber
+		- Contas a pagar
+		- Controle de devoluções
+	- Controle Diversos
+		- Alterar dados cadastrais
+		- Cadastrar categorias
