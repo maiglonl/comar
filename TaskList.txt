@@ -1,3 +1,8 @@
+PGTO
+	2018-06-06 - 1981,00
+
+
+
 TODO
 	CRUD Contas Bancarias
 	CRUD Pedidos
@@ -6,14 +11,14 @@ TODO
 	Controle Preço Entrega
 	Controle Vendas
 	Dashboard Admin
-	Dashboard Vendedor/Distribuidor
+	Dashboard Distribuidor/Distribuidor
 	Integrar Pagamento
 	Layout Externo
 	Layout Interno
 
 
 DOING
-	CRUD Distribuidor/Vendedor
+	CRUD Distribuidor/Distribuidor
 
 
 DONE
@@ -34,63 +39,92 @@ REFERENCE
 	
 
 
+Usar Preço de venda e Preço vendedor
 
-- Página com listagem de produtos com valor original
-	- Fazer Login
-	- Fazer Cadastro
-- Dashboard Vendedor/Parceiro
-	- Ambiente de compras
-		- Descrição do produto
-			- Adicionar ao carrinho
-			- Calcular frete
-			- Produtos semelhantes
-		- Adicionar ao carrinho
-		- Busca e filtro de produtos
-	- Pedidos
-		- Listagem de pedidos realizados
-			- Informações sobre o pedido
-			- Informações sobre a entrega 
-	- Usuários cadastrados
-		- Link para descrição do usuário
-			- Pedidos realizados pelo usuário
-			- Árvore de usuários registrados pelo usuário
-		- Informação do valor a receber dos usuários cadastrados
-		- Informação do valor recebido dos usuários cadastrados
-		- Opção para cadastrar novo usuário
-	- Carrinho de compras
-		- Concluir pedido
-			- Confirmar endereço de entrega
-			- Calcular frete
-			- Confirmar forma de pagamento
-			- Volta para Dashboard
-		- Opção para calcular frete
-		- Opção para alterar quantidade dos produtos
-		- opção para remover produto do carrinho
+
+	- Página Inicial
+		- Login
+		- Cadastro
 		- Ambiente de compras
-	- Dados cadastrais
-		- Logout
-		- Alterar dados
-		- Alterar senha
-		- Cadastro de contas bancárias
-	- Gráficos visuais
 
-- Dashboard Admin
-	- Cadastro de Usuários
-		- Gerenciar usuários
-		- Histórico de compras
-	- Cadastro de Produtos
-		- Gerenciar atributos
-		- Gerenciar imagens
-		- Histórico de vendas
-	- Controle de Pedidos
-		- Registrar novo pedido
-		- Pedidos pendentes
-		- Pedidos enviados
-		- Pedidos entregues
-	- Controle Financeiro
-		- Contas a receber
-		- Contas a pagar
-		- Controle de devoluções
-	- Controle Diversos
-		- Alterar dados cadastrais
-		- Cadastrar categorias
+	- Dashboard Distribuidor/Parceiro
+		- Ambiente de compras
+			- Listagem de produtos 
+			- Adicionar ao carrinho
+			- Busca/filtro de produtos
+				- Resultado da busca/filtro
+			- Descrição do produto
+				- Ver dados e imagens
+				- Adicionar ao carrinho
+				- Calcular frete
+				- Produtos semelhantes
+		- Pedidos
+			- Listagem de pedidos realizados
+				- Informações sobre o pedido
+				- Informações sobre a entrega 
+				- Fatura de pedidos
+		- Usuários cadastrados
+			- Descrição do usuário filho
+				- Pedidos do usuário filho
+				- Árvore de usuários filhoS
+			- Gráfico do valor a receber
+			- Gráfico do valor recebido
+			- Cadastrar novo usuário
+		- Carrinho de compras
+			- Opção para calcular frete
+			- Alterar quantidade dos produtos
+			- Remover produto do carrinho
+			- Voltar para Ambiente de compras
+			- Concluir pedido
+				- Confirmar endereço de entrega
+				- Calcular frete
+				- Confirmar forma de pagamento
+				- Checkout pedido
+				- Fatura pedido
+		- Dados cadastrais
+			- Alterar dados
+			- Alterar senha
+			- Cadastro de contas bancárias
+			- Logout
+		- Gráficos visuais
+
+	- Dashboard Admin
+		- Cadastro de Usuários
+			- Gerenciar usuários 
+			- Histórico de compras
+		- Cadastro de Produtos
+			- Gerenciar produto 
+			- Gerenciar atributos 
+			- Gerenciar imagens 
+			- Histórico de vendas
+			- Controle de estoque
+			- Controle de assistências
+		- Controle de Pedidos
+			- Registrar novo pedido
+			- Pedidos pendentes
+			- Pedidos enviados
+			- Pedidos entregues
+		- Controle Financeiro
+			- Relação de pedidos e contas
+			- Contas a receber
+			- Contas a pagar
+			- Controle de devoluções
+		- Controle Diversos
+			- Alterar dados cadastrais
+			- Cadastrar categorias
+
+	- Layout Site
+
+
+
+
+
+
+
+order
+	id
+	user_id
+	status_id
+	total
+	delivery_cep
+	delivery_adress

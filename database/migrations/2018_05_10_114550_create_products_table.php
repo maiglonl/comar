@@ -24,6 +24,7 @@ class CreateProductsTable extends Migration {
 			$table->integer('width')->nullable(); //largura
 			$table->integer('length')->nullable(); //comprimento
 			$table->integer('diameter')->nullable(); //diametro
+			$table->integer('amount'); //quantidade
 			$table->boolean('status')->nullable()->default(true);
 			$table->timestamps();
 		});

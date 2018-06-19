@@ -165,6 +165,7 @@ class UsersController extends Controller {
 	 * Return list with all users.
 	 */
 	public function all(){
+		
 		return $this->repository->all();
 	}
 }

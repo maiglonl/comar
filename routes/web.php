@@ -11,13 +11,11 @@
 |
 */
 
-Route::get('/', function () {
-	return view('welcome');
-});
+Route::get('/', 'ProductsController@shop');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'ProductsController@shop')->name('home');
 
 Route::group(['prefix' => 'app', 'as' => 'app.', 'middleware' => ['auth']], function () {
 	Route::get('/home', 'HomeController@appIndex')->name('home');
@@ -25,6 +23,8 @@ Route::group(['prefix' => 'app', 'as' => 'app.', 'middleware' => ['auth']], func
 	Route::get('attributes/create/{product_id}', 'AttributesController@create')->name('attributes.create');
 	Route::get('attributes/edit/{id}', 'AttributesController@edit')->name('attributes.edit');
 	Route::resource('attributes', 'AttributesController')->except(['index','show','create','edit']);
+
+	Route::get('status/all', 'StatusController@all')->name('status.all');
 
 	Route::get('categories/all', 'CategoriesController@all')->name('categories.all');
 	Route::get('categories/edit/{id}', 'CategoriesController@edit')->name('categories.edit');
