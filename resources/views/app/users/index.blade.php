@@ -9,7 +9,7 @@
 	</div>
 	<nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
-			<li class="breadcrumb-item"><a href="{{ route('app.home') }}">Home</a></li>
+			<li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
 			<li class="breadcrumb-item active" aria-current="page">Usuários</li>
 		</ol>
 	</nav>
@@ -45,7 +45,7 @@
 		$(document).ready(function() {
 			$('#table-users').DataTable({
 				ajax: {
-					url: "{{ route('app.users.all') }}",
+					url: "{{ route('users.all') }}",
 					dataSrc: ""
 				},
 				columns: [
@@ -59,7 +59,7 @@
 				order: [],
 				fnRowCallback: function( row, data, index, indexFull ) {
 					$(row).on('click', function(evt) {
-						window.open("{{ route('app.users.show', ['']) }}/"+data.id, evt.ctrlKey ? '_blank' : '_self');
+						window.open("{{ route('users.show', ['']) }}/"+data.id, evt.ctrlKey ? '_blank' : '_self');
 					});
 				}
 			});
@@ -67,7 +67,7 @@
 
 		function openFormUser(){
 			$.fancybox.open({
-				src: '{{ route('app.users.create') }}',
+				src: '{{ route('users.create') }}',
 				type: 'ajax',
 				opts: { 
 					clickOutside: false,

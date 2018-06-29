@@ -59,7 +59,7 @@ class AttributesController extends Controller{
 			$this->validator->with($request->except('_token'))->passesOrFail(ValidatorInterface::RULE_CREATE);
 			$product = $this->repository->create($request->except('_token'));
 			$response = [
-				'message' => 'Attribute created.',
+				'message' => 'Atributo registrado',
 				'data'    => $product->toArray(),
 			];
 			return response()->json($response);
@@ -84,7 +84,7 @@ class AttributesController extends Controller{
 			$this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
 			$product = $this->repository->update($request->all(), $id);
 			$response = [
-				'message' => 'Attribute updated.',
+				'message' => 'Attributo atualizado',
 				'data'    => $product->toArray(),
 			];
 			return response()->json($response);
@@ -106,7 +106,7 @@ class AttributesController extends Controller{
 	public function destroy($id) {
 		$deleted = $this->repository->delete($id);
 		return response()->json([
-			'message' => 'Attribute deleted.',
+			'message' => 'Attributo removido',
 			'deleted' => $deleted,
 		]);
 	}

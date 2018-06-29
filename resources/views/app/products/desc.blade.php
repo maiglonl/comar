@@ -9,8 +9,8 @@
 		</div>
 		<nav aria-label="breadcrumb">
 			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="{{ route('app.home') }}">Home</a></li>
-				<li class="breadcrumb-item"><a href="{{ route('app.products.index') }}">Produtos</a></li>
+				<li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+				<li class="breadcrumb-item"><a href="{{ route('products.index') }}">Produtos</a></li>
 				<li class="breadcrumb-item active" aria-current="page">{{ $product->name }}</li>
 			</ol>
 		</nav>
@@ -19,19 +19,19 @@
 				<div class="card">
 					<div class="card-body">
 						<div class="row">
-							<div class="col-6">
+							<div class="col-sm-6">
 								<img v-if="product.files.length > 0" :src="product.files[0]" class="img-fluid img-thumbnail rounded">
 								<img v-else src="{{ DEFAULT_IMAGE_PRODUCTS }}" class="img-fluid img-thumbnail rounded">
 								
-								<div class="row mt-2">
-									<div class="col-sm-3" v-for="(file, index) in product.files" v-if="index < 4">
+								<div class="row p-0 m-0 mt-2">
+									<div class="col-sm-3 p-2" v-for="(file, index) in product.files" v-if="index < 4">
 										<a :href="file" :data-fancybox="'gallery_'+product.id">
 											<img v-if="product.files.length > 0" :src="product.thumbnails[index]" class="img-fluid img-thumbnail rounded">
 										</a>
 									</div>
 								</div>
 							</div>
-							<div class="col-6">
+							<div class="col-sm-6">
 								<div class="row">
 									<div class="col">
 										<h3 class="section-title" id="prod_name">@{{ product.name | name }} <small v-if="product.category" class="text-muted">| @{{ product.category.name | name }}</small></h3>
@@ -70,17 +70,6 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-sm-9">
-					<div class="card-body">
-						<div class="col">
-							<div class="row" v-else>
-								<div class="col text-center">
-									<h5>Nenhuma imagem encontrada!<br><small class="text-muted">Adicione novas imagens para visualizá-las aqui.</small></h5>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
 			</div>
 		</div>
 	</div>
@@ -95,7 +84,7 @@
 				validaForm("#formImageUpload", function() {
 					var formData = new FormData($('#formImageUpload')[0]);
 					$.ajax({
-						url: "{{ route('app.products.image.upload', [$product->id]) }}",
+						url: "{{ route('products.image.upload', [$product->id]) }}",
 						type: 'POST',
 						success: completeHandler = function(data) { 
 							self.reloadData();
@@ -116,7 +105,7 @@
 			methods:{
 				reloadData: function (){
 					var self = this;
-					$.get('{{ route('app.products.find', [$product->id]) }}', function(data) {
+					$.get('{{ route('products.find', [$product->id]) }}', function(data) {
 						if(data.error){
 							toastr.error('Falha ao atualizar produto!');
 						}else{
@@ -130,7 +119,7 @@
 				openFormEditProduct: function(){
 					var self = this;
 					$.fancybox.open({
-						src: '{{ route('app.products.edit', [$product->id]) }}',
+						src: '{{ route('products.edit', [$product->id]) }}',
 						type: 'ajax',
 						opts: { 
 							clickOutside: false,
@@ -144,7 +133,7 @@
 				openFormAddAttribute: function(){
 					var self = this;
 					$.fancybox.open({
-						src: '{{ route('app.attributes.create', [$product->id]) }}',
+						src: '{{ route('attributes.create', [$product->id]) }}',
 						type: 'ajax',
 						opts: { 
 							clickOutside: false,
@@ -158,7 +147,7 @@
 				openFormEditAttribute: function(id){
 					var self = this;
 					$.fancybox.open({
-						src: '{{ route('app.attributes.edit', ['']) }}/'+id,
+						src: '{{ route('attributes.edit', ['']) }}/'+id,
 						type: 'ajax',
 						opts: { 
 							clickOutside: false,
@@ -171,20 +160,20 @@
 				},
 				removeFile: function(id, index){
 					var self = this;
-					$.delete('{{ route('app.products.image.delete', ['', '']) }}/'+id+'/'+index, { '_token': "{{ csrf_token() }}" }, function(data) {
+					$.delete('{{ route('products.image.delete', ['', '']) }}/'+id+'/'+index, { '_token': "{{ csrf_token() }}" }, function(data) {
 						toastr.success('Imagem removida com sucesso!');
 						self.reloadData();
 					});
 				},
 				imagePull: function(id, index){
 					var self = this;
-					$.put('{{ route('app.products.image.pull', ['', '']) }}/'+id+'/'+index, { '_token': "{{ csrf_token() }}" }, function(data) {
+					$.put('{{ route('products.image.pull', ['', '']) }}/'+id+'/'+index, { '_token': "{{ csrf_token() }}" }, function(data) {
 						self.reloadData();
 					});
 				},
 				imagePush: function(id, index){
 					var self = this;
-					$.put('{{ route('app.products.image.push', ['', '']) }}/'+id+'/'+index, { '_token': "{{ csrf_token() }}" }, function(data) {
+					$.put('{{ route('products.image.push', ['', '']) }}/'+id+'/'+index, { '_token': "{{ csrf_token() }}" }, function(data) {
 						self.reloadData();
 					});
 				}

@@ -27,7 +27,7 @@
 			},
 			created: function(){
 				var self = this;
-				$.get('{{ route('app.categories.all') }}', function(data) {
+				$.get('{{ route('categories.all') }}', function(data) {
 					self.categories = data;
 				});
 			},
@@ -35,7 +35,7 @@
 				submitFormCreateProduct: function (){ 
 					var self = this;
 					validaForm("#formCreateProduct", function(){
-						$.post('{{ route('app.products.store') }}', self.product, function(data) {	
+						$.post('{{ route('products.store') }}', self.product, function(data) {	
 							if(data.error){
 								toastr.error('Falha ao criar produto!');
 							}else{

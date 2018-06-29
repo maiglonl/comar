@@ -28,7 +28,7 @@
 					var self = this;
 					validaForm("#formEditAttribute", function(){
 						self.attribute._token = "{{ csrf_token() }}";
-						$.put('{{ route('app.attributes.update', [$attribute->id]) }}', self.attribute, function(data) {
+						$.put('{{ route('attributes.update', [$attribute->id]) }}', self.attribute, function(data) {
 							if(data.error){
 								toastr.error('Falha ao atualizar atributo!');
 							}else{
@@ -41,7 +41,7 @@
 				},
 				submitFormDeleteAttribute: function (){ 
 					var token = {'_token': "{{ csrf_token() }}"};
-					$.delete('{{ route('app.attributes.destroy', [$attribute->id]) }}', token, function(data) {
+					$.delete('{{ route('attributes.destroy', [$attribute->id]) }}', token, function(data) {
 						toastr.success('Atributo removido com sucesso');
 						parent.jQuery.fancybox.close();
 					});

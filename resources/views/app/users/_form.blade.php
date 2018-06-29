@@ -1,11 +1,13 @@
-@if(Auth::user()->role == USER_ROLES_ADMIN)
+@if(Auth::user() && (Auth::user()->role == USER_ROLES_ADMIN || Auth::user()->role == USER_ROLES_SELLER))
 	<div class="row">
 		<div class="col">
 			<div class="form-group">
 				<div class="btn-group btn-group-toggle border rounded d-flex" role="group" data-toggle="buttons" style="width: 100%;">
-					<label class="btn btn-light w-100" :class="{active : user.role == '{{ USER_ROLES_ADMIN }}'}">
-						<input type="radio" name="usr_role" table="user" field="role" autocomplete="off" v-model="user.role" value="{{ USER_ROLES_ADMIN }}" required> Admin
-					</label>
+					@if(Auth::user()->role == USER_ROLES_ADMIN)
+						<label class="btn btn-light w-100" :class="{active : user.role == '{{ USER_ROLES_ADMIN }}'}">
+							<input type="radio" name="usr_role" table="user" field="role" autocomplete="off" v-model="user.role" value="{{ USER_ROLES_ADMIN }}" required> Admin
+						</label>
+					@endif
 					<label class="btn btn-light w-100" :class="{active : user.role == '{{ USER_ROLES_SELLER }}'}">
 						<input type="radio" name="usr_role" table="user" field="role" autocomplete="off" v-model="user.role" value="{{ USER_ROLES_SELLER }}" required> Vendedor
 					</label>
@@ -26,7 +28,7 @@
 	</div>
 	<div class="col-xs-12 col-sm-6 col-md-3">
 		<div class="form-label-group">
-			<input type="text" class="form-control" id="usr_cp" name="usr_cp" placeholder="CPF/CNPJ" v-model="user.cp" mask="999.999.999-99" required>
+			<input type="text" class="form-control" id="usr_cp" name="usr_cp" placeholder="CPF/CNPJ" v-model="user.cp" v-mask="['###.###.###-##', '##.###.###/####-##']" required>
 			<label for="usr_cp">CPF/CNPJ</label>
 		</div>
 	</div>
@@ -66,13 +68,13 @@
 	</div>
 	<div class="col">
 		<div class="form-label-group">
-			<input type="text" class="form-control" id="usr_phone1" name="usr_phone1" placeholder="Fone 1" v-model="user.phone1" required>
+			<input type="text" class="form-control" id="usr_phone1" name="usr_phone1" placeholder="Fone 1" v-model="user.phone1" v-mask="['(##)####-####', '(##)#####-####']" required>
 			<label for="usr_phone1">Fone 1</label>
 		</div>
 	</div>
 	<div class="col">
 		<div class="form-label-group">
-			<input type="text" class="form-control" id="usr_phone2" name="usr_phone2" placeholder="Fone 2" v-model="user.phone2">
+			<input type="text" class="form-control" id="usr_phone2" name="usr_phone2" placeholder="Fone 2" v-model="user.phone2" v-mask="['(##)####-####', '(##)#####-####']">
 			<label for="usr_phone2">Fone 2</label>
 		</div>
 	</div>
@@ -80,7 +82,7 @@
 <div class="row">
 	<div class="col-xs-6 col-sm-3">
 		<div class="form-label-group">
-			<input type="text" class="form-control" id="usr_zipcode" name="usr_zipcode" placeholder="CEP" v-model="user.zipcode" required>
+			<input type="text" class="form-control" id="usr_zipcode" name="usr_zipcode" placeholder="CEP" v-model="user.zipcode"  v-mask="['#####-###']" required>
 			<label for="usr_zipcode">CEP</label>
 		</div>
 	</div>
@@ -98,7 +100,7 @@
 	</div>
 	<div class="col-xs-4 col-sm-2">
 		<div class="form-label-group">
-			<input type="text" class="form-control" id="usr_state" name="usr_state" placeholder="UF" v-model="user.state" required>
+			<input type="text" class="form-control" id="usr_state" name="usr_state" placeholder="UF" v-model="user.state" v-mask="['AA']" required>
 			<label for="usr_state">UF</label>
 		</div>
 	</div>
@@ -112,7 +114,7 @@
 	</div>
 	<div class="col-sm-2">
 		<div class="form-label-group">
-			<input type="text" class="form-control" id="usr_number" name="usr_number" placeholder="Nº" v-model="user.number" required>
+			<input type="text" class="form-control" id="usr_number" name="usr_number" placeholder="Nº" v-model="user.number" v-mask="['######']" required>
 			<label for="usr_number">Nº</label>
 		</div>
 	</div>
@@ -123,11 +125,21 @@
 		</div>
 	</div>
 </div>
-<div class="row" v-if="user.role != '{{ USER_ROLES_ADMIN }}'">
-	<div class="col">
-		<div class="form-label-group">
-			<input type="text" class="form-control" id="usr_parent_id" name="usr_parent_id" placeholder="Responsável" v-model="user.parent_id" required>
-			<label for="usr_parent_id">Responsável</label>
+@if(!Auth::user())
+	<div class="row" v-if="user.role != '{{ USER_ROLES_ADMIN }}'">
+		<div class="col">
+			<div class="form-label-group">
+				<input type="text" class="form-control" id="usr_parent_id" name="usr_parent_id" placeholder="Responsável" v-model="user.parent_id" required>
+				<label for="usr_parent_id">Responsável</label>
+			</div>
+		</div>
+	</div>
+@endif
+<div class="row">
+	<div class="col-sm-12">
+		<div class="form-group">
+			<button type="submit" class="btn btn-success float-right" title="Salvar">{!! ICONS_OK !!}</i></button>
+			<button type="button" class="btn btn-danger float-left closeFancybox" title="Cancelar">{!! ICONS_CANCEL !!}</i></button>
 		</div>
 	</div>
 </div>

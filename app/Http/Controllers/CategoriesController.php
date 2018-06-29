@@ -59,7 +59,7 @@ class CategoriesController extends Controller{
             $this->validator->with($request->except('_token'))->passesOrFail(ValidatorInterface::RULE_CREATE);
             $product = $this->repository->create($request->except('_token'));
             $response = [
-                'message' => 'Category created.',
+                'message' => 'Categoria registrada',
                 'data'    => $product->toArray(),
             ];
             return response()->json($response);
@@ -84,7 +84,7 @@ class CategoriesController extends Controller{
             $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
             $product = $this->repository->update($request->all(), $id);
             $response = [
-                'message' => 'Category updated.',
+                'message' => 'Categoria atualizada',
                 'data'    => $product->toArray(),
             ];
             return response()->json($response);
@@ -105,7 +105,7 @@ class CategoriesController extends Controller{
     public function destroy($id) {
         $deleted = $this->repository->delete($id);
         return response()->json([
-            'message' => 'Category deleted.',
+            'message' => 'Categoria removida',
             'deleted' => $deleted,
         ]);
     }

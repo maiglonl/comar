@@ -11,29 +11,31 @@
 |
 */
 
-Route::get('/', 'ProductsController@shop');
-
 Auth::routes();
 
-Route::get('/home', 'ProductsController@shop')->name('home');
+Route::get('/', 'ProductsController@shop')->name('index');
 
-Route::group(['prefix' => 'app', 'as' => 'app.', 'middleware' => ['auth']], function () {
-	Route::get('/home', 'HomeController@appIndex')->name('home');
+Route::get('home', 'HomeController@appIndex')->name('home');
 
+Route::get('status/all', 'StatusController@all')->name('status.all');
+
+Route::get('categories/all', 'CategoriesController@all')->name('categories.all');
+
+Route::get('products/desc/{id}', 'ProductsController@desc')->name('products.desc');
+Route::get('products/shop', 'ProductsController@shop')->name('products.shop');
+Route::get('products/find/{id}', 'ProductsController@find')->name('products.find');
+Route::get('products/all', 'ProductsController@all')->name('products.all');
+
+Route::post('users', 'UsersController@store')->name('users.store');
+
+Route::group(['middleware' => ['auth']], function () {
 	Route::get('attributes/create/{product_id}', 'AttributesController@create')->name('attributes.create');
 	Route::get('attributes/edit/{id}', 'AttributesController@edit')->name('attributes.edit');
 	Route::resource('attributes', 'AttributesController')->except(['index','show','create','edit']);
 
-	Route::get('status/all', 'StatusController@all')->name('status.all');
-
-	Route::get('categories/all', 'CategoriesController@all')->name('categories.all');
 	Route::get('categories/edit/{id}', 'CategoriesController@edit')->name('categories.edit');
 	Route::resource('categories', 'CategoriesController')->only(['create','store','update']);
 
-	Route::get('products/desc/{id}', 'ProductsController@desc')->name('products.desc');
-	Route::get('products/shop', 'ProductsController@shop')->name('products.shop');
-	Route::get('products/find/{id}', 'ProductsController@find')->name('products.find');
-	Route::get('products/all', 'ProductsController@all')->name('products.all');
 	Route::post('products/image/{id}', 'ProductsController@uploadImage')->name('products.image.upload');
 	Route::put('products/image/pull/{id}/{index}', 'ProductsController@pullImage')->name('products.image.pull');
 	Route::put('products/image/push/{id}/{index}', 'ProductsController@pushImage')->name('products.image.push');
@@ -42,5 +44,6 @@ Route::group(['prefix' => 'app', 'as' => 'app.', 'middleware' => ['auth']], func
 
 	Route::get('users/find/{id}', 'UsersController@find')->name('users.find');
 	Route::get('users/all', 'UsersController@all')->name('users.all');
-	Route::resource('users', 'UsersController');
+	Route::resource('users', 'UsersController')->except('store');
+
 });

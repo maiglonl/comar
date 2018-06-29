@@ -25,7 +25,7 @@
 			},
 			created: function(){
 				var self = this;
-				$.get('{{ route('app.categories.all') }}', function(data) {
+				$.get('{{ route('categories.all') }}', function(data) {
 					self.categories = data;
 				});
 			},
@@ -37,7 +37,7 @@
 					var self = this;
 					validaForm("#formEditProduct", function(){
 						self.product._token = "{{ csrf_token() }}";
-						$.put('{{ route('app.products.update', [$product->id]) }}', self.product, function(data) {
+						$.put('{{ route('products.update', [$product->id]) }}', self.product, function(data) {
 							if(data.error){
 								toastr.error('Falha ao atualizar produto!');
 							}else{

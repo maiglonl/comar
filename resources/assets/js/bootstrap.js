@@ -6,7 +6,16 @@ window.Popper = require('popper.js').default;
 
 /* jQuery*/
 window.$ = window.jQuery = require('jquery');
-//require('jquery-ui');
+window.$ = $.extend(require('jquery-ui-bundle'));
+$.widget.bridge('uitooltip', $.ui.tooltip);
+
+/* VueJs */
+window.Vue = require('vue');
+var VueResource = require('vue-resource');
+import VueTheMask from 'vue-the-mask';
+Vue.use(VueResource);
+Vue.use(VueTheMask);
+window.EventHub = new Vue();
 
 /* Bootstrap */
 require('bootstrap');

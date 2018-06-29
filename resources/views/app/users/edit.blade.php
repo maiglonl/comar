@@ -1,18 +1,8 @@
 <div>
 	<div id="userEditApp">
 		<h2 class="page-title">Usuário <small> | Edição de Usuário</small></h2>
-		<form action="" id="formEditUser">
-
+		<form action="{{ route('users.update', [$user->id]) }}" id="formEditUser" data-prefix="usr">
 			@include('app.users._form')
-
-			<div class="row">
-				<div class="col-sm-12">
-					<div class="form-group">
-						<button class="btn btn-success float-right" @click.prevent="submitFormEditUser" title="Salvar">{!! ICONS_OK !!}</i></button>
-						<button type="button" class="btn btn-danger float-left closeFancybox" title="Cancelar">{!! ICONS_CANCEL !!}</i></button>
-					</div>
-				</div>
-			</div>
 		</form>
 	</div>
 
@@ -28,22 +18,29 @@
 					var child = $(this).children().first();
 					self[child.attr('table')][child.attr('field')] = child.val();
 				});
+				$("#formEditUser").cValidate({
+					data: self.user,
+					isPut: true,
+					success: 'Usuário atualizado com sucesso!',
+					error: 'Falha ao atualizar usuário!',
+				});
 			},
 			methods:{
 				submitFormEditUser: function (){ 
-					var self = this;
-					validaForm("#formEditUser", function(){
-						self.user._token = "{{ csrf_token() }}";
-						$.put('{{ route('app.users.update', [$user->id]) }}', self.user, function(data) {
-							if(data.error){
-								toastr.error('Falha ao atualizar usuário!');
-							}else{
-								toastr.success('Usuário atualizado com sucesso');
-							}
-							parent.jQuery.fancybox.close();
-						});
-					});
 					$("#formEditUser").submit();
+				}
+			},
+			watch:{
+				'user.zipcode': function(val){
+					var self = this;
+					if(val.length == 9){
+						$.getJSON("https://viacep.com.br/ws/"+ val.replace(/\W/g, '') +"/json/?callback=?", function(dados) {
+							self.user.street = dados.logradouro;
+							self.user.district = dados.bairro;
+							self.user.city = dados.localidade;
+							self.user.state = dados.uf;
+						});
+					}
 				}
 			}
 		});

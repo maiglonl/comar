@@ -11243,6 +11243,15 @@ table.dataTable tbody td.selected a {
   color: #a2d4ed;
 }
 
+[ng\:cloak],
+[ng-cloak],
+[data-ng-cloak],
+[x-ng-cloak],
+.ng-cloak,
+.x-ng-cloak {
+  display: none !important;
+}
+
 .link-unstyled,
 .link-unstyled:visited,
 .link-unstyled:hover,
@@ -11475,6 +11484,43 @@ div.form-label-group.form-control > input[readonly] {
   padding-bottom: calc(var(--input-padding-y) / 3);
   font-size: 12px;
   color: #777;
+}
+
+.ui-autocomplete {
+  padding: 0;
+  list-style: none;
+  background-color: #fff;
+  width: 218px;
+  border: 1px solid #B0BECA;
+  max-height: 350px;
+  overflow-x: hidden;
+  z-index: 99999;
+}
+
+.ui-autocomplete .ui-menu-item-wrapper {
+  border-top: 1px solid #B0BECA;
+  display: block;
+  padding: 4px 6px;
+  color: #353D44;
+  cursor: pointer;
+}
+
+.ui-autocomplete .ui-menu-item-wrapper:first-child {
+  border-top: none;
+}
+
+.ui-autocomplete .ui-menu-item-wrapper.ui-state-active {
+  background-color: #80bdff;
+  color: #636b6f;
+}
+
+#ui-autocomplete-container {
+  display: block;
+  position: relative;
+}
+
+.ui-autocomplete {
+  position: absolute;
 }
 
 /*!

@@ -29,7 +29,7 @@
 				submitFormCreateAttribute: function (){ 
 					var self = this;
 					validaForm("#formCreateAttribute", function(){
-						$.post('{{ route('app.attributes.store') }}', self.attribute, function(data) {	
+						$.post('{{ route('attributes.store') }}', self.attribute, function(data) {	
 							if(data.error){
 								toastr.error('Falha ao criar atributo!');
 							}else{

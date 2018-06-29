@@ -10,6 +10,14 @@
 	return false;
  */
 
+/* Define por padrão o csrf_token em todas as requisições ajax */
+$(function() {
+	$.ajaxSetup({
+		headers: {
+			'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+		}
+	});
+});
 
 /**
  * Busca view e atribui ao elemento
@@ -40,7 +48,12 @@ window.dateBetween = function(date, start, end) {
 window.validaForm = function(form, submitFunc){
 	$(form).validate({
 		errorClass: 'invalid-feedback',
-		submitHandler: submitFunc,
+		submitHandler: function(data){
+			if(data.error){
+				this.showErrors(data.message);
+			}
+			submitFunc(data);
+		},
 		errorElement: 'div',
 		highlight: function(element) {
 			if ( element.type === "radio" ) {
@@ -57,12 +70,9 @@ window.validaForm = function(form, submitFunc){
 			}
 		},
 		errorPlacement: function(error, element) {
-			console.log(element);
 			if ( element[0].type == "radio" && element.parent("label").hasClass('btn')) {
-				console.log(1);
 				error.insertAfter(element.parent().parent());
 			}else{
-				console.log(2);
 				error.insertAfter(element[0]);
 			}
 		}
@@ -260,5 +270,5 @@ window.getCookie = function(cname){
 }
 
 window.deleteCookie = function(cname){
-	document.cookie= cname+"=;expires=Wed 01 Jan 1970"
+	document.cookie = cname+"=;expires=Wed 01 Jan 1970"
 }

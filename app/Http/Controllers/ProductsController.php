@@ -122,7 +122,7 @@ class ProductsController extends Controller {
 			$this->validator->with($request->except('_token'))->passesOrFail(ValidatorInterface::RULE_CREATE);
 			$product = $this->repository->create($request->except('_token'));
 			$response = [
-				'message' => 'Product created.',
+				'message' => 'Produto registrado',
 				'data'    => $product->toArray(),
 			];
 			return response()->json($response);
@@ -149,7 +149,7 @@ class ProductsController extends Controller {
 			$this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
 			$product = $this->repository->update($request->all(), $id);
 			$response = [
-				'message' => 'Product updated.',
+				'message' => 'Produto atualizado',
 				'data'    => $product->toArray(),
 			];
 			return response()->json($response);
@@ -172,7 +172,7 @@ class ProductsController extends Controller {
 		$deleted = $this->repository->delete($id);
 		$this->deleteAllImages($id);
 		return response()->json([
-			'message' => 'Product deleted.',
+			'message' => 'Produto removido',
 			'deleted' => $deleted,
 		]);
 	}
@@ -213,7 +213,7 @@ class ProductsController extends Controller {
 		Storage::delete($files[$index]);
 		$this->refreshImageNames($id);
 		return response()->json([
-			'message' => 'Image deleted.'
+			'message' => 'Imagem removida'
 		]);
 	}
 
@@ -227,7 +227,7 @@ class ProductsController extends Controller {
 			$store = Storage::putFileAs($path, $file, count($files)."_".date('YmdHis').".".$file->getClientOriginalExtension());
 		}
 		return response()->json([
-			'message' => 'Images uploaded.'
+			'message' => 'Imagens atualizadas'
 		]);
 	}
 
@@ -239,7 +239,7 @@ class ProductsController extends Controller {
 		Storage::move($files[$index], $path.$minIndex.".".File::extension($files[$index]));
 		$this->refreshImageNames($id);
 		return response()->json([
-			'message' => 'Image updated.'
+			'message' => 'Imagem atualizada'
 		]);
 	}
 	/* Altera o indice da imagem */
@@ -250,7 +250,7 @@ class ProductsController extends Controller {
 		Storage::move($files[$index], $path.$newIndex."_99999999999999.".File::extension($files[$index]));
 		$this->refreshImageNames($id);
 		return response()->json([
-			'message' => 'Image updated.'
+			'message' => 'Imagem atualizada.'
 		]);
 	}
 

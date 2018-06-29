@@ -10,8 +10,8 @@
 		</div>
 		<nav aria-label="breadcrumb">
 			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="{{ route('app.home') }}">Home</a></li>
-				<li class="breadcrumb-item"><a href="{{ route('app.products.index') }}">Produtos</a></li>
+				<li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+				<li class="breadcrumb-item"><a href="{{ route('products.index') }}">Produtos</a></li>
 				<li class="breadcrumb-item active" aria-current="page">{{ $product->name }}</li>
 			</ol>
 		</nav>
@@ -136,7 +136,7 @@
 				validaForm("#formImageUpload", function() {
 					var formData = new FormData($('#formImageUpload')[0]);
 					$.ajax({
-						url: "{{ route('app.products.image.upload', [$product->id]) }}",
+						url: "{{ route('products.image.upload', [$product->id]) }}",
 						type: 'POST',
 						success: completeHandler = function(data) { 
 							self.reloadData();
@@ -157,7 +157,7 @@
 			methods:{
 				reloadData: function (){
 					var self = this;
-					$.get('{{ route('app.products.find', [$product->id]) }}', function(data) {
+					$.get('{{ route('products.find', [$product->id]) }}', function(data) {
 						if(data.error){
 							toastr.error('Falha ao atualizar produto!');
 						}else{
@@ -171,7 +171,7 @@
 				openFormEditProduct: function(){
 					var self = this;
 					$.fancybox.open({
-						src: '{{ route('app.products.edit', [$product->id]) }}',
+						src: '{{ route('products.edit', [$product->id]) }}',
 						type: 'ajax',
 						opts: { 
 							clickOutside: false,
@@ -185,7 +185,7 @@
 				openFormAddAttribute: function(){
 					var self = this;
 					$.fancybox.open({
-						src: '{{ route('app.attributes.create', [$product->id]) }}',
+						src: '{{ route('attributes.create', [$product->id]) }}',
 						type: 'ajax',
 						opts: { 
 							clickOutside: false,
@@ -199,7 +199,7 @@
 				openFormEditAttribute: function(id){
 					var self = this;
 					$.fancybox.open({
-						src: '{{ route('app.attributes.edit', ['']) }}/'+id,
+						src: '{{ route('attributes.edit', ['']) }}/'+id,
 						type: 'ajax',
 						opts: { 
 							clickOutside: false,
@@ -212,20 +212,20 @@
 				},
 				removeFile: function(id, index){
 					var self = this;
-					$.delete('{{ route('app.products.image.delete', ['', '']) }}/'+id+'/'+index, { '_token': "{{ csrf_token() }}" }, function(data) {
+					$.delete('{{ route('products.image.delete', ['', '']) }}/'+id+'/'+index, { '_token': "{{ csrf_token() }}" }, function(data) {
 						toastr.success('Imagem removida com sucesso!');
 						self.reloadData();
 					});
 				},
 				imagePull: function(id, index){
 					var self = this;
-					$.put('{{ route('app.products.image.pull', ['', '']) }}/'+id+'/'+index, { '_token': "{{ csrf_token() }}" }, function(data) {
+					$.put('{{ route('products.image.pull', ['', '']) }}/'+id+'/'+index, { '_token': "{{ csrf_token() }}" }, function(data) {
 						self.reloadData();
 					});
 				},
 				imagePush: function(id, index){
 					var self = this;
-					$.put('{{ route('app.products.image.push', ['', '']) }}/'+id+'/'+index, { '_token': "{{ csrf_token() }}" }, function(data) {
+					$.put('{{ route('products.image.push', ['', '']) }}/'+id+'/'+index, { '_token': "{{ csrf_token() }}" }, function(data) {
 						self.reloadData();
 					});
 				}

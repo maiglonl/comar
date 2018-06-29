@@ -9,7 +9,7 @@
 	</div>
 	<nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
-			<li class="breadcrumb-item"><a href="{{ route('app.home') }}">Home</a></li>
+			<li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
 			<li class="breadcrumb-item active" aria-current="page">Produtos</li>
 		</ol>
 	</nav>
@@ -43,7 +43,7 @@
 		$(document).ready(function() {
 			$('#table-products').DataTable({
 				ajax: {
-					url: "{{ route('app.products.all') }}",
+					url: "{{ route('products.all') }}",
 					dataSrc: ""
 				},
 				columns: [
@@ -56,7 +56,7 @@
 				order: [],
 				fnRowCallback: function( row, data, index, indexFull ) {
 					$(row).on('click', function(evt) {
-						window.open("{{ route('app.products.show', ['']) }}/"+data.id, evt.ctrlKey ? '_blank' : '_self');
+						window.open("{{ route('products.show', ['']) }}/"+data.id, evt.ctrlKey ? '_blank' : '_self');
 					});
 				}
 			});
@@ -64,7 +64,7 @@
 
 		function openFormProduct(){
 			$.fancybox.open({
-				src: '{{ route('app.products.create') }}',
+				src: '{{ route('products.create') }}',
 				type: 'ajax',
 				opts: { 
 					clickOutside: false,

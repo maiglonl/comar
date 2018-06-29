@@ -8,7 +8,7 @@
 	</div>
 	<nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
-			<li class="breadcrumb-item"><a href="{{ route('app.home') }}">Home</a></li>
+			<li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
 			<li class="breadcrumb-item active" aria-current="page">Comprar</li>
 		</ol>
 	</nav>
@@ -36,7 +36,7 @@
 									<img src="{{ DEFAULT_IMAGE_PRODUCTS }}" class="img-fluid img-thumbnail rounded">
 								</div>
 								<div class="card-body">
-									<h4 class="card-title mt_height_name"><a :href="'{{ route('app.products.desc', ['']) }}/'+product.id" title="Mais informações" class="link-unstyled"><strong>@{{ product.name }}</strong></a> <br> <small>@{{ product.category.name }}</small></h4>
+									<h4 class="card-title mt_height_name"><a :href="'{{ route('products.desc', ['']) }}/'+product.id" title="Mais informações" class="link-unstyled"><strong>@{{ product.name }}</strong></a> <br> <small>@{{ product.category.name }}</small></h4>
 									<p class="card-text mt_height_description">@{{ product.description | limit_words(15) }}</p>
 								</div>
 								<ul class="list-group list-group-flush">
@@ -73,7 +73,7 @@
 			methods:{
 				reloadData: function (){
 					var self = this;
-					$.get('{{ route('app.products.all') }}', function(data) {
+					$.get('{{ route('products.all') }}', function(data) {
 						if(data.error){
 							toastr.error('Falha ao carregar produtos!');
 						}else{

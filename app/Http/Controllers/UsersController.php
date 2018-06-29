@@ -69,7 +69,7 @@ class UsersController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function create() {
-		return view('app.users.create', compact('user'));
+		return view('app.users.create');
 	}
 
 	/**
@@ -98,7 +98,7 @@ class UsersController extends Controller {
 			$this->validator->with($request->except('_token'))->passesOrFail(ValidatorInterface::RULE_CREATE);
 			$user = $this->repository->create($request->except('_token'));
 			$response = [
-				'message' => 'User created.',
+				'message' => 'Usuário registrado',
 				'data'    => $user->toArray(),
 			];
 			return response()->json($response);
@@ -125,7 +125,7 @@ class UsersController extends Controller {
 			$this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
 			$user = $this->repository->update($request->all(), $id);
 			$response = [
-				'message' => 'User updated.',
+				'message' => 'Usuário atualizado',
 				'data'    => $user->toArray(),
 			];
 			return response()->json($response);
@@ -147,7 +147,7 @@ class UsersController extends Controller {
 	public function destroy($id) {
 		$deleted = $this->repository->delete($id);
 		return response()->json([
-			'message' => 'User deleted.',
+			'message' => 'Usuário removido',
 			'deleted' => $deleted,
 		]);
 	}

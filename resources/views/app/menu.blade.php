@@ -1,8 +1,10 @@
 <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
 	<div class="container">
-		<a class="navbar-brand" href="{{ route('app.home') }}">
-			{{ config('app.name', 'Laravel') }}
-		</a>
+		@if(Auth::user())
+			<a class="navbar-brand" href="{{ route('home') }}">{{ config('app.name', 'Laravel') }}</a>
+		@else
+			<a class="navbar-brand" href="{{ route('index') }}">{{ config('app.name', 'Laravel') }}</a>
+		@endif
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
@@ -20,9 +22,9 @@
 					<li><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
 				@else
 
-					<li><a class="nav-link" href="{{ route('app.products.shop') }}">Shop</a></li>
-					<li><a class="nav-link" href="{{ route('app.products.index') }}">Produtos</a></li>
-					<li><a class="nav-link" href="{{ route('app.users.index') }}">Usuários</a></li>
+					<li><a class="nav-link" href="{{ route('products.shop') }}">Shop</a></li>
+					<li><a class="nav-link" href="{{ route('products.index') }}">Produtos</a></li>
+					<li><a class="nav-link" href="{{ route('users.index') }}">Usuários</a></li>
 					<li class="nav-item dropdown">
 						<a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
 							{{ Auth::user()->name }} <span class="caret"></span>

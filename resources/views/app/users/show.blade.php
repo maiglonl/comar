@@ -10,8 +10,8 @@
 		</div>
 		<nav aria-label="breadcrumb">
 			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="{{ route('app.home') }}">Home</a></li>
-				<li class="breadcrumb-item"><a href="{{ route('app.users.index') }}">Usuários</a></li>
+				<li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+				<li class="breadcrumb-item"><a href="{{ route('users.index') }}">Usuários</a></li>
 				<li class="breadcrumb-item active" aria-current="page">{{ $user->name }}</li>
 			</ol>
 		</nav>
@@ -114,7 +114,7 @@
 				validaForm("#formImageUpload", function() {
 					var formData = new FormData($('#formImageUpload')[0]);
 					$.ajax({
-						url: "{ { route('app.users.image.upload', [$user->id]) }}",
+						url: "{ { route('users.image.upload', [$user->id]) }}",
 						type: 'POST',
 						success: completeHandler = function(data) { 
 							self.reloadData();
@@ -135,7 +135,7 @@
 			methods:{
 				reloadData: function (){
 					var self = this;
-					$.get('{{ route('app.users.find', [$user->id]) }}', function(data) {
+					$.get('{{ route('users.find', [$user->id]) }}', function(data) {
 						if(data.error){
 							toastr.error('Falha ao atualizar usuário!');
 						}else{
@@ -146,7 +146,7 @@
 				openFormEditUser: function(){
 					var self = this;
 					$.fancybox.open({
-						src: '{{ route('app.users.edit', [$user->id]) }}',
+						src: '{{ route('users.edit', [$user->id]) }}',
 						type: 'ajax',
 						opts: { 
 							clickOutside: false,
