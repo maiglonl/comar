@@ -101300,15 +101300,11 @@ window.toastr = __webpack_require__("./node_modules/toastr/toastr.js");
 toastr.options.timeOut = 5000;
 
 /* Axios */
-window.axios = __webpack_require__("./node_modules/axios/index.js");
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-
 var token = document.head.querySelector('meta[name="csrf-token"]');
-if (token) {
-    window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
-} else {
-    console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
-}
+window.axios = __webpack_require__("./node_modules/axios/index.js");
+window._axios = axios.create({
+	headers: { 'X-CSRF-TOKEN': token.content }
+});
 
 /***/ }),
 
@@ -101608,15 +101604,6 @@ window.filters = {
 	$input[0].dispatchEvent(e);
 	return false;
  */
-
-/* Define por padrão o csrf_token em todas as requisições ajax */
-$(function () {
-	$.ajaxSetup({
-		headers: {
-			'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-		}
-	});
-});
 
 /**
  * Busca view e atribui ao elemento

@@ -7,7 +7,7 @@
 	</div>
 
 	<script type="text/javascript">
-		new Vue({
+		var userCreateApp = new Vue({
 			el: '#userCreateApp',
 			data: {
 				user: {
@@ -37,20 +37,29 @@
 				'user.zipcode': function(val){
 					var self = this;
 					if(val.length == 9){
+						console.log(0);
 						setAddressData(val, self.user);
+						console.log(2);
 					}
 				}
 			}
 		});
 		async function setAddressData(cep, data) {
 			try {
-				const response = await axios.get("http://www.viacep.com.br/ws/"+ cep.replace(/\W/g, '') +"/json").then(function (response) {
-					data.street = dados.logradouro;
-					data.district = dados.bairro;
-					data.city = dados.localidade;
-					data.state = dados.uf;
-				}).catch(function(response){});
-			} catch (error) {}
+				const response = await axios.get("https://viacep.com.br/ws/"+ cep.replace(/\W/g, '') +"/json").then(function (response) {
+					console.log(response);
+					data.street = response.logradouro;
+					data.district = response.bairro;
+					data.city = response.localidade;
+					data.state = response.uf;
+				}).catch(function(response){
+					console.log('catch');
+					console.log(response);
+				});
+			} catch (error) {
+				console.log('error');
+				console.log(error);
+			}
 		}
 	</script>
 </div>

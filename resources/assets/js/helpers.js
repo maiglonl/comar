@@ -10,15 +10,6 @@
 	return false;
  */
 
-/* Define por padrão o csrf_token em todas as requisições ajax */
-$(function() {
-	$.ajaxSetup({
-		headers: {
-			'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-		}
-	});
-});
-
 /**
  * Busca view e atribui ao elemento
  */
