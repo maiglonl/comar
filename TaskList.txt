@@ -117,7 +117,13 @@ Usar Preço de venda e Preço vendedor
 
 
 
-
+Buy Process:
+	- Verificar se tem 'order' com 'status' = 1 para 'user'
+		S- Verificar se tem 'item' para 'order'
+			S- Acrescentar 'amount'
+			N- Criar Item
+		N- Criar Order
+			- Criar Item
 
 
 
@@ -125,6 +131,21 @@ order
 	id
 	user_id
 	status_id
-	total
 	delivery_cep
-	delivery_adress
+	delivery_address
+
+item_order
+	id
+	order_ir
+	price
+
+task
+	id
+	name
+
+action
+	id
+	user_id
+	task_id
+	order_id
+	date

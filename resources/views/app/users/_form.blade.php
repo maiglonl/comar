@@ -129,9 +129,10 @@
 	<div class="row" v-if="user.role != '{{ USER_ROLES_ADMIN }}'">
 		<div class="col">
 			<div class="form-label-group">
-				<input type="text" class="form-control" id="usr_parent_id" name="usr_parent_id" placeholder="Responsável" v-model="user.parent_id" required>
+				<input type="text" class="form-control" id="usr_parent_name" name="usr_parent_name" placeholder="Responsável">
 				<label for="usr_parent_id">Responsável</label>
 			</div>
+			<input type="hidden" id="usr_parent_id" v-model="user.parent_id">
 		</div>
 	</div>
 @endif

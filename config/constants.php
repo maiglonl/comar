@@ -19,7 +19,19 @@
 	define('USER_ROLES_PARTNER','partner');
 	define('USER_ROLES_CLIENT', 'client');
 
+	/* USER_ROLES */
+	define('STATUS_ORDER_EM_ABERTO',	'1');
+	define('STATUS_ORDER_CANCELADO',	'2');
+	define('STATUS_ORDER_AG_PAG',		'3');
+	define('STATUS_ORDER_PAG_APR',		'4');
+	define('STATUS_ORDER_AG_ENV',		'5');
+	define('STATUS_ORDER_ENV',			'6');
+	define('STATUS_ORDER_ETREGUE',		'7');
+
 	/* DEFAULT_IMAGES */
 	define('DEFAULT_IMAGE_PRODUCTS', 	'/storage/products/default.png');
 	define('DEFAULT_IMAGE_USERS_FEMALE','/storage/users/user_female.png');
 	define('DEFAULT_IMAGE_USERS_MALE', 	'/storage/users/user_male.png');
+
+	/* BUSINESS RULES */
+	define('PARTNER_MULTIPLIER', '0.9');

@@ -23,7 +23,9 @@
 				@else
 
 					<li><a class="nav-link" href="{{ route('products.shop') }}">Shop</a></li>
-					<li><a class="nav-link" href="{{ route('products.index') }}">Produtos</a></li>
+					@if(Auth::user()->role == USER_ROLES_ADMIN) 
+						<li><a class="nav-link" href="{{ route('products.index') }}">Produtos</a></li>
+					@endif
 					<li><a class="nav-link" href="{{ route('users.index') }}">Usuários</a></li>
 					<li class="nav-item dropdown">
 						<a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -41,6 +43,7 @@
 							</form>
 						</div>
 					</li>
+					<li><a class="nav-link" href="{{ route('products.shop') }}"><i class="fas fa-shopping-cart"></i>(4)</span></a></li>
 				@endguest
 			</ul>
 		</div>

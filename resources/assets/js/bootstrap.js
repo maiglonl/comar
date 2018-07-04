@@ -9,6 +9,13 @@ window.$ = window.jQuery = require('jquery');
 window.$ = $.extend(require('jquery-ui-bundle'));
 $.widget.bridge('uitooltip', $.ui.tooltip);
 
+/* Axios */
+let token = document.head.querySelector('meta[name="csrf-token"]');
+window.axios = require('axios');
+window._axios = axios.create({
+	headers: {'X-CSRF-TOKEN': token.content}
+});
+
 /* VueJs */
 window.Vue = require('vue');
 var VueResource = require('vue-resource');
@@ -45,10 +52,3 @@ require('bootstrap-select');
 /* Toastr */
 window.toastr = require('toastr');
 toastr.options.timeOut = 5000;
-
-/* Axios */
-let token = document.head.querySelector('meta[name="csrf-token"]');
-window.axios = require('axios');
-window._axios = axios.create({
-	headers: {'X-CSRF-TOKEN': token.content}
-});

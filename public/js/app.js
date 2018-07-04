@@ -101262,6 +101262,13 @@ window.$ = window.jQuery = __webpack_require__("./node_modules/jquery/dist/jquer
 window.$ = $.extend(__webpack_require__("./node_modules/jquery-ui-bundle/jquery-ui.js"));
 $.widget.bridge('uitooltip', $.ui.tooltip);
 
+/* Axios */
+var token = document.head.querySelector('meta[name="csrf-token"]');
+window.axios = __webpack_require__("./node_modules/axios/index.js");
+window._axios = axios.create({
+	headers: { 'X-CSRF-TOKEN': token.content }
+});
+
 /* VueJs */
 window.Vue = __webpack_require__("./node_modules/vue/dist/vue.common.js");
 var VueResource = __webpack_require__("./node_modules/vue-resource/dist/vue-resource.esm.js");
@@ -101298,13 +101305,6 @@ __webpack_require__("./node_modules/bootstrap-select/dist/js/bootstrap-select.js
 /* Toastr */
 window.toastr = __webpack_require__("./node_modules/toastr/toastr.js");
 toastr.options.timeOut = 5000;
-
-/* Axios */
-var token = document.head.querySelector('meta[name="csrf-token"]');
-window.axios = __webpack_require__("./node_modules/axios/index.js");
-window._axios = axios.create({
-	headers: { 'X-CSRF-TOKEN': token.content }
-});
 
 /***/ }),
 
@@ -101394,7 +101394,7 @@ $.widget("custom.wAutocomplete", $.ui.autocomplete, {
 			},
 			appendTo: appendId
 		}).wAutocomplete("instance")._renderItem = function (ul, item) {
-			return $("<li>").append("<div class=\"ui-menu-item-wrapper\">" + filtersVue.name(item[options.searchAttr]) + "</div>").appendTo(ul);
+			return $("<li>").append("<div class=\"ui-menu-item-wrapper\">" + filters.name(item[options.searchAttr]) + "</div>").appendTo(ul);
 		};
 	};
 })(jQuery);
@@ -101591,8 +101591,9 @@ window.filters = {
 /***/ }),
 
 /***/ "./resources/assets/js/helpers.js":
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__) {
 
+"use strict";
 /**
  * Dispatch event when radio button group change
  */
@@ -101604,6 +101605,35 @@ window.filters = {
 	$input[0].dispatchEvent(e);
 	return false;
  */
+
+/* Define por padrão o csrf_token em todas as requisições ajax */
+$(function () {
+	$.ajaxSetup({
+		headers: {
+			'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+		}
+	});
+});
+
+/* Função para consulta de cep e atualiza dados do endereço */
+window.setAddressData = function (cep, data) {
+	var url = "https://viacep.com.br/ws/" + cep.replace(/\W/g, '') + "/json";
+	axios.get(url).then(function (resp) {
+		if (resp.data.erro) {
+			toastr.error("CEP não encontrado!");
+			data.street = "";
+			data.district = "";
+			data.city = "";
+			data.state = "";
+		}
+		data.street = resp.data.logradouro;
+		data.district = resp.data.bairro;
+		data.city = resp.data.localidade;
+		data.state = resp.data.uf;
+	}).catch(function (error) {
+		toastr.error("Falha ao consultar cep");
+	});
+};
 
 /**
  * Busca view e atribui ao elemento

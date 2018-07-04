@@ -10,6 +10,35 @@
 	return false;
  */
 
+/* Define por padrão o csrf_token em todas as requisições ajax */
+$(function() {
+	$.ajaxSetup({
+		headers: {
+			'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+		}
+	});
+});
+
+/* Função para consulta de cep e atualiza dados do endereço */
+window.setAddressData = function(cep, data) {
+	let url = "https://viacep.com.br/ws/"+ cep.replace(/\W/g, '') +"/json";
+	axios.get(url).then(function (resp) {
+		if (resp.data.erro) {
+			toastr.error("CEP não encontrado!");
+			data.street = "";
+			data.district = "";
+			data.city = "";
+			data.state = "";
+		}
+		data.street = resp.data.logradouro;
+		data.district = resp.data.bairro;
+		data.city = resp.data.localidade;
+		data.state = resp.data.uf;
+	}).catch(function(error) {
+		toastr.error("Falha ao consultar cep");
+	});
+}
+
 /**
  * Busca view e atribui ao elemento
  */

@@ -39,8 +39,13 @@
 								</div>
 								<div class="row">
 									<div class="col">
-										<label class="label-plaintext label-sm" for="prod_value">Valores:</label>
-										<p class="form-control-plaintext" id="prod_value">@{{ product.value_seller | currency(true) }} / @{{ product.value_partner | currency(true) }}</p>
+										<label class="label-plaintext label-sm" for="prod_value">Valor:</label>
+										<p class="form-control-plaintext" id="prod_value">
+											@{{ product.value_partner | currency(true) }} 
+											@if(\App\Helpers\PermHelper::viewValues()) 
+												/ @{{ product.value_seller | currency(true) }}
+											@endif
+										</p>
 									</div>
 								</div>
 								<div class="row">
@@ -53,6 +58,24 @@
 									<div class="col">
 										<label class="label-plaintext label-sm" for="prod_description">Descrição:</label>
 										<p class="form-control-plaintext" id="prod_description">@{{ product.description | default }}</p>
+									</div>
+								</div>
+								<div class="row" v-if="product.attributes" v-for="attribute in product.attributes">
+									<div class="col">
+										<label class="label-plaintext label-sm" for="prod_value">@{{ attribute.name }}:</label>
+										<p class="form-control-plaintext" id="prod_value">@{{ attribute.value }}</p>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col pt-5">
+										@if(!Auth::user())
+											<div class="alert alert-light text-center" role="alert">
+												<p>Para continuar com a compra é neccessário estar <a href="{{ route('login') }}">logado</a> no sistema!</p>
+												<a href="{{ route('register') }}">Ainda não possui cadastro?</p>
+											</div>
+										@else
+											<a class="btn btn-primary" href="#" role="button">Comprar</a>
+										@endif
 									</div>
 								</div>
 							</div>

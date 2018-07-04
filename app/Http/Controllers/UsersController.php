@@ -11,6 +11,7 @@ use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Repositories\UserRepository;
 use App\Validators\UserValidator;
+use Auth;
 
 /**
  * Class UsersController.
@@ -46,8 +47,11 @@ class UsersController extends Controller {
 	 */
 	public function index() {
 		$this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-		$users = $this->repository->all();
-
+		if(Auth::user()->role != USER_ROLES_ADMIN){
+			$users = $this->repository->findWhere(['parent_id' => Auth::user()->id]);
+		}else{
+			$users = $this->repository->all();
+		}
 		return view('app.users.index', compact('users'));
 	}
 
@@ -60,7 +64,12 @@ class UsersController extends Controller {
 	 */
 	public function show($id) {
 		$user = $this->repository->find($id);
-		return view('app.users.show', compact('user'));
+		if(Auth::user()->role != USER_ROLES_ADMIN && $user->parent_id != Auth::user()->id){
+			return view('app.errors.permission');
+		}else{
+			return view('app.users.show', compact('user'));
+		}
+		
 	}
 
 	/**
@@ -69,7 +78,8 @@ class UsersController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function create() {
-		return view('app.users.create');
+		$users = $this->repository->all();
+		return Auth::user() ? view('app.users.create', compact('users')) : view('auth.register', compact('users'));
 	}
 
 	/**
@@ -165,7 +175,10 @@ class UsersController extends Controller {
 	 * Return list with all users.
 	 */
 	public function all(){
-		
-		return $this->repository->all();
+		if(Auth::user()->role != USER_ROLES_ADMIN){
+			return $this->repository->findWhere(['parent_id' => Auth::user()->id]);
+		}else{
+			return $this->repository->all();
+		}
 	}
 }

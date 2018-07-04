@@ -51,8 +51,13 @@
 						</div>
 						<div class="row">
 							<div class="col">
-								<label class="label-plaintext label-sm" for="prod_value">Valores:</label>
-								<p class="form-control-plaintext" id="prod_value">@{{ product.value_seller | currency(true) }} / @{{ product.value_partner | currency(true) }}</p>
+								<label class="label-plaintext label-sm" for="prod_value">Valor:</label>
+								<p class="form-control-plaintext" id="prod_value">
+									@{{ product.value_seller | currency(true) }} 
+									@if(\App\Helpers\PermHelper::viewValues()) 
+										/ @{{ product.value_partner | currency(true) }}
+									@endif
+								</p>
 							</div>
 						</div>
 						<div class="row">

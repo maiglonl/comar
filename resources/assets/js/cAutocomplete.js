@@ -82,7 +82,7 @@ $.widget("custom.wAutocomplete", $.ui.autocomplete, {
 			appendTo: appendId
 		}).wAutocomplete("instance")._renderItem = function( ul, item ) {
 			return $("<li>")
-			.append("<div class=\"ui-menu-item-wrapper\">"+filtersVue.name(item[options.searchAttr])+"</div>")
+			.append("<div class=\"ui-menu-item-wrapper\">"+filters.name(item[options.searchAttr])+"</div>")
 			.appendTo( ul );
 		};
 	}

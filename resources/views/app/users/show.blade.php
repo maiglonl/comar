@@ -5,7 +5,7 @@
 		<div class="page-title">
 			<h3>
 				Usuários | <small class="text-muted">Descrição do usuário</small>
-				<button type="button" class="btn btn-sm btn-primary float-right" title="Editar Usuário" @click="openFormEditUser()">{!! ICONS_EDIT !!}</button>
+				<button type="button" class="btn btn-sm btn-primary float-right" title="Alterar Cadastro" @click="openFormEditUser()">{!! ICONS_EDIT !!}</button>
 			</h3>
 		</div>
 		<nav aria-label="breadcrumb">

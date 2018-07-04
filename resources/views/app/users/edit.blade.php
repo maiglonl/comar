@@ -25,21 +25,11 @@
 					error: 'Falha ao atualizar usuário!',
 				});
 			},
-			methods:{
-				submitFormEditUser: function (){ 
-					$("#formEditUser").submit();
-				}
-			},
 			watch:{
 				'user.zipcode': function(val){
 					var self = this;
 					if(val.length == 9){
-						$.getJSON("https://viacep.com.br/ws/"+ val.replace(/\W/g, '') +"/json/?callback=?", function(dados) {
-							self.user.street = dados.logradouro;
-							self.user.district = dados.bairro;
-							self.user.city = dados.localidade;
-							self.user.state = dados.uf;
-						});
+						setAddressData(val, self.user);
 					}
 				}
 			}
