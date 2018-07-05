@@ -11,6 +11,7 @@ use App\Http\Requests\ProductCreateRequest;
 use App\Http\Requests\ProductUpdateRequest;
 use App\Repositories\ProductRepository;
 use App\Validators\ProductValidator;
+use App\Criteria\ProductValueCriteria;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 

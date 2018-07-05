@@ -36,21 +36,20 @@
 									<img src="{{ DEFAULT_IMAGE_PRODUCTS }}" class="img-fluid img-thumbnail rounded">
 								</div>
 								<div class="card-body">
-									<h4 class="card-title mt_height_name"><a :href="'{{ route('products.desc', ['']) }}/'+product.id" title="Mais informações" class="link-unstyled"><strong>@{{ product.name }}</strong></a> <br> <small>@{{ product.category.name }}</small></h4>
-									<p class="card-text mt_height_description">@{{ product.description | limit_words(15) }}</p>
-								</div>
-								<ul class="list-group list-group-flush">
-									@if(Auth::user() && Auth::user()->role == USER_ROLES_ADMIN)
-										<h2><li class="list-group-item"><span>R$</span><span class="float-right">@{{ product.value_seller | currency }}</span></li></h2>
-										<h2><li class="list-group-item"><span>R$</span><span class="float-right">@{{ product.value_partner | currency }}</span></li></h2>
-									@elseif(Auth::user() && Auth::user()->role == USER_ROLES_SELLER)
-										<h2><li class="list-group-item"><span>R$</span><span class="float-right">@{{ product.value_seller | currency }}</span></li></h2>
-									@else
-										<h2><li class="list-group-item"><span>R$</span><span class="float-right">@{{ product.value_partner | currency }}</span></li></h2>
-									@endif
-								</ul>
-								<div class="card-footer-btn btn btn-primary">
-									Comprar
+									<a :href="'{{ route('products.desc', ['']) }}/'+product.id" title="Mais informações" class="link-unstyled">
+										<h4 class="card-title mt_height_name"><strong>@{{ product.name }}</strong> <br> <small>@{{ product.category.name }}</small></h4>
+										<p class="card-text mt_height_description">@{{ product.description | limit_words(15) }}</p>
+										<ul class="list-group list-group-flush">
+											@if(Auth::user() && Auth::user()->role == USER_ROLES_ADMIN)
+												<h2><li class="list-group-item"><span>R$</span><span class="float-right">@{{ product.value_seller | currency }}</span></li></h2>
+												<h2><li class="list-group-item"><span>R$</span><span class="float-right">@{{ product.value_partner | currency }}</span></li></h2>
+											@elseif(Auth::user() && Auth::user()->role == USER_ROLES_SELLER)
+												<h2><li class="list-group-item"><span>R$</span><span class="float-right">@{{ product.value_seller | currency }}</span></li></h2>
+											@else
+												<h2><li class="list-group-item"><span>R$</span><span class="float-right">@{{ product.value_partner | currency }}</span></li></h2>
+											@endif
+										</ul>
+									</a>
 								</div>
 							</div>
 						</div>

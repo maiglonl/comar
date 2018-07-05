@@ -43,7 +43,7 @@ class User extends Authenticatable implements Transformable{
 		'password', 'remember_token',
 	];
 
-	protected $appends = ['search'];
+	//protected $appends = ['search'];
 
 	public function getSearchAttribute(){
 		return "$this->id - $this->name [$this->city]";

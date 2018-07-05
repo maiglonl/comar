@@ -74,7 +74,7 @@
 												<a href="{{ route('register') }}">Ainda não possui cadastro?</p>
 											</div>
 										@else
-											<a class="btn btn-primary" href="#" role="button">Comprar</a>
+											<a class="btn btn-primary" href="#" role="button" @click.prevent="addItem()">Comprar</a>
 										@endif
 									</div>
 								</div>

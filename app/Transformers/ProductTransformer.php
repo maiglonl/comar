@@ -12,23 +12,28 @@ use App\Models\Product;
  */
 class ProductTransformer extends TransformerAbstract
 {
-    /**
-     * Transform the Product entity.
-     *
-     * @param \App\Models\Product $model
-     *
-     * @return array
-     */
-    public function transform(Product $model)
-    {
-        return [
-            'id'         => (int) $model->id,
-            'name'		 => $model->name,
-            'description'=> $model->description,
-            'value'		 => (float) $model->value,
-            'status'	 => $model->status,
-            'created_at' => $model->created_at,
-            'updated_at' => $model->updated_at
-        ];
-    }
+	/**
+	 * Transform the Product entity.
+	 *
+	 * @param \App\Models\Product $model
+	 *
+	 * @return array
+	 */
+	public function transform(Product $model)
+	{
+		return [
+			'name' 			=> (int) $model->name,
+			'description' 	=> $model->description,
+			'category_id' 	=> $model->category_id,
+			'value_partner' => (float) $model->value_partner,
+			'value_seller' 	=> \App\Helpers\PermHelper::viewValues() ? (float) $model->value_seller : '',
+			'weight' 		=> $model->weight,
+			'height' 		=> $model->height,
+			'width' 		=> $model->width,
+			'length' 		=> $model->length,
+			'diameter' 		=> $model->diameter,
+			'amount' 		=> $model->amount,
+			'status' 		=> $model->status
+		];
+	}
 }

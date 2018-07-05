@@ -16,10 +16,10 @@ TODO
 	Layout Externo
 	Layout Interno
 
+	Não mostrar 'value_seller' nas requisições
 
 DOING
 	CRUD Distribuidor/Distribuidor
-
 
 DONE
 	CRUD Produtos - Cadastro do produto

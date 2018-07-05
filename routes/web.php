@@ -49,10 +49,15 @@ Route::group(['middleware' => ['auth', 'can:access-admin']], function () {
 	Route::post('products/image/{id}', 'ProductsController@uploadImage')->name('products.image.upload');
 	Route::delete('products/image/{id}/{index}', 'ProductsController@deleteImage')->name('products.image.delete');
 
+	// Orders
+	Route::get('orders/current', 'OrdersController@current')->name('orders.current');
+
 	// Resources
 	Route::resource('attributes', 'AttributesController')->except(['index','show','create','edit']);
 	Route::resource('categories', 'CategoriesController')->only(['create','store','update']);
 	Route::resource('products', 'ProductsController');
+	Route::resource('Orders', 'OrdersController');
+	Route::resource('Items', 'ItemsController');
 });
 
 // Authenticated Routes

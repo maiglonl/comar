@@ -4,9 +4,11 @@ namespace App\Repositories;
 
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
+use App\Criteria\ProductValueCriteria;
 use App\Repositories\ProductRepository;
 use App\Models\Product;
 use App\Validators\ProductValidator;
+use App\Presenters\ProductPresenter;
 
 /**
  * Class ProductRepositoryEloquent.
@@ -15,34 +17,39 @@ use App\Validators\ProductValidator;
  */
 class ProductRepositoryEloquent extends BaseRepository implements ProductRepository
 {
-    /**
-     * Specify Model class name
-     *
-     * @return string
-     */
-    public function model()
-    {
-        return Product::class;
-    }
+	/**
+	 * Specify Model class name
+	 *
+	 * @return string
+	 */
+	public function model()
+	{
+		return Product::class;
+	}
 
-    /**
-    * Specify Validator class name
-    *
-    * @return mixed
-    */
-    public function validator()
-    {
+	/**
+	* Specify Validator class name
+	*
+	* @return mixed
+	*/
+	public function validator()
+	{
 
-        return ProductValidator::class;
-    }
+		return ProductValidator::class;
+	}
 
 
-    /**
-     * Boot up the repository, pushing criteria
-     */
-    public function boot()
-    {
-        $this->pushCriteria(app(RequestCriteria::class));
-    }
-    
+	/**
+	 * Boot up the repository, pushing criteria
+	 */
+	public function boot()
+	{
+		$this->pushCriteria(app(RequestCriteria::class));
+		$this->pushCriteria(app(ProductValueCriteria::class));
+	}
+
+	public function presenter()
+	{
+		//return ProductPresenter::class;
+	}
 }
