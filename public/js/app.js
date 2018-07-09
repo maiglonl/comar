@@ -101591,9 +101591,8 @@ window.filters = {
 /***/ }),
 
 /***/ "./resources/assets/js/helpers.js":
-/***/ (function(module, __webpack_exports__) {
+/***/ (function(module, exports) {
 
-"use strict";
 /**
  * Dispatch event when radio button group change
  */

@@ -49,9 +49,6 @@ Route::group(['middleware' => ['auth', 'can:access-admin']], function () {
 	Route::post('products/image/{id}', 'ProductsController@uploadImage')->name('products.image.upload');
 	Route::delete('products/image/{id}/{index}', 'ProductsController@deleteImage')->name('products.image.delete');
 
-	// Orders
-	Route::get('orders/current', 'OrdersController@current')->name('orders.current');
-
 	// Resources
 	Route::resource('attributes', 'AttributesController')->except(['index','show','create','edit']);
 	Route::resource('categories', 'CategoriesController')->only(['create','store','update']);
@@ -64,6 +61,13 @@ Route::group(['middleware' => ['auth', 'can:access-admin']], function () {
 Route::group(['middleware' => ['auth']], function () {
 	Route::get('users/find/{id}', 'UsersController@find')->name('users.find');
 	Route::get('users/all', 'UsersController@all')->name('users.all');
+
+	// Orders
+	Route::get('orders/current', 'OrdersController@current')->name('orders.current');
+	Route::get('orders/cart/{id}', 'OrdersController@cart')->name('orders.cart');
+
+	// Items
+	Route::post('items/store', 'ItemsController@store')->name('items.store');
 
 	Route::resource('orders', 'OrdersController');
 	Route::resource('users', 'UsersController')->except('store');

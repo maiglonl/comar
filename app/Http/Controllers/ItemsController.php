@@ -19,186 +19,172 @@ use App\Validators\ItemValidator;
  */
 class ItemsController extends Controller
 {
-    /**
-     * @var ItemRepository
-     */
-    protected $repository;
+	/**
+	 * @var ItemRepository
+	 */
+	protected $repository;
 
-    /**
-     * @var ItemValidator
-     */
-    protected $validator;
+	/**
+	 * @var ItemValidator
+	 */
+	protected $validator;
 
-    /**
-     * ItemsController constructor.
-     *
-     * @param ItemRepository $repository
-     * @param ItemValidator $validator
-     */
-    public function __construct(ItemRepository $repository, ItemValidator $validator)
-    {
-        $this->repository = $repository;
-        $this->validator  = $validator;
-    }
+	/**
+	 * ItemsController constructor.
+	 *
+	 * @param ItemRepository $repository
+	 * @param ItemValidator $validator
+	 */
+	public function __construct(ItemRepository $repository, ItemValidator $validator)
+	{
+		$this->repository = $repository;
+		$this->validator  = $validator;
+	}
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $items = $this->repository->all();
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function add()
+	{
+		$this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
+		$items = $this->repository->all();
 
-        if (request()->wantsJson()) {
+		if (request()->wantsJson()) {
 
-            return response()->json([
-                'data' => $items,
-            ]);
-        }
+			return response()->json([
+				'data' => $items,
+			]);
+		}
 
-        return view('items.index', compact('items'));
-    }
+		return view('items.index', compact('items'));
+	}
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  ItemCreateRequest $request
-     *
-     * @return \Illuminate\Http\Response
-     *
-     * @throws \Prettus\Validator\Exceptions\ValidatorException
-     */
-    public function store(ItemCreateRequest $request)
-    {
-        try {
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @param  ItemCreateRequest $request
+	 *
+	 * @return \Illuminate\Http\Response
+	 *
+	 * @throws \Prettus\Validator\Exceptions\ValidatorException
+	 */
+	public function store(ItemCreateRequest $request){
+		$it = $request->all();
+		$item = $this->repository->findWhere(['order_id' => $it['order_id'], 'product_id' => $it['product_id']])->first();
+		if($item){
+			$item->amount++;
+			$this->repository->update($item->toArray(), $item->id);
+		}else{
+			$item = $this->repository->create([
+				'order_id' => $it['order_id'], 
+				'product_id' => $it['product_id'],
+				'value' => $it['value'],
+				'amount' => 1
+			]);
+		}
+		return response()->json($item);		
+	}
 
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  int $id
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function show($id)
+	{
+		$item = $this->repository->find($id);
 
-            $item = $this->repository->create($request->all());
+		if (request()->wantsJson()) {
 
-            $response = [
-                'message' => 'Item created.',
-                'data'    => $item->toArray(),
-            ];
+			return response()->json([
+				'data' => $item,
+			]);
+		}
 
-            if ($request->wantsJson()) {
+		return view('items.show', compact('item'));
+	}
 
-                return response()->json($response);
-            }
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param  int $id
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function edit($id)
+	{
+		$item = $this->repository->find($id);
 
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
+		return view('items.edit', compact('item'));
+	}
 
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
-        }
-    }
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  ItemUpdateRequest $request
+	 * @param  string            $id
+	 *
+	 * @return Response
+	 *
+	 * @throws \Prettus\Validator\Exceptions\ValidatorException
+	 */
+	public function update(ItemUpdateRequest $request, $id)
+	{
+		try {
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $item = $this->repository->find($id);
+			$this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
 
-        if (request()->wantsJson()) {
+			$item = $this->repository->update($request->all(), $id);
 
-            return response()->json([
-                'data' => $item,
-            ]);
-        }
+			$response = [
+				'message' => 'Item updated.',
+				'data'    => $item->toArray(),
+			];
 
-        return view('items.show', compact('item'));
-    }
+			if ($request->wantsJson()) {
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $item = $this->repository->find($id);
+				return response()->json($response);
+			}
 
-        return view('items.edit', compact('item'));
-    }
+			return redirect()->back()->with('message', $response['message']);
+		} catch (ValidatorException $e) {
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  ItemUpdateRequest $request
-     * @param  string            $id
-     *
-     * @return Response
-     *
-     * @throws \Prettus\Validator\Exceptions\ValidatorException
-     */
-    public function update(ItemUpdateRequest $request, $id)
-    {
-        try {
+			if ($request->wantsJson()) {
 
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
+				return response()->json([
+					'error'   => true,
+					'message' => $e->getMessageBag()
+				]);
+			}
 
-            $item = $this->repository->update($request->all(), $id);
-
-            $response = [
-                'message' => 'Item updated.',
-                'data'    => $item->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-
-            if ($request->wantsJson()) {
-
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
-        }
-    }
+			return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+		}
+	}
 
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        $deleted = $this->repository->delete($id);
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  int $id
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function destroy($id)
+	{
+		$deleted = $this->repository->delete($id);
 
-        if (request()->wantsJson()) {
+		if (request()->wantsJson()) {
 
-            return response()->json([
-                'message' => 'Item deleted.',
-                'deleted' => $deleted,
-            ]);
-        }
+			return response()->json([
+				'message' => 'Item deleted.',
+				'deleted' => $deleted,
+			]);
+		}
 
-        return redirect()->back()->with('message', 'Item deleted.');
-    }
+		return redirect()->back()->with('message', 'Item deleted.');
+	}
 }

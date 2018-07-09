@@ -109,17 +109,23 @@ class OrdersController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show($id)
-	{
+	public function cart($id){
 		$order = $this->repository->find($id);
-
-		if (request()->wantsJson()) {
-
-			return response()->json([
-				'data' => $order,
-			]);
+		if($order->status_id != STATUS_ORDER_EM_ABERTO){
+			return view('orders.show', compact('order'));
 		}
+		return view('app.orders.cart', compact('order'));
+	}
 
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  int $id
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function show($id){
+		$order = $this->repository->find($id);
 		return view('orders.show', compact('order'));
 	}
 

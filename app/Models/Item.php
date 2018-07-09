@@ -20,6 +20,11 @@ class Item extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+	    'order_id',
+		'product_id',
+		'amount',
+		'value'
+	];
 
 }

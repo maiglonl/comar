@@ -1,17 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
-	<div id="productDescApp">
+	<div id="orderCartApp">
 		<div class="page-title">
 			<h3>
-				Produtos | <small class="text-muted">Descrição do produto</small>
+				Pedidos | <small class="text-muted">Pedido em andamento</small>
 			</h3>
 		</div>
 		<nav aria-label="breadcrumb">
 			<ol class="breadcrumb">
 				<li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-				<li class="breadcrumb-item"><a href="{{ route('products.index') }}">Produtos</a></li>
-				<li class="breadcrumb-item active" aria-current="page">{{ $product->name }}</li>
+				<li class="breadcrumb-item"><a href="{{ route('products.index') }}">Pedidos</a></li>
+				<li class="breadcrumb-item active" aria-current="page">Novo pedido</li>
 			</ol>
 		</nav>
 		<div class="row justify-content-center">
@@ -66,18 +66,6 @@
 										<p class="form-control-plaintext" id="prod_value">@{{ attribute.value }}</p>
 									</div>
 								</div>
-								<div class="row">
-									<div class="col pt-5">
-										@if(!Auth::user())
-											<div class="alert alert-light text-center" role="alert">
-												<p>Para continuar com a compra é neccessário estar <a href="{{ route('login') }}">logado</a> no sistema!</p>
-												<a href="{{ route('register') }}">Ainda não possui cadastro?</p>
-											</div>
-										@else
-											<a class="btn btn-primary" href="#" role="button" @click.prevent="addItem">Comprar</a>
-										@endif
-									</div>
-								</div>
 							</div>
 						</div>
 						<div class="row">
@@ -98,30 +86,13 @@
 	</div>
 	<script type="text/javascript">
 		new Vue({
-			el: '#productDescApp',
+			el: '#orderCartApp',
 			data: {
-				product: {!! $product->toJson() !!}
+				order: {!! $order->toJson() !!}
 			},
 			mounted: function(){
 			},
 			methods:{
-				addItem: function(){
-					let self = this;
-					$.get('{{ route('orders.current') }}', function(order) {
-						if(order.error){
-							toastr.error('Falha ao criar pedido!');
-						}else{
-							let item = {
-								'order_id': order.id,
-								'product_id': self.product.id,
-								'value': self.product.{{ \App\Helpers\PermHelper::lowerValue() ? 'value_seller' : 'value_partner' }}
-							}
-							$.post('{{ route('items.store') }}', item, function(data) {
-								console.log(data);
-							});
-						}
-					});
-				}
 			},
 			filters: filters
 		});

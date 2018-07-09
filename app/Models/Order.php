@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
+use App\Models\Item;
 
 /**
  * Class Order.
  *
  * @package namespace App\Models;
  */
-class Order extends Model implements Transformable
-{
+class Order extends Model implements Transformable {
 	use TransformableTrait;
 
 	/**
@@ -31,5 +31,11 @@ class Order extends Model implements Transformable
 		'number',
 		'complement'
 	];
+
+	protected $with = ['items'];
+
+	public function items(){
+		return $this->hasMany(Item::class);
+	}
 
 }
