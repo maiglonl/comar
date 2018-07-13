@@ -10,3 +10,4 @@ require('./helpers');
 require('./filters');
 require('./cAutocomplete');
 require('./cValidate');
+require('./pagseguro');

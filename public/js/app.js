@@ -101229,6 +101229,7 @@ __webpack_require__("./resources/assets/js/helpers.js");
 __webpack_require__("./resources/assets/js/filters.js");
 __webpack_require__("./resources/assets/js/cAutocomplete.js");
 __webpack_require__("./resources/assets/js/cValidate.js");
+__webpack_require__("./resources/assets/js/pagseguro.js");
 
 /***/ }),
 
@@ -101899,6 +101900,27 @@ window.getCookie = function (cname) {
 
 window.deleteCookie = function (cname) {
 	document.cookie = cname + "=;expires=Wed 01 Jan 1970";
+};
+
+/***/ }),
+
+/***/ "./resources/assets/js/pagseguro.js":
+/***/ (function(module, exports) {
+
+var pagSeguro = {
+	getBrand: function getBrand(bin) {
+		return new Promise(function (resolve, reject) {
+			PagSeguroDirectPayment.getBrand({
+				cardBin: bin,
+				success: function success(res) {
+					resolve({
+						result: res,
+						url: 'https://stc.pagseguro.uol.com.br/'
+					});
+				}
+			});
+		});
+	}
 };
 
 /***/ }),

@@ -19,64 +19,59 @@
 				<div class="card">
 					<div class="card-body">
 						<div class="row">
-							<div class="col-sm-6">
-								<img v-if="product.files.length > 0" :src="product.files[0]" class="img-fluid img-thumbnail rounded">
-								<img v-else src="{{ DEFAULT_IMAGE_PRODUCTS }}" class="img-fluid img-thumbnail rounded">
-								
-								<div class="row p-0 m-0 mt-2">
-									<div class="col-sm-3 p-2" v-for="(file, index) in product.files" v-if="index < 4">
-										<a :href="file" :data-fancybox="'gallery_'+product.id">
-											<img v-if="product.files.length > 0" :src="product.thumbnails[index]" class="img-fluid img-thumbnail rounded">
-										</a>
-									</div>
-								</div>
-							</div>
-							<div class="col-sm-6">
-								<div class="row">
-									<div class="col">
-										<h3 class="section-title" id="prod_name">@{{ product.name | name }} <small v-if="product.category" class="text-muted">| @{{ product.category.name | name }}</small></h3>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col">
-										<label class="label-plaintext label-sm" for="prod_value">Valor:</label>
-										<p class="form-control-plaintext" id="prod_value">
-											@{{ product.value_partner | currency(true) }} 
-											@if(\App\Helpers\PermHelper::viewValues()) 
-												/ @{{ product.value_seller | currency(true) }}
-											@endif
-										</p>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col">
-										<label class="label-plaintext label-sm" for="prod_value">Medidas: <small>(P | D | AxLxC)</small></label>
-										<p class="form-control-plaintext" id="prod_value">@{{ product.weight }}Kg | @{{ product.diameter }}cm | @{{ product.height }}x@{{ product.width }}x@{{ product.length }}cm</p>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col">
-										<label class="label-plaintext label-sm" for="prod_description">Descrição:</label>
-										<p class="form-control-plaintext" id="prod_description">@{{ product.description | default }}</p>
-									</div>
-								</div>
-								<div class="row" v-if="product.attributes" v-for="attribute in product.attributes">
-									<div class="col">
-										<label class="label-plaintext label-sm" for="prod_value">@{{ attribute.name }}:</label>
-										<p class="form-control-plaintext" id="prod_value">@{{ attribute.value }}</p>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="row">
 							<div class="col">
-								<hr>
+								<div class="table-responsive">
+									<table class="table table-hover">
+										<thead>
+											<tr>
+												<th scope="col" style="width: 12%;"></th>
+												<th scope="col" style="width: 38%;">Produto</th>
+												<th scope="col" style="width: 16%;">Quantidade</th>
+												<th scope="col" style="width: 17%;">Valor Unit.</th>
+												<th scope="col" style="width: 17%;">Valor Total</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr v-for="item in order.items">
+												<td>
+													<img v-if="item.product.thumbnails.length > 0" :src="item.product.thumbnails[0]" class="img-fluid">
+													<img v-else src="{{ DEFAULT_IMAGE_PRODUCTS }}" class="img-fluid">
+												</td>
+												<td>
+													<h4>@{{ item.product.name | name}} - <small>@{{ item.product.category.name | name }}</small></h4>
+												</td>
+												<td><h4><small><i class="fas fa-minus"></i></small> <span class="ml-2 mr-2">@{{ item.amount }}</span> <small><i class="fas fa-plus"></i></small></h4></td>
+												<td><h4>@{{ item.product.value | currency(true)}}</h4></td>
+												<td><h4>@{{ item.amount * item.product.value | currency(true) }}</h4></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
 							</div>
 						</div>
-						<div class="row" v-if="product.attributes" v-for="attribute in product.attributes">
-							<div class="col">	
-								<label class="label-plaintext label-sm">@{{ attribute.name | name }}:</label>
-								<p class="form-control-plaintext">@{{ attribute.value | default }}</p>
+						<div class="row"><hr></div>
+						<div class="row">
+							<div class="col-sm-8">
+								Calcular Frete:
+							</div>
+							<div class="col-sm-4">
+								<div class="row border-top border-primary">
+									<div class="col-6">Produtos</div>
+									<div class="col-6 text-right">R$ 1223,00</div>
+								</div>
+								<div class="row border-top border-bottom border-primary">
+									<div class="col-6">Frete</div>
+									<div class="col-6 text-right">R$ 123,00</div>
+								</div>
+								<div class="row border-bottom border-primary">
+									<div class="col-6">Total</div>
+									<div class="col-6 text-right">R$ 1223,00</div>
+								</div>
+							</div>
+						</div>
+						<div class="row text-right mt-4">
+							<div class="col">
+								<a href="{{ route('orders.checkout', [$order->id]) }}" class="btn btn-primary">Finalizar Compra</a>
 							</div>
 						</div>
 					</div>

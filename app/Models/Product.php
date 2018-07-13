@@ -37,7 +37,7 @@ class Product extends Model implements Transformable {
 		'status'
 	];
 
-	protected $appends = ['files', 'thumbnails'];
+	protected $appends = ['files', 'thumbnails', 'value'];
 	protected $with = ['attributes', 'category'];
 
 	public function attributes(){
@@ -63,6 +63,13 @@ class Product extends Model implements Transformable {
 			$files[$key] = Image::url($file,300,300,array('crop'));
 		}
 		return $files;
+	}
+
+	public function getValueAttribute(){
+		if(\App\Helpers\PermHelper::lowerValue()){
+			return $this->value_seller;
+		}
+		return $this->value_partner;
 	}
 
 }
