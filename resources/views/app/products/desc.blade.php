@@ -74,7 +74,19 @@
 												<a href="{{ route('register') }}">Ainda não possui cadastro?</p>
 											</div>
 										@else
-											<a class="btn btn-primary" href="#" role="button" @click.prevent="addItem">Comprar</a>
+										<div v-if="!added">
+											<a class="btn p-2 btn-primary" href="#" role="button" @click.prevent="buyItem">Comprar Agora</a>
+											<a class="btn p-2 btn-outline-primary" href="#" role="button" @click.prevent="addItem">Adicionar ao carrinho</a>
+										</div>
+										<div v-else>
+											<div class="alert alert-success text-center" role="alert">
+												<h4 class="alert-heading">Produto adicionado ao carrinho!</h4>
+												<p>O que deseja fazer agora?</p>
+												<hr>
+												<a class="btn p-2 btn-success" href="{{ route('products.shop') }}" role="button">Continuar comprando</a>
+												<a class="btn p-2 btn-outline-success" href="{{ route('orders.cart') }}" role="button">Ver meu carrinho</a>
+											</div>
+										</div>
 										@endif
 									</div>
 								</div>
@@ -100,26 +112,17 @@
 		new Vue({
 			el: '#productDescApp',
 			data: {
-				product: {!! $product->toJson() !!}
+				product: {!! $product->toJson() !!},
+				added: false
 			},
 			mounted: function(){
 			},
 			methods:{
 				addItem: function(){
 					let self = this;
-					$.get('{{ route('orders.current') }}', function(order) {
-						if(order.error){
-							toastr.error('Falha ao criar pedido!');
-						}else{
-							let item = {
-								'order_id': order.id,
-								'product_id': self.product.id,
-								'value': self.product.{{ \App\Helpers\PermHelper::lowerValue() ? 'value_seller' : 'value_partner' }}
-							}
-							$.post('{{ route('items.store') }}', item, function(data) {
-								console.log(data);
-							});
-						}
+					$.post('{{ route('orders.item.add', ['']) }}/'+self.product.id, null, function(data) {
+						toastr.success('Produto adicionado ao carrinho');
+						self.added = true;
 					});
 				}
 			},

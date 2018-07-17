@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-	<div id="orderCartApp">
+	<div id="orderCartApp" v-cloak>
 		<div class="page-title">
 			<h3>
 				Pedidos | <small class="text-muted">Pedido em andamento</small>
@@ -37,12 +37,20 @@
 													<img v-if="item.product.thumbnails.length > 0" :src="item.product.thumbnails[0]" class="img-fluid">
 													<img v-else src="{{ DEFAULT_IMAGE_PRODUCTS }}" class="img-fluid">
 												</td>
+												<td><h4 class="mt-1">@{{ item.product.name | name}} - <small>@{{ item.product.category.name | name }}</small></h4></td>
 												<td>
-													<h4>@{{ item.product.name | name}} - <small>@{{ item.product.category.name | name }}</small></h4>
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<button class="btn btn-outline-secondary text-monospace" type="button" id="button-addon1">-</button>
+														</div>
+														<div class="form-control text-center">@{{ item.amount }}</div>
+														<div class="input-group-append">
+															<button class="btn btn-outline-secondary text-monospace" type="button" id="button-addon2">+</button>
+														</div>
+													</div>
 												</td>
-												<td><h4><small><i class="fas fa-minus"></i></small> <span class="ml-2 mr-2">@{{ item.amount }}</span> <small><i class="fas fa-plus"></i></small></h4></td>
-												<td><h4>@{{ item.product.value | currency(true)}}</h4></td>
-												<td><h4>@{{ item.amount * item.product.value | currency(true) }}</h4></td>
+												<td><h4 class="mt-1">@{{ item.product.value | currency(true)}}</h4></td>
+												<td><h4 class="mt-1">@{{ item.amount * item.product.value | currency(true) }}</h4></td>
 											</tr>
 										</tbody>
 									</table>

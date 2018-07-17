@@ -101913,18 +101913,63 @@ window.deleteCookie = function (cname) {
 /***/ "./resources/assets/js/pagseguro.js":
 /***/ (function(module, exports) {
 
-var pagSeguro = {
+window.pagSeguro = {
+	creditCards: {},
 	getBrand: function getBrand(bin) {
 		return new Promise(function (resolve, reject) {
 			PagSeguroDirectPayment.getBrand({
 				cardBin: bin,
 				success: function success(res) {
+					var brand = pagSeguro.creditCards[res.brand.name.toUpperCase()];
+					var url = brand.images.MEDIUM.path;
 					resolve({
 						result: res,
-						url: 'https://stc.pagseguro.uol.com.br/'
+						url: 'https://stc.pagseguro.uol.com.br' + url
 					});
 				}
 			});
+		});
+	},
+	getPaymentMethods: function getPaymentMethods(amount) {
+		return new Promise(function (resolve, reject) {
+			PagSeguroDirectPayment.getPaymentMethods({
+				amount: amount,
+				success: function success(res) {
+					var creditCards = pagSeguro.creditCards = res.paymentMethods.CREDIT_CARD.options;
+					var brands = [];
+					Object.keys(creditCards).forEach(function (key) {
+						var url = creditCards[key].images.MEDIUM.path;
+						brands.push('https://stc.pagseguro.uol.com.br' + url);
+					});
+					resolve(brands);
+				}
+			});
+		});
+	},
+	createCardToken: function createCardToken(params) {
+		return new Promise(function (resolve, reject) {
+			params.success = function (response) {
+				resolve(response.card.token);
+			};
+			PagSeguroDirectPayment.createCardToken(params);
+		});
+	},
+	getInstallments: function getInstallments(amount, brand) {
+		return new Promise(function (resolve, reject) {
+			PagSeguroDirectPayment.getInstallments({
+				amount: amount,
+				brand: brand,
+				maxInstallmentNoInterest: 0, // Número de parcelas SEM JÚROS // REMEMBER
+				success: function success(res) {
+					resolve(res.installments[brand]);
+				}
+			});
+		});
+	},
+	getSenderHash: function getSenderHash() {
+		return new Promise(function (resolve, reject) {
+			var data = PagSeguroDirectPayment.getSenderHash();
+			resolve(data);
 		});
 	}
 };

@@ -12,52 +12,81 @@
 			<li class="breadcrumb-item active" aria-current="page">Comprar</li>
 		</ol>
 	</nav>
-	<div class="row justify-content-center" id="productShopApp">
-		<div class="col">
-			<div class="card">
-				<div class="card-body">
-					<div class="row">
-						<div class="col-3" v-for="product in products">
-							<div class="card mb-4">
-								<div v-if="product.files.length > 0" class="bs_hovereffect rounded">
-									<img :src="product.thumbnails[0]" class="img-fluid img-thumbnail rounded">
-									<div class="overlay">
-										<div class="text-center">
-											<p class="bs_group0">
-												<a :href="product.files[0]" :data-fancybox="'gallery_'+product.id" title="Visualizar Imagem">
-													{!! ICONS_ADD !!}
-												</a>
-												<a v-for="(file, index) in product.files" v-if="index > 0" :href="file" :data-fancybox="'gallery_'+product.id" style="display: none"></a>
-											</p>
-										</div>
-									</div>
-								</div>
-								<div v-else class="bs_hovereffect rounded">
-									<img src="{{ DEFAULT_IMAGE_PRODUCTS }}" class="img-fluid img-thumbnail rounded">
-								</div>
-								<div class="card-body">
-									<a :href="'{{ route('products.desc', ['']) }}/'+product.id" title="Mais informações" class="link-unstyled">
-										<h4 class="card-title mt_height_name"><strong>@{{ product.name }}</strong> <br> <small>@{{ product.category.name }}</small></h4>
-										<p class="card-text mt_height_description">@{{ product.description | limit_words(15) }}</p>
-										<ul class="list-group list-group-flush">
-											@if(Auth::user() && Auth::user()->role == USER_ROLES_ADMIN)
-												<h2><li class="list-group-item"><span>R$</span><span class="float-right">@{{ product.value_seller | currency }}</span></li></h2>
-												<h2><li class="list-group-item"><span>R$</span><span class="float-right">@{{ product.value_partner | currency }}</span></li></h2>
-											@elseif(Auth::user() && Auth::user()->role == USER_ROLES_SELLER)
-												<h2><li class="list-group-item"><span>R$</span><span class="float-right">@{{ product.value_seller | currency }}</span></li></h2>
-											@else
-												<h2><li class="list-group-item"><span>R$</span><span class="float-right">@{{ product.value_partner | currency }}</span></li></h2>
-											@endif
-										</ul>
-									</a>
-								</div>
-							</div>
+	<div class="row">
+		<div class="col-sm-5 col-md-4 col-lg-3">
+			<div class="content">
+				<h4>Pesquisa de produtos</h4>
+				<p>xxx resultados</p>
+			</div>
+			<div class="content">
+				<h5>Ordenar resultados</h5>
+				<p>Mais relevante V | X Y</p>
+			</div>
+			<div class="content">
+				<h5>Categorias</h5>
+				<p>
+					Categoria a (123)<br>
+					Categoria b (123)<br>
+					Categoria c (123)<br>
+					Categoria d (123)<br>
+					Categoria e (123)<br>
+					Categoria f (123)<br>
+					Categoria g (123)<br>
+				</p>
+			</div>
+			<div class="content">
+				<h5>Preço</h5>
+				<p>De R$[___] até R$[___]</p>
+			</div>
+
+		</div>
+		<div class="col-sm-7 col-md-8 col-lg-9" id="productShopApp">
+			<div class="row">
+				<div class="col-sm-12 col-md-6 col-lg-4 pl-2 pr-2 pb-3" v-for="product in products">
+					<div class="card pointer h-shadow" @click="openProductDescription(product.id)">
+						<div v-if="product.files.length > 0">
+							<img :src="product.thumbnails[0]" class="img-fluid border-bottom p-1">
+						</div>
+						<div v-else class="">
+							<img src="{{ DEFAULT_IMAGE_PRODUCTS }}" class="img-fluid border-bottom p-1">
+						</div>
+						<div class="card-body">
+							<h4 class="card-price">
+								@if(Auth::user() && Auth::user()->role == USER_ROLES_ADMIN)
+									<span v-html="currency(product.value_seller)"></span>
+									<span v-html="currency(product.value_partner)"></span>
+								@elseif(Auth::user() && Auth::user()->role == USER_ROLES_SELLER)
+									<span v-html="currency(product.value_seller)"></span>
+								@else
+									<span v-html="currency(product.value_partner)"></span>
+								@endif
+							</h4>
+							<h5 :class="[ product.interest_free == 12 ? 'text-success' : 'text-muted' ]">
+								<i class="far fa-credit-card"></i> 
+								@if(Auth::user() && Auth::user()->role == USER_ROLES_ADMIN)
+									<small>12x <span v-html="currency(product.value_seller/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small><br>
+									<small>12x <span v-html="currency(product.value_partner/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small>
+								@elseif(Auth::user() && Auth::user()->role == USER_ROLES_SELLER)
+									<small>12x <span v-html="currency(product.value_seller/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small>
+								@else
+									<small>12x <span v-html="currency(product.value_partner/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small>
+								@endif
+							</h5>
+							<h5 :class="[ product.free_shipping ? 'text-success' : 'text-muted' ]">
+								<i class="fas fa-truck"></i> 
+								<small v-if="product.free_shipping">Frete grátis</small>
+								<small v-else>Entrega p/ todo o Brasil</small>
+							</h5>
+							<h5 class="card-text mt_height_name">@{{ product.name }} - <small>@{{ product.category.name }}</small></h5>
+							<h5></h5>
+							<p class="mt_height_description">@{{ product.description | limit_words(12) }}</p>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	
 	<script type="text/javascript">
 		new Vue({
 			el: '#productShopApp',
@@ -79,6 +108,16 @@
 							self.product = data;
 						}
 					});
+				},
+				openProductDescription: function (id){
+					location.href = '{{ route('products.desc', ['']) }}/'+id;
+				},
+				currency: function (val){
+					let v = filters.currency(val, true);
+					let v1 = v.substr(-2, 2);
+					let v2 = v.substr(0, v.length-3);
+					let result = v1 != '00' ? v2+"<sup>"+v1+"</sup>" : v2;
+					return result;
 				}
 			},
 			filters: filters

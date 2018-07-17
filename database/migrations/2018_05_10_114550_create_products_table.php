@@ -25,6 +25,8 @@ class CreateProductsTable extends Migration {
 			$table->integer('length')->nullable(); //comprimento
 			$table->integer('diameter')->nullable(); //diametro
 			$table->integer('amount'); //quantidade
+			$table->integer('interest_free')->nullable()->default(12);
+			$table->boolean('free_shipping')->nullable()->default(false);
 			$table->boolean('status')->nullable()->default(true);
 			$table->timestamps();
 		});

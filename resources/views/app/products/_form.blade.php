@@ -105,6 +105,26 @@
 	</div>
 </div>
 <div class="row">
+	<div class="col-6">
+		<div class="form-group">
+			<div class="btn-group btn-group-toggle border rounded d-flex" role="group" data-toggle="buttons" style="width: 100%; height: 49px;">
+				<label class="btn btn-light w-100" :class="{active : product.free_shipping == '1'}" style="padding-top:12px;">
+					<input type="radio" name="prod_free_shipping" table="product" field="free_shipping" autocomplete="off" v-model="product.free_shipping" value="1" required>Sim
+				</label>
+				<label class="btn btn-light w-100" :class="{active : product.free_shipping == '0'}" style="padding-top:12px;">
+					<input type="radio" name="prod_free_shipping" table="product" field="free_shipping" autocomplete="off" v-model="product.free_shipping" value="0" required>Não
+				</label>
+			</div>
+		</div>
+	</div>
+	<div class="col-8">
+		<div class="form-label-group">
+			<input type="text" class="form-control" id="prod_interest_free" name="prod_interest_free" placeholder="Sem juros" v-model="product.interest_free" required>
+			<label for="prod_interest_free">Sem juros</label>
+		</div>
+	</div>
+</div>
+<div class="row">
 	<div class="col">
 		<div class="form-label-group">
 			<textarea rows="4" class="form-control" id="prod_description" name="prod_description" placeholder="Descrição" v-model="product.description" required></textarea>

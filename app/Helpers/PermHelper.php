@@ -28,4 +28,15 @@ class PermHelper{
 		}
 	}
 
+	public static function lowerValueText(){
+		if(!Auth::user()){
+			return 'value_partner';
+		}
+		switch (Auth::user()->role){
+			case USER_ROLES_ADMIN:
+			case USER_ROLES_SELLER: return 'value_seller'; break;
+			default: return 'value_partner'; break;
+		}
+	}
+
 }

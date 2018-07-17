@@ -8454,22 +8454,26 @@ button.bg-dark:focus {
   white-space: normal;
 }
 
-.shadow-sm {
+.shadow-sm,
+.h-shadow-sm:hover {
   -webkit-box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
           box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
 }
 
-.shadow {
+.shadow,
+.h-shadow:hover {
   -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
           box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
 }
 
-.shadow-lg {
+.shadow-lg,
+.h-shadow-lg:hover {
   -webkit-box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
           box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
 }
 
-.shadow-none {
+.shadow-none,
+.h-shadow-none:hover {
   -webkit-box-shadow: none !important;
           box-shadow: none !important;
 }
@@ -11252,6 +11256,11 @@ table.dataTable tbody td.selected a {
   display: none !important;
 }
 
+sup {
+  top: -.5em !important;
+  font-size: .6em !important;
+}
+
 .link-unstyled,
 .link-unstyled:visited,
 .link-unstyled:hover,
@@ -11274,6 +11283,68 @@ table.dataTable tbody td.selected a {
           box-shadow: inherit;
   padding: inherit;
   vertical-align: inherit;
+}
+
+/* Rules for sizing the icon. */
+
+.material-icons.md-18 {
+  font-size: 18px;
+}
+
+.material-icons.md-24 {
+  font-size: 24px;
+}
+
+.material-icons.md-36 {
+  font-size: 36px;
+}
+
+.material-icons.md-48 {
+  font-size: 48px;
+}
+
+/* Rules for using icons as black on a light background. */
+
+.material-icons.md-dark {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.material-icons.md-dark.md-inactive {
+  color: rgba(0, 0, 0, 0.26);
+}
+
+/* Rules for using icons as white on a dark background. */
+
+.material-icons.md-light {
+  color: white;
+}
+
+.material-icons.md-light.md-inactive {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.h-shadow-none:hover {
+  -webkit-transition: all 0.55s;
+  transition: all 0.55s;
+}
+
+.h-shadow-sm:hover {
+  -webkit-transition: all 0.55s;
+  transition: all 0.55s;
+}
+
+.h-shadow:hover {
+  -webkit-transition: all 0.55s;
+  transition: all 0.55s;
+}
+
+.h-shadow-lg:hover {
+  -webkit-transition: all 0.55s;
+  transition: all 0.55s;
 }
 
 .card-footer-btn:last-child {

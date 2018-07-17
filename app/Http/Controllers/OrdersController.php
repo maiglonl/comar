@@ -11,8 +11,11 @@ use App\Http\Requests\OrderCreateRequest;
 use App\Http\Requests\OrderUpdateRequest;
 use App\Http\Requests\OrderCheckoutRequest;
 use App\Repositories\OrderRepository;
+use App\Repositories\ItemRepository;
+use App\Repositories\ProductRepository;
 use App\Validators\OrderValidator;
 use Auth;
+use App\PagSeguro\PagSeguro;
 
 /**
  * Class OrdersController.
@@ -37,10 +40,16 @@ class OrdersController extends Controller
 	 * @param OrderRepository $repository
 	 * @param OrderValidator $validator
 	 */
-	public function __construct(OrderRepository $repository, OrderValidator $validator)
+	public function __construct(
+		OrderRepository $orderRepository, 
+		ItemRepository $itemRepository, 
+		ProductRepository $productRepository, 
+		OrderValidator $validator)
 	{
-		$this->repository = $repository;
-		$this->validator  = $validator;
+		$this->itemRepository = $itemRepository;
+		$this->productRepository = $productRepository;
+		$this->orderRepository = $orderRepository;
+		$this->validator = $validator;
 	}
 
 	/**
@@ -48,13 +57,11 @@ class OrdersController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index()
-	{
-		$this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-		$orders = $this->repository->all();
+	public function index(){
+		$this->orderRepository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
+		$orders = $this->orderRepository->all();
 
 		if (request()->wantsJson()) {
-
 			return response()->json([
 				'data' => $orders,
 			]);
@@ -72,13 +79,12 @@ class OrdersController extends Controller
 	 *
 	 * @throws \Prettus\Validator\Exceptions\ValidatorException
 	 */
-	public function store(OrderCreateRequest $request)
-	{
+	public function store(OrderCreateRequest $request){
 		try {
 
 			$this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
 
-			$order = $this->repository->create($request->all());
+			$order = $this->orderRepository->create($request->all());
 
 			$response = [
 				'message' => 'Order created.',
@@ -110,11 +116,8 @@ class OrdersController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function cart($id){
-		$order = $this->repository->find($id);
-		if($order->status_id != STATUS_ORDER_EM_ABERTO){
-			return view('orders.show', compact('order'));
-		}
+	public function cart(){
+		$order = $this->current();
 		return view('app.orders.cart', compact('order'));
 	}
 
@@ -126,11 +129,22 @@ class OrdersController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function checkout($id){
-		$order = $this->repository->find($id);
+		$data = [
+			'email' => 'maiglonl@gmail.com',
+			'token' => 'AA06F28B1DBB4CB3939D6BE9FF9E5FB0'
+		];
+		$response = (new PagSeguro)->request(PagSeguro::SESSION_SANDBOX, $data);
+		$order = $this->orderRepository->find($id);
 		if($order->status_id != STATUS_ORDER_EM_ABERTO){
 			return view('orders.show', compact('order'));
 		}
-		return view('app.orders.checkout', compact('order'));
+
+		$session = new \SimpleXMLElement($response->getContents());
+		$session = $session->id;
+
+		$amount = number_format(24301, 2, '.', '');
+
+		return view('app.orders.checkout', compact('order', 'session', 'amount'));
 	}
 
 	/**
@@ -145,7 +159,7 @@ class OrdersController extends Controller
 	public function postCheckout(OrderCheckoutRequest $request){
 		try {
 			//$this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
-			//$order = $this->repository->update($request->all(), $id);
+			//$order = $this->orderRepository->update($request->all(), $id);
 			$data = [
 				'email' => 'maiglonl@gmail.com',
 				'token' => 'AA06F28B1DBB4CB3939D6BE9FF9E5FB0',
@@ -155,12 +169,14 @@ class OrdersController extends Controller
 				'currency' => 'BRL',
 				'senderName' => 'Maiglon A Lubacheuski',
 				'senderCPF' => '02557961027',
-				'senderEmail' => 'comprador@uol.com.br',
+				'senderEmail' => 'comprador@sandbox.pagseguro.com.br',
 				'senderPhone' => '997398991',
 				'senderAreaCode' => '51',
+				'installmentValue' => number_format($data['installmentValue'], 2, '.', ''),
+				'shippingAddressCountry' => 'BRA',
+				'billingAddressCountry' => 'BRA',
 
-
-
+				/*
 				'paymentMode' => 'default',
 				'paymentMethod' => 'creditCard',
 				'receiverEmail' => 'suporte@lojamodelo.com.br',
@@ -176,7 +192,7 @@ class OrdersController extends Controller
 				'senderCPF' => '22111944785',
 				'senderAreaCode' => '11',
 				'senderPhone' => '56273440',
-				'senderEmail' => 'comprador@uol.com.br',
+				'senderEmail' => 'comprador@sandbox.pagseguro.com.br',
 				'senderHash' => 'abc123',
 				'shippingAddressStreet' => 'Av. Brig. Faria Lima',
 				'shippingAddressNumber' => '1384',
@@ -205,12 +221,15 @@ class OrdersController extends Controller
 				'billingAddressCity' => 'Sao Paulo',
 				'billingAddressState' => 'SP',
 				'billingAddressCountry' => 'BRA',
+				*/
 			];
 			// number_format($product->value, 2, '.', '')
-			$response = [
-				'message' => 'Compra realizada com sucesso.',
-				'data'    => '1'//$order->toArray(),
-			];
+			
+			try{
+				$response = (new PagSeguro)->request(PagSeguro::CHECKOUT_SANDBOX, $data);
+			} catch (\Exception $e) {
+				dd($e->getMessage());
+			}
 			return response()->json($response);
 		} catch (ValidatorException $e) {
 			if ($request->wantsJson()) {
@@ -231,7 +250,7 @@ class OrdersController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show($id){
-		$order = $this->repository->find($id);
+		$order = $this->orderRepository->find($id);
 		return view('orders.show', compact('order'));
 	}
 
@@ -242,11 +261,57 @@ class OrdersController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function edit($id)
-	{
-		$order = $this->repository->find($id);
-
+	public function edit($id){
+		$order = $this->orderRepository->find($id);
 		return view('orders.edit', compact('order'));
+	}
+
+	/**
+	 * Add Item to current order.
+	 *
+	 * @param  int $id
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function addItem($product_id){
+		$order = $this->current();
+		$product = $this->productRepository->find($product_id);
+		$data = [
+			'order_id' => $order->id,
+			'product_id' => $product->id
+		];
+		$items = $this->itemRepository->findWhere($data);
+		error_log(\App\Helpers\PermHelper::lowerValueText());
+		error_log($product[\App\Helpers\PermHelper::lowerValueText()]);
+		if(count($items) > 0){
+			$item = $items[0];
+			$item->amount++;
+			$item->value = $product[\App\Helpers\PermHelper::lowerValueText()];
+			$result = $this->itemRepository->update($item->toArray(), $item->id);
+		}else{
+			$data['amount'] = 1;
+			$data['value'] = $product[\App\Helpers\PermHelper::lowerValueText()];
+			$result = $this->itemRepository->create($data);
+		}
+		return $result;
+	}
+
+	/**
+	 * Add Item to current order.
+	 *
+	 * @param  int $id
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function removeItem($item_id){
+		$item = $this->itemRepository->find($item_id);
+		$order = $this->orderRepository->find($item->order_id);
+		if($order->user_id != Auth::id()){
+			return response('Ação não permitida para este usuário.', 403);
+		}else{
+			$this->itemRepository->delete($item_id);
+		}
+		return $items;
 	}
 
 	/**
@@ -259,13 +324,12 @@ class OrdersController extends Controller
 	 *
 	 * @throws \Prettus\Validator\Exceptions\ValidatorException
 	 */
-	public function update(OrderUpdateRequest $request, $id)
-	{
+	public function update(OrderUpdateRequest $request, $id){
 		try {
 
 			$this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
 
-			$order = $this->repository->update($request->all(), $id);
+			$order = $this->orderRepository->update($request->all(), $id);
 
 			$response = [
 				'message' => 'Order updated.',
@@ -300,9 +364,8 @@ class OrdersController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy($id)
-	{
-		$deleted = $this->repository->delete($id);
+	public function destroy($id){
+		$deleted = $this->orderRepository->delete($id);
 
 		if (request()->wantsJson()) {
 
@@ -323,12 +386,11 @@ class OrdersController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function current(){
-		$order = $this->repository->findWhere(['user_id' => Auth::id(), 'status_id' => STATUS_ORDER_EM_ABERTO])->first();
+		$order = $this->orderRepository->findWhere(['user_id' => Auth::id(), 'status_id' => STATUS_ORDER_EM_ABERTO])->first();
 		if(!$order){
-			$order = $this->repository->create(['user_id' => Auth::id(), 'status_id' => STATUS_ORDER_EM_ABERTO]);
+			$order = $this->orderRepository->create(['user_id' => Auth::id(), 'status_id' => STATUS_ORDER_EM_ABERTO]);
 		}
-
-		return response()->json($order);
+		return $order;
 	}
 
 }

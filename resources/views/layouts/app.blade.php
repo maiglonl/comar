@@ -1,35 +1,41 @@
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+	<!-- CSRF Token -->
+	<meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+	<title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Scripts -->
-    <script type="text/javascript" src="{{ mix('js/app.js') }}"></script>
+	<!-- Scripts -->
+	@yield('pre-scripts')
+	<script type="text/javascript" src="{{ mix('js/app.js') }}"></script>
 
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
+	<!-- Fonts -->
+	<link rel="dns-prefetch" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <!-- Styles -->
-    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+	<!-- Styles -->
+	<link href="{{ mix('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
-    <div id="app">
+	<div id="app">
 		@include('app.menu')
-        <main class="py-4">
-        	<div class="container">
-            	@yield('content')
-        	</div>
+		<main class="py-4">
+			<div class="container-fluid">
+				<div class="row justify-content-md-center">
+					<div class="col-md-10">
+						@yield('content')
+					</div>
+				</div>
+			</div>
 
-            @yield('scripts')
-        </main>
-    </div>
+			@yield('scripts')
+		</main>
+	</div>
 </body>
 </html>

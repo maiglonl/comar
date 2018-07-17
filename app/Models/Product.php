@@ -34,6 +34,8 @@ class Product extends Model implements Transformable {
 		'length',
 		'diameter',
 		'amount',
+		'interest_free',
+		'free_shipping',
 		'status'
 	];
 
