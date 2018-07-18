@@ -2,189 +2,61 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use Prettus\Validator\Contracts\ValidatorInterface;
-use Prettus\Validator\Exceptions\ValidatorException;
-use App\Http\Requests\ItemCreateRequest;
-use App\Http\Requests\ItemUpdateRequest;
 use App\Repositories\ItemRepository;
-use App\Validators\ItemValidator;
 
-/**
- * Class ItemsController.
- *
- * @package namespace App\Http\Controllers;
- */
-class ItemsController extends Controller
-{
-	/**
-	 * @var ItemRepository
-	 */
-	protected $repository;
-
-	/**
-	 * @var ItemValidator
-	 */
-	protected $validator;
-
-	/**
-	 * ItemsController constructor.
-	 *
-	 * @param ItemRepository $repository
-	 * @param ItemValidator $validator
-	 */
-	public function __construct(ItemRepository $repository, ItemValidator $validator)
-	{
+class ItemsController extends Controller{
+	
+	public function __construct(ItemRepository $repository){
 		$this->repository = $repository;
-		$this->validator  = $validator;
+		$this->names = [
+			'plural' => 'items',
+			'singular' => 'item',
+			'pt_plural' => 'itens',
+			'pt_singular' => 'item',
+			'pt_gender' => 'o',
+			'base_blades' => 'items'
+		];
 	}
 
 	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\Response
+	 * Disponible methods from Trait.
 	 */
-	public function add()
-	{
-		$this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-		$items = $this->repository->all();
-
-		if (request()->wantsJson()) {
-
-			return response()->json([
-				'data' => $items,
-			]);
-		}
-
-		return view('items.index', compact('items'));
+	use ControllerTrait {
+		ControllerTrait::trait_find as find;
+		ControllerTrait::trait_store as store;
+		ControllerTrait::trait_update as update;
+		ControllerTrait::trait_destroy as destroy;
 	}
 
 	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @param  ItemCreateRequest $request
-	 *
-	 * @return \Illuminate\Http\Response
-	 *
-	 * @throws \Prettus\Validator\Exceptions\ValidatorException
+	 * Increase the Item amount in 1.
 	 */
-	public function store(ItemCreateRequest $request){
-		$it = $request->all();
-		$item = $this->repository->findWhere(['order_id' => $it['order_id'], 'product_id' => $it['product_id']])->first();
-		if($item){
-			$item->amount++;
-			$this->repository->update($item->toArray(), $item->id);
-		}else{
-			$item = $this->repository->create([
-				'order_id' => $it['order_id'], 
-				'product_id' => $it['product_id'],
-				'value' => $it['value'],
-				'amount' => 1
-			]);
-		}
-		return response()->json($item);		
-	}
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int $id
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function show($id)
-	{
+	public function increase($id){
 		$item = $this->repository->find($id);
-
-		if (request()->wantsJson()) {
-
-			return response()->json([
-				'data' => $item,
-			]);
-		}
-
-		return view('items.show', compact('item'));
+		$item->amount++;
+		$item = $this->repository->update($item->toArray(), $id);
+		return response()->json([
+			'data' => $items,
+			'message' => "Quantidade do item atualizada"
+		]);
 	}
 
 	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int $id
-	 *
-	 * @return \Illuminate\Http\Response
+	 * Decrease the Item amount in 1.
 	 */
-	public function edit($id)
-	{
+	public function decrease($id){
 		$item = $this->repository->find($id);
-
-		return view('items.edit', compact('item'));
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  ItemUpdateRequest $request
-	 * @param  string            $id
-	 *
-	 * @return Response
-	 *
-	 * @throws \Prettus\Validator\Exceptions\ValidatorException
-	 */
-	public function update(ItemUpdateRequest $request, $id)
-	{
-		try {
-
-			$this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
-
-			$item = $this->repository->update($request->all(), $id);
-
-			$response = [
-				'message' => 'Item updated.',
-				'data'    => $item->toArray(),
-			];
-
-			if ($request->wantsJson()) {
-
-				return response()->json($response);
-			}
-
-			return redirect()->back()->with('message', $response['message']);
-		} catch (ValidatorException $e) {
-
-			if ($request->wantsJson()) {
-
-				return response()->json([
-					'error'   => true,
-					'message' => $e->getMessageBag()
-				]);
-			}
-
-			return redirect()->back()->withErrors($e->getMessageBag())->withInput();
-		}
-	}
-
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int $id
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function destroy($id)
-	{
-		$deleted = $this->repository->delete($id);
-
-		if (request()->wantsJson()) {
-
+		if($item->amount <= 1){
 			return response()->json([
-				'message' => 'Item deleted.',
-				'deleted' => $deleted,
+				'error' => true,
+				'message' => "Quantidade mínima atingida"
 			]);
 		}
-
-		return redirect()->back()->with('message', 'Item deleted.');
+		$item->amount--;
+		$item = $this->repository->update($item->toArray(), $id);
+		return response()->json([
+			'data' => $items,
+			'message' => "Quantidade do item atualizada"
+		]);
 	}
 }

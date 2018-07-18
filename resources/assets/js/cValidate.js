@@ -14,7 +14,7 @@
 		var reload = options.hasOwnProperty("reload") ? options.reload : false;
 		var isPut = options.hasOwnProperty("isPut") ? options.isPut : false;
 		isPut = $(form).attr('method') == 'PUT' ? true : isPut;
-		var handler = options.hasOwnProperty("handler") ? options.handler : function(data) {	
+		var handler = options.hasOwnProperty("handler") ? options.handler : function(data) {
 			if(data.error){
 				var msgs = {};
 				$.each(data.message, function(index, val) {
@@ -24,7 +24,7 @@
 				if (typeof error === "function") {
 					error();
 				}else{
-					error = data.message ? data.message : error;
+					error = data.message && typeof data.message === "string" ? data.message : error;
 					toastr.error(error);
 				}
 			}else{
@@ -39,7 +39,7 @@
 				if (typeof success === "function") {
 					success();
 				}else{
-					success = data.message ? data.message : success;
+					success = data.message && typeof data.message === "string" ? data.message : success;
 					toastr.success(success);
 				}
 				parent.jQuery.fancybox.close();
@@ -56,6 +56,9 @@
 				}
 			},
 			highlight: function(element) {
+				if(!element){
+					element = form;
+				}
 				if ( element.type === "radio" ) {
 					$( element ).parent().parent().addClass('is-invalid').removeClass('is-valid');
 				} else {
@@ -63,6 +66,9 @@
 				}
 			},
 			unhighlight: function(element) {
+				if(!element){
+					element = form;
+				}
 				if ( element.type === "radio" ) {
 					$( element ).parent().parent().removeClass('is-invalid').addClass('is-valid');
 				} else {

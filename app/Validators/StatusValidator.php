@@ -6,20 +6,18 @@ use \Prettus\Validator\Contracts\ValidatorInterface;
 use \Prettus\Validator\LaravelValidator;
 
 /**
- * Class ItemValidator.
+ * Class StatusValidator.
  *
  * @package namespace App\Validators;
  */
-class ItemValidator extends LaravelValidator{
+class StatusValidator extends LaravelValidator {
 	/**
 	 * Validation Rules
 	 *
 	 * @var array
 	 */
 	protected $rules = [
-		'order_id' => 'required|exists:orders,id',
-		'product_id' => 'required|exists:products,id',
-		'amount' => 'required|min:1',
-		'value' => 'required|min:1'
+		ValidatorInterface::RULE_CREATE => [],
+		ValidatorInterface::RULE_UPDATE => [],
 	];
 }

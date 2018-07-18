@@ -10,15 +10,20 @@ use \Prettus\Validator\LaravelValidator;
  *
  * @package namespace App\Validators;
  */
-class OrderValidator extends LaravelValidator
-{
-    /**
-     * Validation Rules
-     *
-     * @var array
-     */
-    protected $rules = [
-        ValidatorInterface::RULE_CREATE => [],
-        ValidatorInterface::RULE_UPDATE => [],
-    ];
+class OrderValidator extends LaravelValidator {
+	/**
+	 * Validation Rules
+	 *
+	 * @var array
+	 */
+	protected $rules = [
+		'user_id' => 'required|exists:users,id',
+		'status_id' => 'required|exists:users,id',
+		'zipcode' => 'required',
+		'state' => 'required|size:2',
+		'city' => 'required',
+		'district' => 'required',
+		'street' => 'required',
+		'number' => 'required'
+	];
 }

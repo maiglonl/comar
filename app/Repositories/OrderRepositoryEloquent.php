@@ -13,36 +13,26 @@ use App\Validators\OrderValidator;
  *
  * @package namespace App\Repositories;
  */
-class OrderRepositoryEloquent extends BaseRepository implements OrderRepository
-{
-    /**
-     * Specify Model class name
-     *
-     * @return string
-     */
-    public function model()
-    {
-        return Order::class;
-    }
+class OrderRepositoryEloquent extends BaseRepository implements OrderRepository{
+	/**
+	 * Specify Model class name
+	 */
+	public function model(){
+		return Order::class;
+	}
 
-    /**
-    * Specify Validator class name
-    *
-    * @return mixed
-    */
-    public function validator()
-    {
+	/**
+	 * Specify Validator class name
+	 */
+	public function validator(){
+		return OrderValidator::class;
+	}
 
-        return OrderValidator::class;
-    }
-
-
-    /**
-     * Boot up the repository, pushing criteria
-     */
-    public function boot()
-    {
-        $this->pushCriteria(app(RequestCriteria::class));
-    }
-    
+	/**
+	 * Boot up the repository, pushing criteria
+	 */
+	public function boot(){
+		$this->pushCriteria(app(RequestCriteria::class));
+	}
+	
 }

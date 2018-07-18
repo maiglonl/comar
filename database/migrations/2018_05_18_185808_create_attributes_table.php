@@ -14,7 +14,7 @@ class CreateAttributesTable extends Migration {
 		Schema::create('attributes', function(Blueprint $table) {
 			$table->increments('id');
 			$table->string('name');
-			$table->string('value')->nullable();
+			$table->string('value');
 			$table->integer('product_id')->nullable()->unsigned();
 			$table->foreign('product_id')->references('id')->on('products');
 			$table->timestamps();

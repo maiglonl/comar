@@ -1,7 +1,7 @@
 <div>
 	<div id="userEditApp">
 		<h2 class="page-title">Usuário <small> | Edição de Usuário</small></h2>
-		<form action="{{ route('users.update', [$user->id]) }}" id="formEditUser" data-prefix="usr">
+		<form action="{{ route('users.update', [$user->id]) }}" id="formEditUser" method="PUT" data-prefix="usr">
 			@include('app.users._form')
 		</form>
 	</div>
@@ -20,7 +20,6 @@
 				});
 				$("#formEditUser").cValidate({
 					data: self.user,
-					isPut: true,
 					success: 'Usuário atualizado com sucesso!',
 					error: 'Falha ao atualizar usuário!',
 				});

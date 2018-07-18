@@ -143,9 +143,17 @@ task
 	id
 	name
 
+	- Pagamento
+	- Envio
+	- Entrega
+
 action
 	id
 	user_id
 	task_id
 	order_id
 	date
+
+Forma de entrega
+	- 1 para cada produto
+Forma de pagamento

@@ -13,26 +13,26 @@ use App\Validators\AttributeValidator;
  *
  * @package namespace App\Repositories;
  */
-class AttributeRepositoryEloquent extends BaseRepository implements AttributeRepository
-{
-    /**
-     * Specify Model class name
-     *
-     * @return string
-     */
-    public function model()
-    {
-        return Attribute::class;
-    }
+class AttributeRepositoryEloquent extends BaseRepository implements AttributeRepository{
+	/**
+	 * Specify Model class name
+	 */
+	public function model(){
+		return Attribute::class;
+	}
 
-    
+	/**
+	 * Specify Validator class name
+	 */
+	public function validator(){
+		return AttributeValidator::class;
+	}
 
-    /**
-     * Boot up the repository, pushing criteria
-     */
-    public function boot()
-    {
-        $this->pushCriteria(app(RequestCriteria::class));
-    }
-    
+	/**
+	 * Boot up the repository, pushing criteria
+	 */
+	public function boot(){
+		$this->pushCriteria(app(RequestCriteria::class));
+	}
+	
 }

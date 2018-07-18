@@ -17,7 +17,6 @@ class CategoryValidator extends LaravelValidator {
 	 * @var array
 	 */
 	protected $rules = [
-		ValidatorInterface::RULE_CREATE => [],
-		ValidatorInterface::RULE_UPDATE => [],
+		'name' => 'required|string|max:255'
 	];
 }

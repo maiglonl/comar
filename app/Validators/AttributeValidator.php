@@ -17,7 +17,8 @@ class AttributeValidator extends LaravelValidator {
 	 * @var array
 	 */
 	protected $rules = [
-		ValidatorInterface::RULE_CREATE => [],
-		ValidatorInterface::RULE_UPDATE => [],
+        'name' => 'required|string|max:255|min:3',
+        'value' => 'required|string|max:255',
+        'product_id' => 'required|exists:products,id'
 	];
 }

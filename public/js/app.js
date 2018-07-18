@@ -101431,7 +101431,7 @@ $.widget("custom.wAutocomplete", $.ui.autocomplete, {
 				if (typeof error === "function") {
 					error();
 				} else {
-					error = data.message ? data.message : error;
+					error = data.message && typeof data.message === "string" ? data.message : error;
 					toastr.error(error);
 				}
 			} else {
@@ -101446,7 +101446,7 @@ $.widget("custom.wAutocomplete", $.ui.autocomplete, {
 				if (typeof success === "function") {
 					success();
 				} else {
-					success = data.message ? data.message : success;
+					success = data.message && typeof data.message === "string" ? data.message : success;
 					toastr.success(success);
 				}
 				parent.jQuery.fancybox.close();
@@ -101463,6 +101463,9 @@ $.widget("custom.wAutocomplete", $.ui.autocomplete, {
 				}
 			},
 			highlight: function highlight(element) {
+				if (!element) {
+					element = form;
+				}
 				if (element.type === "radio") {
 					$(element).parent().parent().addClass('is-invalid').removeClass('is-valid');
 				} else {
@@ -101470,6 +101473,9 @@ $.widget("custom.wAutocomplete", $.ui.autocomplete, {
 				}
 			},
 			unhighlight: function unhighlight(element) {
+				if (!element) {
+					element = form;
+				}
 				if (element.type === "radio") {
 					$(element).parent().parent().removeClass('is-invalid').addClass('is-valid');
 				} else {

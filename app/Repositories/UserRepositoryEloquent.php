@@ -17,8 +17,6 @@ use Illuminate\Support\Facades\Hash;
 class UserRepositoryEloquent extends BaseRepository implements UserRepository {
 	/**
 	 * Specify Model class name
-	 *
-	 * @return string
 	 */
 	public function model(){
 		return User::class;
@@ -26,34 +24,9 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository {
 
 	/**
 	* Specify Validator class name
-	*
-	* @return mixed
 	*/
 	public function validator(){
 		return UserValidator::class;
-	}
-
-
-	/**
-	 * Create Repository
-	 * @param  array  $attributes [description]
-	 * @return Repository         [description]
-	 */
-	public function create(array $attributes){
-		$attributes["password"] = isset($attributes["password"]) ? bcrypt($attributes["password"]) : bcrypt("12345");
-		return parent::create($attributes);
-	}
-
-	/**
-	 * Update Repository
-	 * @param  array  $attributes [description]
-	 * @return Repository         [description]
-	 */
-	public function update(array $attributes, $id){
-		if(isset($attributes["password"])){
-			$attributes["password"] = bcrypt($attributes["password"]);
-		}
-		return parent::update($attributes, $id);
 	}
 
 	/**
@@ -62,5 +35,22 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository {
 	public function boot(){
 		$this->pushCriteria(app(RequestCriteria::class));
 	}
-	
+
+	/**
+	 * Create Repository
+	 */
+	public function create(array $attributes){
+		$attributes["password"] = isset($attributes["password"]) ? bcrypt($attributes["password"]) : bcrypt("12345");
+		return parent::create($attributes);
+	}
+
+	/**
+	 * Update Repository
+	 */
+	public function update(array $attributes, $id){
+		if(isset($attributes["password"])){
+			$attributes["password"] = bcrypt($attributes["password"]);
+		}
+		return parent::update($attributes, $id);
+	}
 }

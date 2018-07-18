@@ -17,7 +17,17 @@ class ProductValidator extends LaravelValidator {
 	 * @var array
 	 */
 	protected $rules = [
-		ValidatorInterface::RULE_CREATE => [],
-		ValidatorInterface::RULE_UPDATE => [],
+		'name' => 'required|string|max:255',
+		'description' => 'required',
+		'category_id' => 'required|exists:categories,id',
+		'value_partner' => 'required',
+		'value_seller' => 'required',
+		'weight' => 'required',
+		'height' => 'required',
+		'width' => 'required',
+		'length' => 'required',
+		'diameter' => 'required',
+		'amount' => 'required',
+		'status' => 'required'
 	];
 }

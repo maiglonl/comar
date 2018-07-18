@@ -13,26 +13,26 @@ use App\Validators\CategoryValidator;
  *
  * @package namespace App\Repositories;
  */
-class CategoryRepositoryEloquent extends BaseRepository implements CategoryRepository
-{
-    /**
-     * Specify Model class name
-     *
-     * @return string
-     */
-    public function model()
-    {
-        return Category::class;
-    }
+class CategoryRepositoryEloquent extends BaseRepository implements CategoryRepository{
+	/**
+	 * Specify Model class name
+	 */
+	public function model(){
+		return Category::class;
+	}
 
-    
+	/**
+	 * Specify Validator class name
+	 */
+	public function validator(){
+		return CategoryValidator::class;
+	}
 
-    /**
-     * Boot up the repository, pushing criteria
-     */
-    public function boot()
-    {
-        $this->pushCriteria(app(RequestCriteria::class));
-    }
-    
+	/**
+	 * Boot up the repository, pushing criteria
+	 */
+	public function boot(){
+		$this->pushCriteria(app(RequestCriteria::class));
+	}
+	
 }
