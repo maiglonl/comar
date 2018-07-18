@@ -1,11 +1,13 @@
 
 // Body
-$body-bg: #f5f8fa;
+$body-bg: #f5f8fa !important;
+$body-color: $gray-800 !important;
 
 // Typography
 $font-family-sans-serif: sans-serif;
 $font-family-base: Roboto;
-$font-size-base: 0.9rem;
-$line-height-base: 1.6;
+$font-size-base: 1rem;
+$line-height-base: 1.5;
 $enable-gradients: false;
-$text-color: #636b6f !default;
+$text-color: #636b6f;
+

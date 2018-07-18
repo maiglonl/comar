@@ -11,6 +11,13 @@ window.filters = {
 		v = (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
 		return z > 0 ? s + x + v : '---';
 	},
+	currency_sup: function (val){
+		let v = filters.currency(val, true);
+		let v1 = v.substr(-2, 2);
+		let v2 = v.substr(0, v.length-3);
+		let result = v2+"<sup>"+v1+"</sup>";
+		return result;
+	},
 	limit_words: function(text, n){
 		var words = text.split(' ');
 		if(words.length <= n){

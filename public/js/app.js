@@ -101513,6 +101513,13 @@ window.filters = {
 		    v = (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
 		return z > 0 ? s + x + v : '---';
 	},
+	currency_sup: function currency_sup(val) {
+		var v = filters.currency(val, true);
+		var v1 = v.substr(-2, 2);
+		var v2 = v.substr(0, v.length - 3);
+		var result = v2 + "<sup>" + v1 + "</sup>";
+		return result;
+	},
 	limit_words: function limit_words(text, n) {
 		var words = text.split(' ');
 		if (words.length <= n) {
@@ -101979,7 +101986,7 @@ window.pagSeguro = {
 /***/ "./resources/assets/sass/app.scss":
 /***/ (function(module, exports) {
 
-// removed by extract-text-webpack-plugin
+throw new Error("Module build failed: ModuleBuildError: Module build failed: \n$body-color: $gray-800 !important;\n            ^\n      Undefined variable: \"$gray-800\".\n      in /Users/Maiglon/Workspace/Sites/comar/resources/assets/sass/_variables.scss (line 4, column 14)\n    at runLoaders (/Users/Maiglon/Workspace/Sites/comar/node_modules/webpack/lib/NormalModule.js:195:19)\n    at /Users/Maiglon/Workspace/Sites/comar/node_modules/loader-runner/lib/LoaderRunner.js:364:11\n    at /Users/Maiglon/Workspace/Sites/comar/node_modules/loader-runner/lib/LoaderRunner.js:230:18\n    at context.callback (/Users/Maiglon/Workspace/Sites/comar/node_modules/loader-runner/lib/LoaderRunner.js:111:13)\n    at Object.asyncSassJobQueue.push [as callback] (/Users/Maiglon/Workspace/Sites/comar/node_modules/sass-loader/lib/loader.js:55:13)\n    at Object.done [as callback] (/Users/Maiglon/Workspace/Sites/comar/node_modules/neo-async/async.js:7974:18)\n    at options.error (/Users/Maiglon/Workspace/Sites/comar/node_modules/node-sass/lib/index.js:294:32)");
 
 /***/ }),
 

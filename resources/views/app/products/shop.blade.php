@@ -53,23 +53,23 @@
 						<div class="card-body">
 							<h4 class="card-price">
 								@if(Auth::user() && Auth::user()->role == USER_ROLES_ADMIN)
-									<span v-html="currency(product.value_seller)"></span>
-									<span v-html="currency(product.value_partner)"></span>
+									<span v-html="currency_sup(product.value_seller)"></span>
+									<span v-html="currency_sup(product.value_partner)"></span>
 								@elseif(Auth::user() && Auth::user()->role == USER_ROLES_SELLER)
-									<span v-html="currency(product.value_seller)"></span>
+									<span v-html="currency_sup(product.value_seller)"></span>
 								@else
-									<span v-html="currency(product.value_partner)"></span>
+									<span v-html="currency_sup(product.value_partner)"></span>
 								@endif
 							</h4>
 							<h5 :class="[ product.interest_free == 12 ? 'text-success' : 'text-muted' ]">
 								<i class="far fa-credit-card"></i> 
 								@if(Auth::user() && Auth::user()->role == USER_ROLES_ADMIN)
-									<small>12x <span v-html="currency(product.value_seller/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small><br>
-									<small>12x <span v-html="currency(product.value_partner/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small>
+									<small>12x <span v-html="currency_sup(product.value_seller/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small><br>
+									<small>12x <span v-html="currency_sup(product.value_partner/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small>
 								@elseif(Auth::user() && Auth::user()->role == USER_ROLES_SELLER)
-									<small>12x <span v-html="currency(product.value_seller/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small>
+									<small>12x <span v-html="currency_sup(product.value_seller/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small>
 								@else
-									<small>12x <span v-html="currency(product.value_partner/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small>
+									<small>12x <span v-html="currency_sup(product.value_partner/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small>
 								@endif
 							</h5>
 							<h5 :class="[ product.free_shipping ? 'text-success' : 'text-muted' ]">
@@ -112,12 +112,8 @@
 				openProductDescription: function (id){
 					location.href = '{{ route('products.desc', ['']) }}/'+id;
 				},
-				currency: function (val){
-					let v = filters.currency(val, true);
-					let v1 = v.substr(-2, 2);
-					let v2 = v.substr(0, v.length-3);
-					let result = v1 != '00' ? v2+"<sup>"+v1+"</sup>" : v2;
-					return result;
+				currency_sup: function (val){
+					return filters.currency_sup(val, true);
 				}
 			},
 			filters: filters
