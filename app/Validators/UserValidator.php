@@ -38,6 +38,7 @@ class UserValidator extends LaravelValidator {
 		ValidatorInterface::RULE_UPDATE => [
 			'name' => 'required|string|max:100',
 			'username' => 'required|string|max:20',
+			'cp' => 'required|string|max:18',
 			'email' => 'required|string|email|max:100',
 			'phone1' => 'required|max:11',
 			'phone2' => 'max:11',

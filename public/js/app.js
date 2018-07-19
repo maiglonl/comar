@@ -101986,7 +101986,7 @@ window.pagSeguro = {
 /***/ "./resources/assets/sass/app.scss":
 /***/ (function(module, exports) {
 
-throw new Error("Module build failed: ModuleBuildError: Module build failed: \n$body-color: $gray-800 !important;\n            ^\n      Undefined variable: \"$gray-800\".\n      in /Users/Maiglon/Workspace/Sites/comar/resources/assets/sass/_variables.scss (line 4, column 14)\n    at runLoaders (/Users/Maiglon/Workspace/Sites/comar/node_modules/webpack/lib/NormalModule.js:195:19)\n    at /Users/Maiglon/Workspace/Sites/comar/node_modules/loader-runner/lib/LoaderRunner.js:364:11\n    at /Users/Maiglon/Workspace/Sites/comar/node_modules/loader-runner/lib/LoaderRunner.js:230:18\n    at context.callback (/Users/Maiglon/Workspace/Sites/comar/node_modules/loader-runner/lib/LoaderRunner.js:111:13)\n    at Object.asyncSassJobQueue.push [as callback] (/Users/Maiglon/Workspace/Sites/comar/node_modules/sass-loader/lib/loader.js:55:13)\n    at Object.done [as callback] (/Users/Maiglon/Workspace/Sites/comar/node_modules/neo-async/async.js:7974:18)\n    at options.error (/Users/Maiglon/Workspace/Sites/comar/node_modules/node-sass/lib/index.js:294:32)");
+// removed by extract-text-webpack-plugin
 
 /***/ }),
 
