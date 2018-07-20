@@ -13,6 +13,30 @@ use Prettus\Validator\Exceptions\ValidatorException;
 trait ControllerTrait{
 
 	/**
+	 * Display a listing of the resource.
+	 */
+	public function trait_index() {
+		$resources = $this->repository->all();
+		return view('app.'.$this->names['base_blades'].'.index', [$this->names['plural'] => $resources]);
+	}
+
+	/**
+	 * Display the description of the resource.
+	 */
+	public function trait_show($id) {
+		$resource = $this->repository->find($id);
+		return view('app.'.$this->names['base_blades'].'.show', [$this->names['singular'] => $resource]);
+	}
+
+	/**
+	 * Display the description of the resource.
+	 */
+	public function trait_desc($id) {
+		$resource = $this->repository->find($id);
+		return view('app.'.$this->names['base_blades'].'.desc', [$this->names['singular'] => $resource]);
+	}
+
+	/**
 	 * Show the form for create resource.
 	 */
 	public function trait_create() {

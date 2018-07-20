@@ -62,14 +62,13 @@
 								@endif
 							</h4>
 							<h5 :class="[ product.interest_free == 12 ? 'text-success' : 'text-muted' ]">
-								<i class="far fa-credit-card"></i> 
 								@if(Auth::user() && Auth::user()->role == USER_ROLES_ADMIN)
-									<small>12x <span v-html="currency_sup(product.value_seller/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small><br>
-									<small>12x <span v-html="currency_sup(product.value_partner/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small>
+									<i class="far fa-credit-card"></i><small>12x <span v-html="currency_sup(product.value_seller/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small><br>
+									<i class="far fa-credit-card"></i><small>12x <span v-html="currency_sup(product.value_partner/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small>
 								@elseif(Auth::user() && Auth::user()->role == USER_ROLES_SELLER)
-									<small>12x <span v-html="currency_sup(product.value_seller/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small>
+									<i class="far fa-credit-card"></i><small>12x <span v-html="currency_sup(product.value_seller/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small>
 								@else
-									<small>12x <span v-html="currency_sup(product.value_partner/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small>
+									<i class="far fa-credit-card"></i><small>12x <span v-html="currency_sup(product.value_partner/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small>
 								@endif
 							</h5>
 							<h5 :class="[ product.free_shipping ? 'text-success' : 'text-muted' ]">

@@ -36,7 +36,7 @@ class ItemsController extends Controller{
 		$item->amount++;
 		$item = $this->repository->update($item->toArray(), $id);
 		return response()->json([
-			'data' => $items,
+			'data' => $item,
 			'message' => "Quantidade do item atualizada"
 		]);
 	}
@@ -55,7 +55,7 @@ class ItemsController extends Controller{
 		$item->amount--;
 		$item = $this->repository->update($item->toArray(), $id);
 		return response()->json([
-			'data' => $items,
+			'data' => $item,
 			'message' => "Quantidade do item atualizada"
 		]);
 	}

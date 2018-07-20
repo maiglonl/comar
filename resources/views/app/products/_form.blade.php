@@ -81,11 +81,8 @@
 				<div class="input-group-text">R$</div>
 			</div>
 			<div class="form-label-group form-control">
-			<input type="number" step="0.01" class="form-control" id="prod_value_seller" name="prod_value_seller" placeholder="Valor - Vendedor" v-model="product.value_seller">
-			<label for="prod_value_seller">Valor - Vendedor</label>
-			</div>
-			<div class="input-group-append">
-				<div class="input-group-text">,00</div>
+				<input type="number" step="0.01" class="form-control" id="prod_value_seller" name="prod_value_seller" placeholder="Valor - Vendedor" v-model="product.value_seller">
+				<label for="prod_value_seller">Valor - Vendedor</label>
 			</div>
 		</div>
 	</div>
@@ -98,9 +95,6 @@
 				<input type="number" step="0.01" class="form-control" id="prod_value_partner" name="prod_value_partner" placeholder="Valor - Parceiro" v-model="product.value_partner">
 				<label for="prod_value_partner">Valor - Parceiro</label>
 			</div>
-			<div class="input-group-append">
-				<div class="input-group-text">,00</div>
-			</div>
 		</div>
 	</div>
 </div>
@@ -109,18 +103,23 @@
 		<div class="form-group">
 			<div class="btn-group btn-group-toggle border rounded d-flex" role="group" data-toggle="buttons" style="width: 100%; height: 49px;">
 				<label class="btn btn-light w-100" :class="{active : product.free_shipping == '1'}" style="padding-top:12px;">
-					<input type="radio" name="prod_free_shipping" table="product" field="free_shipping" autocomplete="off" v-model="product.free_shipping" value="1" required>Sim
+					<input type="radio" name="prod_free_shipping" table="product" field="free_shipping" autocomplete="off" v-model="product.free_shipping" value="1" required>Frete Grátis
 				</label>
 				<label class="btn btn-light w-100" :class="{active : product.free_shipping == '0'}" style="padding-top:12px;">
-					<input type="radio" name="prod_free_shipping" table="product" field="free_shipping" autocomplete="off" v-model="product.free_shipping" value="0" required>Não
+					<input type="radio" name="prod_free_shipping" table="product" field="free_shipping" autocomplete="off" v-model="product.free_shipping" value="0" required>Frete Pago
 				</label>
 			</div>
 		</div>
 	</div>
-	<div class="col-8">
+	<div class="col-6">
 		<div class="form-label-group">
-			<input type="text" class="form-control" id="prod_interest_free" name="prod_interest_free" placeholder="Sem juros" v-model="product.interest_free" required>
-			<label for="prod_interest_free">Sem juros</label>
+			<select class="form-control float-label-select" id="prod_interest_free" name="prod_interest_free" v-model="product.interest_free" required>
+				<option value selected disabled></option>
+				<option value="0">0</option>
+				<option value="6">6</option>
+				<option value="12">12</option>
+			</select>
+			<label for="prod_interest_free">Parcelas Sem juros</label>
 		</div>
 	</div>
 </div>

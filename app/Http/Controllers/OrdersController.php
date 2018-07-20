@@ -2,131 +2,62 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
-use App\Http\Requests\OrderCreateRequest;
-use App\Http\Requests\OrderUpdateRequest;
 use App\Http\Requests\OrderCheckoutRequest;
 use App\Repositories\OrderRepository;
 use App\Repositories\ItemRepository;
 use App\Repositories\ProductRepository;
-use App\Validators\OrderValidator;
-use Auth;
 use App\PagSeguro\PagSeguro;
 
 /**
  * Class OrdersController.
- *
- * @package namespace App\Http\Controllers;
  */
-class OrdersController extends Controller
-{
-	/**
-	 * @var OrderRepository
-	 */
+class OrdersController extends Controller{
 	protected $repository;
 
-	/**
-	 * @var OrderValidator
-	 */
-	protected $validator;
-
-	/**
-	 * OrdersController constructor.
-	 *
-	 * @param OrderRepository $repository
-	 * @param OrderValidator $validator
-	 */
 	public function __construct(
-		OrderRepository $orderRepository, 
+		OrderRepository $repository, 
 		ItemRepository $itemRepository, 
-		ProductRepository $productRepository, 
-		OrderValidator $validator)
+		ProductRepository $productRepository)
 	{
+		$this->repository = $repository;
 		$this->itemRepository = $itemRepository;
 		$this->productRepository = $productRepository;
-		$this->orderRepository = $orderRepository;
-		$this->validator = $validator;
+
+		$this->names = [
+			'plural' => 'orders',
+			'singular' => 'order',
+			'pt_plural' => 'pedidos',
+			'pt_singular' => 'pedido',
+			'pt_gender' => 'o',
+			'base_blades' => 'orders'
+		];
 	}
 
 	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\Response
+	 * Disponible methods from Trait.
 	 */
-	public function index(){
-		$this->orderRepository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-		$orders = $this->orderRepository->all();
-
-		if (request()->wantsJson()) {
-			return response()->json([
-				'data' => $orders,
-			]);
-		}
-
-		return view('orders.index', compact('orders'));
-	}
-
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @param  OrderCreateRequest $request
-	 *
-	 * @return \Illuminate\Http\Response
-	 *
-	 * @throws \Prettus\Validator\Exceptions\ValidatorException
-	 */
-	public function store(OrderCreateRequest $request){
-		try {
-
-			$this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
-
-			$order = $this->orderRepository->create($request->all());
-
-			$response = [
-				'message' => 'Order created.',
-				'data'    => $order->toArray(),
-			];
-
-			if ($request->wantsJson()) {
-
-				return response()->json($response);
-			}
-
-			return redirect()->back()->with('message', $response['message']);
-		} catch (ValidatorException $e) {
-			if ($request->wantsJson()) {
-				return response()->json([
-					'error'   => true,
-					'message' => $e->getMessageBag()
-				]);
-			}
-
-			return redirect()->back()->withErrors($e->getMessageBag())->withInput();
-		}
+	use ControllerTrait {
+		ControllerTrait::trait_index as index;
+		ControllerTrait::trait_show as show;
+		ControllerTrait::trait_destroy as destroy;
+		ControllerTrait::trait_find as find;
+		ControllerTrait::trait_all as all;
 	}
 
 	/**
 	 * Display the specified resource.
-	 *
-	 * @param  int $id
-	 *
-	 * @return \Illuminate\Http\Response
 	 */
 	public function cart(){
-		$order = $this->current();
+		$order = $this->repository->current();
 		return view('app.orders.cart', compact('order'));
 	}
 
 	/**
 	 * Display the specified resource.
-	 *
-	 * @param  int $id
-	 *
-	 * @return \Illuminate\Http\Response
 	 */
 	public function checkout($id){
 		$data = [
@@ -134,7 +65,7 @@ class OrdersController extends Controller
 			'token' => 'AA06F28B1DBB4CB3939D6BE9FF9E5FB0'
 		];
 		$response = (new PagSeguro)->request(PagSeguro::SESSION_SANDBOX, $data);
-		$order = $this->orderRepository->find($id);
+		$order = $this->repository->find($id);
 		if($order->status_id != STATUS_ORDER_EM_ABERTO){
 			return view('orders.show', compact('order'));
 		}
@@ -149,17 +80,11 @@ class OrdersController extends Controller
 
 	/**
 	 * Update the specified resource in storage.
-	 *
-	 * @param  OrderCheckoutRequest $request
-	 *
-	 * @return Response
-	 *
-	 * @throws \Prettus\Validator\Exceptions\ValidatorException
 	 */
 	public function postCheckout(OrderCheckoutRequest $request){
 		try {
 			//$this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
-			//$order = $this->orderRepository->update($request->all(), $id);
+			//$order = $this->repository->update($request->all(), $id);
 			$data = [
 				'email' => 'maiglonl@gmail.com',
 				'token' => 'AA06F28B1DBB4CB3939D6BE9FF9E5FB0',
@@ -243,46 +168,16 @@ class OrdersController extends Controller
 	}
 
 	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int $id
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function show($id){
-		$order = $this->orderRepository->find($id);
-		return view('orders.show', compact('order'));
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int $id
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function edit($id){
-		$order = $this->orderRepository->find($id);
-		return view('orders.edit', compact('order'));
-	}
-
-	/**
 	 * Add Item to current order.
-	 *
-	 * @param  int $id
-	 *
-	 * @return \Illuminate\Http\Response
 	 */
 	public function addItem($product_id){
-		$order = $this->current();
+		$order = $this->repository->current();
 		$product = $this->productRepository->find($product_id);
 		$data = [
 			'order_id' => $order->id,
 			'product_id' => $product->id
 		];
 		$items = $this->itemRepository->findWhere($data);
-		error_log(\App\Helpers\PermHelper::lowerValueText());
-		error_log($product[\App\Helpers\PermHelper::lowerValueText()]);
 		if(count($items) > 0){
 			$item = $items[0];
 			$item->amount++;
@@ -297,100 +192,17 @@ class OrdersController extends Controller
 	}
 
 	/**
-	 * Add Item to current order.
-	 *
-	 * @param  int $id
-	 *
-	 * @return \Illuminate\Http\Response
+	 * Remove Item from current order.
 	 */
 	public function removeItem($item_id){
 		$item = $this->itemRepository->find($item_id);
-		$order = $this->orderRepository->find($item->order_id);
+		$order = $this->repository->find($item->order_id);
 		if($order->user_id != Auth::id()){
 			return response('Ação não permitida para este usuário.', 403);
 		}else{
 			$this->itemRepository->delete($item_id);
 		}
 		return $items;
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  OrderUpdateRequest $request
-	 * @param  string            $id
-	 *
-	 * @return Response
-	 *
-	 * @throws \Prettus\Validator\Exceptions\ValidatorException
-	 */
-	public function update(OrderUpdateRequest $request, $id){
-		try {
-
-			$this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
-
-			$order = $this->orderRepository->update($request->all(), $id);
-
-			$response = [
-				'message' => 'Order updated.',
-				'data'    => $order->toArray(),
-			];
-
-			if ($request->wantsJson()) {
-
-				return response()->json($response);
-			}
-
-			return redirect()->back()->with('message', $response['message']);
-		} catch (ValidatorException $e) {
-
-			if ($request->wantsJson()) {
-
-				return response()->json([
-					'error'   => true,
-					'message' => $e->getMessageBag()
-				]);
-			}
-
-			return redirect()->back()->withErrors($e->getMessageBag())->withInput();
-		}
-	}
-
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int $id
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function destroy($id){
-		$deleted = $this->orderRepository->delete($id);
-
-		if (request()->wantsJson()) {
-
-			return response()->json([
-				'message' => 'Order deleted.',
-				'deleted' => $deleted,
-			]);
-		}
-
-		return redirect()->back()->with('message', 'Order deleted.');
-	}
-
-	/**
-	 * Return current open order or create a new.
-	 *
-	 * @param  int $id
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function current(){
-		$order = $this->orderRepository->findWhere(['user_id' => Auth::id(), 'status_id' => STATUS_ORDER_EM_ABERTO])->first();
-		if(!$order){
-			$order = $this->orderRepository->create(['user_id' => Auth::id(), 'status_id' => STATUS_ORDER_EM_ABERTO]);
-		}
-		return $order;
 	}
 
 }

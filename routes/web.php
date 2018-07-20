@@ -53,8 +53,6 @@ Route::group(['middleware' => ['auth', 'can:access-admin']], function () {
 	Route::resource('attributes', 'AttributesController')->except(['index','show','create','edit']);
 	Route::resource('categories', 'CategoriesController')->only(['create','store','update']);
 	Route::resource('products', 'ProductsController');
-	Route::resource('Orders', 'OrdersController');
-	Route::resource('Items', 'ItemsController');
 });
 
 // Authenticated Routes
@@ -66,11 +64,14 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('orders/cart', 'OrdersController@cart')->name('orders.cart');
 	Route::get('orders/current', 'OrdersController@current')->name('orders.current');
 	Route::get('orders/checkout', 'OrdersController@checkout')->name('orders.checkout');
+	Route::get('orders/find/{id}', 'OrdersController@find')->name('orders.find');
 	Route::post('orders/checkout', 'OrdersController@postCheckout')->name('orders.checkout.post');
 	Route::post('orders/item/{product_id}', 'OrdersController@addItem')->name('orders.item.add');
 
 	// Items
 	Route::post('items/store', 'ItemsController@store')->name('items.store');
+	Route::post('items/increase/{id}', 'ItemsController@increase')->name('items.increase');
+	Route::post('items/decrease/{id}', 'ItemsController@decrease')->name('items.decrease');
 
 	Route::resource('orders', 'OrdersController');
 	Route::resource('users', 'UsersController')->except('store');

@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use Auth;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use App\Repositories\OrderRepository;
@@ -34,5 +35,16 @@ class OrderRepositoryEloquent extends BaseRepository implements OrderRepository{
 	public function boot(){
 		$this->pushCriteria(app(RequestCriteria::class));
 	}
-	
+
+	/**
+	 * Return current open order or create a new.
+	 */
+	public function current(){
+		$order = $this->findWhere(['user_id' => Auth::id(), 'status_id' => STATUS_ORDER_EM_ABERTO])->first();
+		if(!$order){
+			$order = $this->create(['user_id' => Auth::id(), 'status_id' => STATUS_ORDER_EM_ABERTO]);
+		}
+		return $order;
+	}
+
 }

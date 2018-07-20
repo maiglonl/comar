@@ -3,15 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use Prettus\Validator\Contracts\ValidatorInterface;
-use Prettus\Validator\Exceptions\ValidatorException;
-use App\Http\Requests\ProductCreateRequest;
-use App\Http\Requests\ProductUpdateRequest;
 use App\Repositories\ProductRepository;
-use App\Validators\ProductValidator;
-use App\Criteria\ProductValueCriteria;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 
@@ -24,21 +16,31 @@ class ProductsController extends Controller {
 
 	protected $repository;
 
-	/**
-	 * ProductsController constructor.
-	 */
 	public function __construct(ProductRepository $repository) {
 		$this->repository = $repository;
+		$this->names = [
+			'plural' => 'products',
+			'singular' => 'product',
+			'pt_plural' => 'produtos',
+			'pt_singular' => 'produto',
+			'pt_gender' => 'o',
+			'base_blades' => 'products'
+		];
 	}
 
 	/**
-	 * Display a listing of the resource.
+	 * Disponible methods from Trait.
 	 */
-	public function index() {
-		$this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-		$products = $this->repository->all();
-
-		return view('app.products.index', compact('products'));
+	use ControllerTrait {
+		ControllerTrait::trait_index as index;
+		ControllerTrait::trait_desc as desc;
+		ControllerTrait::trait_show as show;
+		ControllerTrait::trait_create as create;
+		ControllerTrait::trait_edit as edit;
+		ControllerTrait::trait_store as store;
+		ControllerTrait::trait_update as update;
+		ControllerTrait::trait_find as find;
+		ControllerTrait::trait_all as all;
 	}
 
 	/**
@@ -49,103 +51,6 @@ class ProductsController extends Controller {
 		$products = $this->repository->all();
 
 		return view('app.products.shop', compact('products'));
-	}
-
-	/**
-	 * Display a description of the resource.
-	 */
-	public function desc($id) {
-		$product = $this->repository->find($id);
-		return view('app.products.desc', compact('product'));
-	}
-
-	/**
-	 * Display the specified resource.
-	 */
-	public function show($id) {
-		$product = $this->repository->find($id);
-		return view('app.products.show', compact('product'));
-	}
-
-	/**
-	 * Show the form for create resource.
-	 */
-	public function create() {
-		return view('app.products.create');
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 */
-	public function edit($id) {
-		$product = $this->repository->find($id);
-		return view('app.products.edit', compact('product'));
-	}
-
-	/**
-	 * Store a newly created resource in storage.
-	 */
-	public function store(ProductCreateRequest $request) {
-		try {
-			$this->validator->with($request->except('_token'))->passesOrFail(ValidatorInterface::RULE_CREATE);
-			$product = $this->repository->create($request->except('_token'));
-			$response = [
-				'message' => 'Produto registrado',
-				'data'    => $product->toArray(),
-			];
-			return response()->json($response);
-		} catch (ValidatorException $e) {
-			return response()->json([
-				'error'   => true,
-				'message' => $e->getMessageBag()
-			]);
-		}
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 */
-	public function update(ProductUpdateRequest $request, $id) {
-		try {
-			$this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
-			$product = $this->repository->update($request->all(), $id);
-			$response = [
-				'message' => 'Produto atualizado',
-				'data'    => $product->toArray(),
-			];
-			return response()->json($response);
-		} catch (ValidatorException $e) {
-			return response()->json([
-				'error'   => true,
-				'message' => $e->getMessageBag()
-			]);
-		}
-	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 */
-	public function destroy($id) {
-		$deleted = $this->repository->delete($id);
-		$this->deleteAllImages($id);
-		return response()->json([
-			'message' => 'Produto removido',
-			'deleted' => $deleted,
-		]);
-	}
-
-	/**
-	 * Return the specified product.
-	 */
-	public function find($id){
-		return $this->repository->find($id);
-	}
-
-	/**
-	 * Return list with all products.
-	 */
-	public function all(){
-		return $this->repository->all();
 	}
 
 	/**
@@ -197,6 +102,7 @@ class ProductsController extends Controller {
 			'message' => 'Imagem atualizada'
 		]);
 	}
+
 	/* Altera o indice da imagem */
 	public function pushImage(Request $request, $id, $index){
 		$path = env('FILES_PATH_PRODUCTS')."/".$id."/";
