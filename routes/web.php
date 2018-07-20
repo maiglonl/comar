@@ -72,6 +72,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('items/store', 'ItemsController@store')->name('items.store');
 	Route::post('items/increase/{id}', 'ItemsController@increase')->name('items.increase');
 	Route::post('items/decrease/{id}', 'ItemsController@decrease')->name('items.decrease');
+	Route::delete('items/destroy/{id}', 'ItemsController@destroy')->name('items.destroy');
 
 	Route::resource('orders', 'OrdersController');
 	Route::resource('users', 'UsersController')->except('store');
