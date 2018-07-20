@@ -2,7 +2,7 @@
 
 @section('body_top')
 	<div class="jumbotron-fluid">
-		<img v-else src="/storage/images/bg_ofertas.jpg" class="img-fluid">
+		<img src="{{ asset('images/bg_ofertas.jpg') }}" class="img-fluid">
 	</div>
 @endsection
 
