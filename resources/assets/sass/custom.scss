@@ -7,6 +7,16 @@ sup {
     font-size: .6em !important;
 }
 
+.toogle-value{
+	position: fixed; 
+	bottom: 20px; 
+	right: 20px;
+}
+.toogle-value>i {
+	-webkit-transition: all 0.55s;
+	transition: all 0.55s;
+}
+
 .link-unstyled {
 	&,
 	&:visited,

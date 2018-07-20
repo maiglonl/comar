@@ -1,18 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-	<div class="page-title">
+	<div class="page-title pb-3">
 		<h3>
 			Produtos | <small class="text-muted">Listagem de Produtos cadastrados</small>
 			<button type="button" class="btn btn-sm btn-primary float-right" title="Novo Produto" onclick="openFormProduct()">{!! ICONS_ADD !!}</button>
 		</h3>
 	</div>
-	<nav aria-label="breadcrumb">
-		<ol class="breadcrumb">
-			<li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-			<li class="breadcrumb-item active" aria-current="page">Produtos</li>
-		</ol>
-	</nav>
 	<div class="row justify-content-center">
 		<div class="col">
 			<div class="card">

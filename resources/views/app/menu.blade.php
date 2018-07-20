@@ -43,7 +43,7 @@
 							</form>
 						</div>
 					</li>
-					<li><a class="nav-link" href="{{ route('products.shop') }}"><i class="fas fa-shopping-cart"></i>(4)</span></a></li>
+					<li><a class="nav-link" href="{{ route('orders.cart') }}"><i class="fas fa-shopping-cart"></i></span></a></li>
 				@endguest
 			</ul>
 		</div>

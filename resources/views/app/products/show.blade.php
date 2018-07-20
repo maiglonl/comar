@@ -8,13 +8,6 @@
 				<button type="button" class="btn btn-sm btn-primary float-right" title="Editar Produto" @click="openFormEditProduct()">{!! ICONS_EDIT !!}</button>
 			</h3>
 		</div>
-		<nav aria-label="breadcrumb">
-			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-				<li class="breadcrumb-item"><a href="{{ route('products.index') }}">Produtos</a></li>
-				<li class="breadcrumb-item active" aria-current="page">{{ $product->name }}</li>
-			</ol>
-		</nav>
 		<div class="row justify-content-center">
 			<div class="col-sm-3">
 				<div class="card">

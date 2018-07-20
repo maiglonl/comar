@@ -22,13 +22,13 @@
 	<!-- Styles -->
 	<link href="{{ mix('css/app.css') }}" rel="stylesheet">
 </head>
-<body>
+<body class="bg-gray-100">
 	<div id="app">
 		@include('app.menu')
 
 		@yield('body_top')
 
-		<main class="py-4">
+		<main>
 			<div class="container-fluid">
 				<div class="row justify-content-md-center">
 					<div class="col-md-10">

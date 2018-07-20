@@ -1,17 +1,12 @@
 @extends('layouts.app')
 
-@section('content')
-	<div class="page-title">
-		<h3>
-			Produtos | <small class="text-muted">Listagem de Produtos disponíveis</small>
-		</h3>
+@section('body_top')
+	<div class="jumbotron-fluid">
+		<img v-else src="/storage/images/bg_ofertas.jpg" class="img-fluid">
 	</div>
-	<nav aria-label="breadcrumb">
-		<ol class="breadcrumb">
-			<li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-			<li class="breadcrumb-item active" aria-current="page">Comprar</li>
-		</ol>
-	</nav>
+@endsection
+
+@section('content')
 	<div class="row">
 		<div class="col-sm-5 col-md-4 col-lg-3">
 			<div class="content">
@@ -50,39 +45,35 @@
 						<div v-else class="">
 							<img src="{{ DEFAULT_IMAGE_PRODUCTS }}" class="img-fluid border-bottom p-1">
 						</div>
-						<div class="card-body">
+						<div class="card-body mt_height_product">
 							<h4 class="card-price">
-								@if(Auth::user() && Auth::user()->role == USER_ROLES_ADMIN)
-									<span v-html="currency_sup(product.value_seller)"></span>
-									<span v-html="currency_sup(product.value_partner)"></span>
-								@elseif(Auth::user() && Auth::user()->role == USER_ROLES_SELLER)
-									<span v-html="currency_sup(product.value_seller)"></span>
+								@if(\App\Helpers\PermHelper::viewValues())
+									<span v-html="$options.filters.currency_sup(product.value_seller)" v-if="showVals"></span>
+									<span v-html="$options.filters.currency_sup(product.value_partner)"></span>
 								@else
-									<span v-html="currency_sup(product.value_partner)"></span>
+									<span v-html="$options.filters.currency_sup(product.value_partner)"></span>
 								@endif
 							</h4>
 							<h5 :class="[ product.interest_free == 12 ? 'text-success' : 'text-muted' ]">
-								@if(Auth::user() && Auth::user()->role == USER_ROLES_ADMIN)
-									<i class="far fa-credit-card"></i><small>12x <span v-html="currency_sup(product.value_seller/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small><br>
-									<i class="far fa-credit-card"></i><small>12x <span v-html="currency_sup(product.value_partner/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small>
-								@elseif(Auth::user() && Auth::user()->role == USER_ROLES_SELLER)
-									<i class="far fa-credit-card"></i><small>12x <span v-html="currency_sup(product.value_seller/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small>
+								@if(\App\Helpers\PermHelper::viewValues())
+									<span v-if="showVals"><i class="far fa-credit-card"></i><small>12x <span v-html="$options.filters.currency_sup(product.value_seller/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small><br></span>
+									<span><i class="far fa-credit-card"></i><small>12x <span v-html="$options.filters.currency_sup(product.value_partner/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small></span>
 								@else
-									<i class="far fa-credit-card"></i><small>12x <span v-html="currency_sup(product.value_partner/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small>
+									<i class="far fa-credit-card"></i><small>12x <span v-html="$options.filters.currency_sup(product.value_partner/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small>
 								@endif
 							</h5>
-							<h5 :class="[ product.free_shipping ? 'text-success' : 'text-muted' ]">
-								<i class="fas fa-truck"></i> 
-								<small v-if="product.free_shipping">Frete grátis</small>
-								<small v-else>Entrega p/ todo o Brasil</small>
+							<h5 v-if="product.free_shipping" class="text-success">
+								<i class="fas fa-truck"></i> <small>Frete grátis</small>
 							</h5>
-							<h5 class="card-text mt_height_name">@{{ product.name }} - <small>@{{ product.category.name }}</small></h5>
-							<h5></h5>
-							<p class="mt_height_description">@{{ product.description | limit_words(12) }}</p>
+							<p class="h6 card-text">@{{ product.name }}<br><span class="text-muted">@{{ product.category.name }}</span></p>
 						</div>
 					</div>
 				</div>
 			</div>
+			<a class="btn btn-light btn-lg back-to-top text-muted toogle-value" role="button" @click.prevent="toogleView">
+				<i class="far fa-eye" v-if="showVals"></i>
+				<i class="far fa-eye-slash" v-else></i>
+			</a>
 		</div>
 	</div>
 	
@@ -90,12 +81,12 @@
 		new Vue({
 			el: '#productShopApp',
 			data: {
-				products: {!! $products->toJson() !!}
+				products: {!! $products->toJson() !!},
+				showVals: false
 			},
 			mounted: function(){
 				var self = this;
-				$('.mt_height_name').matchHeight();
-				$('.mt_height_description').matchHeight();
+				$('.mt_height_product').matchHeight();
 			},
 			methods:{
 				reloadData: function (){
@@ -111,9 +102,12 @@
 				openProductDescription: function (id){
 					location.href = '{{ route('products.desc', ['']) }}/'+id;
 				},
-				currency_sup: function (val){
-					return filters.currency_sup(val, true);
+				toogleView: function(){
+					this.showVals = !this.showVals;
 				}
+			},
+			updated:function (){
+				$.fn.matchHeight._update();
 			},
 			filters: filters
 		});

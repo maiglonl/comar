@@ -59,16 +59,38 @@ class OrdersController extends Controller{
 	/**
 	 * Display the specified resource.
 	 */
-	public function checkout($id){
+	public function delivery(){
+		$order = $this->repository->current();
+		if($order->status_id != STATUS_ORDER_EM_ABERTO){
+			return view('orders.show', compact('order'));
+		}
+		return view('app.orders.delivery', compact('order'));
+	}
+
+	/**
+	 * Display the specified resource.
+	 */
+	public function payment(){
+		$order = $this->repository->current();
+		if($order->status_id != STATUS_ORDER_EM_ABERTO){
+			return view('orders.show', compact('order'));
+		}
+		return view('app.orders.payment', compact('order'));
+	}
+
+	/**
+	 * Display the specified resource.
+	 */
+	public function checkout(){
+		$order = $this->repository->current();
+		if($order->status_id != STATUS_ORDER_EM_ABERTO){
+			return view('orders.show', compact('order'));
+		}
 		$data = [
 			'email' => 'maiglonl@gmail.com',
 			'token' => 'AA06F28B1DBB4CB3939D6BE9FF9E5FB0'
 		];
 		$response = (new PagSeguro)->request(PagSeguro::SESSION_SANDBOX, $data);
-		$order = $this->repository->find($id);
-		if($order->status_id != STATUS_ORDER_EM_ABERTO){
-			return view('orders.show', compact('order'));
-		}
 
 		$session = new \SimpleXMLElement($response->getContents());
 		$session = $session->id;

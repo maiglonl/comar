@@ -42,7 +42,17 @@ class OrderRepositoryEloquent extends BaseRepository implements OrderRepository{
 	public function current(){
 		$order = $this->findWhere(['user_id' => Auth::id(), 'status_id' => STATUS_ORDER_EM_ABERTO])->first();
 		if(!$order){
-			$order = $this->create(['user_id' => Auth::id(), 'status_id' => STATUS_ORDER_EM_ABERTO]);
+			$order = $this->create([
+				'user_id' => Auth::id(), 
+				'status_id' => STATUS_ORDER_EM_ABERTO,
+				'zipcode' => Auth::user()->zipcode,
+				'state' => Auth::user()->state,
+				'city' => Auth::user()->city,
+				'district' => Auth::user()->district,
+				'street' => Auth::user()->street,
+				'number' => Auth::user()->number,
+				'complement' => Auth::user()->complement
+			]);
 		}
 		return $order;
 	}

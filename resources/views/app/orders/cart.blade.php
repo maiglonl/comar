@@ -1,21 +1,12 @@
-@extends('layouts.app')
+@extends('layouts.order')
 
 @section('content')
-	<div id="orderCartApp" v-cloak>
-		<div class="page-title">
-			<h3>
-				Pedidos | <small class="text-muted">Pedido em andamento</small>
-			</h3>
+	<div id="orderCartApp" class="py-4" v-cloak>
+		<div class="page-title pb-3">
+			<h3>Pedidos | <small class="text-muted">Carrinho de compras</small></h3>
 		</div>
-		<nav aria-label="breadcrumb">
-			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-				<li class="breadcrumb-item"><a href="{{ route('products.index') }}">Pedidos</a></li>
-				<li class="breadcrumb-item active" aria-current="page">Novo pedido</li>
-			</ol>
-		</nav>
 		<div class="card">
-			<div class="card-body ml-3 mr-3 mb-3" v-if="order.items.length > 0">
+			<div class="card-body ml-3 mr-3 mb-3" v-if="order && order.items && order.items.length > 0">
 				<div v-for="item in order.items">
 					<div class="row mt-3">
 						<div class="col-1">
@@ -31,7 +22,7 @@
 							<h5 v-if="item.product.interest_free == 12 || item.product.free_shipping">
 								<span v-if="item.product.interest_free == 12" class="pr-3">
 									<i class="far fa-credit-card text-success"></i>
-									<small class="text-muted">Até 12 parcelas de <span v-html="currency_sup(item.product.{{ \App\Helpers\PermHelper::lowerValueText() }}/12)"></span> s/ juros</small>
+									<small class="text-muted">Até 12 parcelas de <span v-html="$options.filters.currency_sup(item.product.{{ \App\Helpers\PermHelper::lowerValueText() }}/12)"></span> s/ juros</small>
 								</span>
 								<span v-if="item.product.free_shipping">
 									<i class="fas fa-truck text-success"></i> 
@@ -60,7 +51,7 @@
 							</div>
 						</div>
 						<div class="col-2 text-right">
-							<h3 class="mt-2 font-weight-light" v-html="currency_sup(item.amount * item.product.{{ \App\Helpers\PermHelper::lowerValueText() }})"></h3>
+							<h3 class="mt-2 font-weight-light" v-html="$options.filters.currency_sup(item.amount * item.product.{{ \App\Helpers\PermHelper::lowerValueText() }})"></h3>
 						</div>
 					</div>
 					<div class="row">
@@ -71,7 +62,7 @@
 				</div>
 				<div class="row text-right mt-4">
 					<div class="col">
-						<a href="{{ route('orders.checkout', [$order->id]) }}" class="btn btn-primary">Finalizar Compra</a>
+						<a href="{{ route('orders.delivery') }}" class="btn btn-primary">Finalizar Compra</a>
 					</div>
 				</div>
 			</div>
@@ -125,9 +116,6 @@
 					$.post('{{ route('items.decrease', ['']) }}/'+id, null, function(data) {
 						self.reloadData();
 					});
-				},
-				currency_sup: function (val){
-					return filters.currency_sup(val, true);
 				}
 			},
 			filters: filters

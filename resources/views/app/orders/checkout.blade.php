@@ -1,23 +1,16 @@
-@extends('layouts.app')
+@extends('layouts.order')
 
 @section('pre-scripts')
 	<script type="text/javascript" src="https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js"></script>
 @endsection
 
 @section('content')
-	<div id="orderCartApp">
-		<div class="page-title">
+	<div id="orderCartApp" class="py-4">
+		<div class="page-title pb-3">
 			<h3>
 				Pedidos | <small class="text-muted">Checkout</small>
 			</h3>
 		</div>
-		<nav aria-label="breadcrumb">
-			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-				<li class="breadcrumb-item"><a href="{{ route('products.index') }}">Pedidos</a></li>
-				<li class="breadcrumb-item active" aria-current="page">Checkout</li>
-			</ol>
-		</nav>
 		<div class="row justify-content-center">
 			<div class="col">
 				<div class="card">
