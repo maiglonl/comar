@@ -101511,7 +101511,7 @@ window.filters = {
 		    j = (j = i.length) > 3 ? j % 3 : 0,
 		    x = r ? " R$ " : "",
 		    v = (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
-		return z > 0 ? s + x + v : '---';
+		return s + x + v;
 	},
 	currency_sup: function currency_sup(val) {
 		var v = filters.currency(val, true);

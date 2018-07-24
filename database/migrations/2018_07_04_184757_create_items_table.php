@@ -23,6 +23,7 @@ class CreateItemsTable extends Migration{
 			$table->integer('interest_free')->nullable();
 			$table->boolean('free_shipping')->nullable();
 			$table->string('delivery_form')->nullable();
+			$table->string('delivery_cost')->nullable();
 			$table->timestamps();
 
 			$table->foreign('order_id')->references('id')->on('orders');

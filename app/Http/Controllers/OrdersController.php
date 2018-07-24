@@ -11,7 +11,8 @@ use App\Repositories\OrderRepository;
 use App\Repositories\ItemRepository;
 use App\Repositories\ProductRepository;
 use App\PagSeguro\PagSeguro;
-
+use App\Helpers\PermHelper;
+use \Correios;
 /**
  * Class OrdersController.
  */
@@ -56,6 +57,14 @@ class OrdersController extends Controller{
 	}
 
 	/**
+	 * Display the address form.
+	 */
+	public function formAddress(){
+		$order = $this->repository->current();
+		return view('app.orders.forms.address', compact('order'));
+	}
+
+	/**
 	 * Display the specified resource.
 	 */
 	public function cart(){
@@ -67,10 +76,27 @@ class OrdersController extends Controller{
 	 * Display the specified resource.
 	 */
 	public function delivery(){
+		$deliveryMethods = [];
 		$order = $this->repository->current();
 		if(!$this->orderIsReady($order)){
 			return view('app.orders.cart', compact('order'));
 		}
+		foreach ($order->items as $key => $item) {
+			$dados = [
+				'tipo'              => 'sedex,pac', // Separar opções por vírgula (,) caso queira consultar mais de um (1) serviço. > Opções: `sedex`, `sedex_a_cobrar`, `sedex_10`, `sedex_hoje`, `pac`, 'pac_contrato', 'sedex_contrato' , 'esedex'
+				'formato'           => 'caixa', // opções: `caixa`, `rolo`, `envelope`
+				'cep_destino'       => $order->zipcode, // Obrigatório
+				'cep_origem'        => '95890000', // Obrigatorio
+				'peso'              => $item->product['weight'], // Peso em kilos
+				'comprimento'       => $item->product['length'], // Em centímetros
+				'altura'            => $item->product['height'], // Em centímetros
+				'largura'           => $item->product['width'], // Em centímetros
+				'diametro'          => $item->product['diameter'], // Em centímetros
+			];
+
+			$order->items[$key]['delivery_methods'] = Correios::frete($dados);
+		}
+
 		return view('app.orders.delivery', compact('order'));
 	}
 
@@ -94,6 +120,37 @@ class OrdersController extends Controller{
 			return view('app.orders.cart', compact('order'));
 		}
 		return view('app.orders.card', compact('order'));
+	}
+
+	/**
+	 * Update Address data.
+	 */
+	public function storeAddress(Request $request){
+		try {
+			$order = $this->repository->current();
+			if(!$this->orderIsReady($order)){
+				return view('app.orders.cart', compact('order'));
+			}
+			$address = $request->all();
+			$order->zipcode = $address['zipcode'] ? $address['zipcode'] : '';
+			$order->district = $address['district'] ? $address['district'] : '';
+			$order->city = $address['city'] ? $address['city'] : '';
+			$order->state = $address['state'] ? $address['state'] : '';
+			$order->street = $address['street'] ? $address['street'] : '';
+			$order->number = $address['number'] ? $address['number'] : '';
+			$order->complement = $address['complement'] ? $address['complement'] : '';
+			$this->repository->update($order->toArray(), $order->id);
+			$response = [
+				'message' => 'Endereço atualizado',
+				'data'    => $order->toArray(),
+			];
+			return response()->json($response);
+		} catch (ValidatorException $e) {
+			return response()->json([
+				'error'   => true,
+				'message' => $e->getMessageBag()
+			]);
+		}
 	}
 
 	/**
@@ -233,17 +290,37 @@ class OrdersController extends Controller{
 			try{
 				$response = (new PagSeguro)->request(PagSeguro::CHECKOUT_SANDBOX, $data);
 			} catch (\Exception $e) {
-				dd($e->getMessage());
+				//dd($e->getMessage());
 			}
 			return response()->json($response);
 		} catch (ValidatorException $e) {
-			if ($request->wantsJson()) {
+			return response()->json([
+				'error'   => true,
+				'message' => $e->getMessageBag()
+			]);
+		}
+	}
+
+	/**
+	 * Update the specified resource in storage.
+	 */
+	public function calcDeliveryCost(){
+		try {
+			$order = $this->repository->current();
+			if(!$this->orderIsReady($order)){
 				return response()->json([
 					'error'   => true,
-					'message' => $e->getMessageBag()
+					'message' => "Pedido não encontrado"
 				]);
 			}
-			return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+
+			return Correios::cep('95890000');
+			
+		} catch (\Exception $e) {
+			return response()->json([
+				'error' => true,
+				'message' => "Falha ao calcular o frete"
+			]);
 		}
 	}
 
@@ -261,11 +338,11 @@ class OrdersController extends Controller{
 		if(count($items) > 0){
 			$item = $items[0];
 			$item->amount++;
-			$item->value = $product[\App\Helpers\PermHelper::lowerValueText()];
+			$item->value = $product[PermHelper::lowerValueText()];
 			$result = $this->itemRepository->update($item->toArray(), $item->id);
 		}else{
 			$data['amount'] = 1;
-			$data['value'] = $product[\App\Helpers\PermHelper::lowerValueText()];
+			$data['value'] = $product[PermHelper::lowerValueText()];
 			$data['interest_free'] = $product->interest_free;
 			$data['free_shipping'] = $product->free_shipping;
 			$result = $this->itemRepository->create($data);

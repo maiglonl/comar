@@ -1,6 +1,33 @@
 @extends('layouts.app')
 
 @section('content')
+<style type="text/css" media="screen">
+	.add-to-cart span {
+		/* this is the button text message */
+		/* top: 0; */
+		/* left: 0; */
+		/* width: 100%; */
+		/* height: 100%; */
+	}
+	.add-to-cart svg {
+	/* this is the check icon */
+		/* left: 50%;
+		top: 50%; */
+		/* width: 100%; */
+		/* move the icon on the right - outside the button */
+		color: transparent;
+		transform: translateX(50%) translateY(-50%);
+	}
+	.add-to-cart.is-added span {
+		/* product added to the cart - hide text message on the left with no transition*/
+		color: transparent;
+		transform: translateX(-100%);
+	}
+	.add-to-cart.is-added svg {
+		/* product added to the cart - move the svg back inside the button */
+		transform: translateX(-50%) translateY(-50%);
+	}
+</style>
 	<div id="productDescApp">
 		<div class="page-title pb-3">
 			<h3>

@@ -18,7 +18,7 @@
 									<div class="col pl-0">
 										<p class="m-0 p-0">
 											<strong>@{{ order.street }}, @{{ order.number }}</strong><br>
-											<span class="text-muted">@{{ order.complement }}, @{{ order.district }} - @{{ order.city }}/@{{ order.state }}</span>
+											<span class="text-muted"><span v-if="order.complement">@{{ order.complement }}, </span>@{{ order.district }} - @{{ order.city }}/@{{ order.state }}</span>
 										</p>
 									</div>
 									<div class="col-sm-4 col-xs-12 text-sm-right text-xs-center">
@@ -50,16 +50,9 @@
 					<a href="{{ route('orders.payment') }}" class="btn btn-primary">Continuar</a>
 				</div>
 			</div>
-			<div class="col-xs-11 col-sm-3 bg-gray-50 vh-100">
-				<div class="py-5 px-4 mt-3">
-					<p class="mb-2"><b>Resumo da Compra</b></p>
-					<hr class="mt-0 mb-4">
-					<p class="mb-2">Produtos(X) <span class="float-right">R$123,12</span></p>
-					<p>Envio <span class="float-right">R$123,12</span></p>
-					<hr class="my-4">
-					<p>Total <span class="float-right">R$123,12</span></p>
-				</div>
-			</div>
+
+			@include('app.orders._resume')
+
 		</div>
 	</div>
 	
@@ -74,11 +67,33 @@
 				user: {!! Auth::user()->toJson() !!}
 			},
 			mounted: function(){
+				console.log(this.order);
 			},
 			methods:{
+				reloadData: function (){
+					var self = this;
+					$.get('{{ route('orders.find', [$order->id]) }}', function(data) {
+						if(data.error){
+							toastr.error('Falha ao atualizar o pedido!');
+						}else{
+							self.order = data;
+						}
+					});
+				},
 				changeAdress: function(){
-					swal("Alterar dados de entrega");
-				}
+					var self = this;
+					$.fancybox.open({
+						src: '{{ route('orders.form.address') }}',
+						type: 'ajax',
+						opts: { 
+							clickOutside: false,
+							clickSlide: false,
+							afterClose : function(){
+								self.reloadData(); 
+							},
+						}
+					});
+				},
 			},
 			filters: filters
 		});

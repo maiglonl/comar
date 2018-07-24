@@ -161,6 +161,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         //App\Providers\RepositoryServiceProvider::class,
+        Cagartner\CorreiosConsulta\ServiceProvider::class,
 
     ],
 
@@ -210,8 +211,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'Image' => Folklore\Image\Facades\Image::class
-
+        'Image' => Folklore\Image\Facades\Image::class,
+        'Correios' => Cagartner\CorreiosConsulta\Facade::class
     ],
 
 ];

@@ -26,7 +26,9 @@ class Item extends Model implements Transformable {
 		'amount',
 		'value',
 		'interest_free',
-		'free_shipping'
+		'free_shipping',
+		'delivery_form',
+		'delivery_cost'
 	];
 
 	protected $with = ['product'];
