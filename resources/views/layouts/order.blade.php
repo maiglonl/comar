@@ -23,23 +23,21 @@
 	<link href="{{ mix('css/app.css') }}" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
-	<div id="app">
-		@include('app.menu')
+	@include('app.menu')
 
-		@yield('body_top')
+	@yield('body_top')
 
-		<main>
-			<div class="container-fluid">
-				<div class="row justify-content-md-center">
-					<div class="col-md-10">
-						@yield('content')
-					</div>
+	<main>
+		<div class="container-fluid min-100 align-items-stretch">
+			<div class="row justify-content-md-center">
+				<div class="col-md-10">
+					@yield('content')
 				</div>
 			</div>
+		</div>
 
-			@yield('scripts')
+		@yield('scripts')
 
-		</main>
-	</div>
+	</main>
 </body>
 </html>

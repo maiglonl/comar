@@ -49,6 +49,13 @@ class OrdersController extends Controller{
 	}
 
 	/**
+	 * Verify if order is ready
+	 */
+	public function orderIsReady($order){
+		return $order && $order->status_id == STATUS_ORDER_EM_ABERTO && count($order->items) > 0;
+	}
+
+	/**
 	 * Display the specified resource.
 	 */
 	public function cart(){
@@ -61,8 +68,8 @@ class OrdersController extends Controller{
 	 */
 	public function delivery(){
 		$order = $this->repository->current();
-		if($order->status_id != STATUS_ORDER_EM_ABERTO){
-			return view('orders.show', compact('order'));
+		if(!$this->orderIsReady($order)){
+			return view('app.orders.cart', compact('order'));
 		}
 		return view('app.orders.delivery', compact('order'));
 	}
@@ -72,8 +79,8 @@ class OrdersController extends Controller{
 	 */
 	public function payment(){
 		$order = $this->repository->current();
-		if($order->status_id != STATUS_ORDER_EM_ABERTO){
-			return view('orders.show', compact('order'));
+		if(!$this->orderIsReady($order)){
+			return view('app.orders.cart', compact('order'));
 		}
 		return view('app.orders.payment', compact('order'));
 	}
@@ -81,10 +88,21 @@ class OrdersController extends Controller{
 	/**
 	 * Display the specified resource.
 	 */
+	public function card(){
+		$order = $this->repository->current();
+		if(!$this->orderIsReady($order)){
+			return view('app.orders.cart', compact('order'));
+		}
+		return view('app.orders.card', compact('order'));
+	}
+
+	/**
+	 * Display the specified resource.
+	 */
 	public function checkout(){
 		$order = $this->repository->current();
-		if($order->status_id != STATUS_ORDER_EM_ABERTO){
-			return view('orders.show', compact('order'));
+		if(!$this->orderIsReady($order)){
+			return view('app.orders.cart', compact('order'));
 		}
 		$data = [
 			'email' => 'maiglonl@gmail.com',
@@ -101,77 +119,117 @@ class OrdersController extends Controller{
 	}
 
 	/**
+	 * Return formatted data to checkout request
+	 */
+	public function getCheckoutData($order){
+		$data = [];
+
+		$data['email'] = 'maiglonl@gmail.com';
+		$data['token'] = 'AA06F28B1DBB4CB3939D6BE9FF9E5FB0';
+		$data['paymentMode'] = 'default';
+		
+		$data['receiverEmail'] = 'maiglonl@gmail.com';
+		$data['paymentMethod'] = 'creditCard';
+		$data['currency'] = 'BRL';
+		$data['senderName'] = 'Maiglon A Lubacheuski';
+		$data['senderCPF'] = '02557961027';
+		$data['senderEmail'] = 'comprador@sandbox.pagseguro.com.br';
+		$data['senderPhone'] = '997398991';
+		$data['senderAreaCode'] = '51';
+		$data['installmentValue'] = number_format($data['installmentValue'], 2, '.', '');
+		$data['shippingAddressCountry'] = 'BRA';
+		$data['billingAddressCountry'] = 'BRA';
+
+
+		$data['paymentMode'] = 'default';
+		$data['paymentMethod'] = 'boleto';
+		$data['receiverEmail'] = 'maiglonl@gmail.com';
+		$data['currency'] = 'BRL';
+		$data['extraAmount'] = '0.00';
+		$data['itemId1'] = '0001';
+		$data['itemDescription1'] = 'Notebook Prata';
+		$data['itemAmount1'] = '24300.00';
+		$data['itemQuantity1'] = '1';
+		$data['notificationURL'] = 'https://sualoja.com.br/notifica.html';
+		$data['reference'] = 'REF1234';
+		$data['senderName'] = 'Jose Comprador';
+		$data['senderCPF'] = '22111944785';
+		$data['senderAreaCode'] = '11';
+		$data['senderPhone'] = '56273440';
+		$data['senderEmail'] = 'comprador@uol.com.br';
+		$data['senderHash'] = 'abc123';
+		$data['shippingAddressStreet'] = 'Av. Brig. Faria Lima';
+		$data['shippingAddressNumber'] = '1384';
+		$data['shippingAddressComplement'] = '5o andar';
+		$data['shippingAddressDistrict'] = 'Jardim Paulistano';
+		$data['shippingAddressPostalCode'] = '01452002';
+		$data['shippingAddressCity'] = 'Sao Paulo';
+		$data['shippingAddressState'] = 'SP';
+		$data['shippingAddressCountry'] = 'BRA';
+		$data['shippingType'] = '1';
+		$data['shippingCost'] = '1.00';
+
+		/*
+		$data['paymentMode'] = 'default';
+		$data['paymentMethod'] = 'creditCard';
+		$data['receiverEmail'] = 'maiglonl@gmail.com';
+		$data['currency'] = 'BRL';
+		$data['extraAmount'] = '1.00';
+		$data['itemId1'] = '0001';
+		$data['itemDescription1'] = 'Notebook Prata';
+		$data['itemAmount1'] = '24300.00';
+		$data['itemQuantity1'] = '1';
+		$data['notificationURL'] = 'https://sualoja.com.br/notifica.html';
+		$data['reference'] = 'REF1234';
+		$data['senderName'] = 'Jose Comprador';
+		$data['senderCPF'] = '22111944785';
+		$data['senderAreaCode'] = '11';
+		$data['senderPhone'] = '56273440';
+		$data['senderEmail'] = 'comprador@sandbox.pagseguro.com.br';
+		$data['senderHash'] = 'abc123';
+		$data['shippingAddressStreet'] = 'Av. Brig. Faria Lima';
+		$data['shippingAddressNumber'] = '1384';
+		$data['shippingAddressComplement'] = '5o andar';
+		$data['shippingAddressDistrict'] = 'Jardim Paulistano';
+		$data['shippingAddressPostalCode'] = '01452002';
+		$data['shippingAddressCity'] = 'Sao Paulo';
+		$data['shippingAddressState'] = 'SP';
+		$data['shippingAddressCountry'] = 'BRA';
+		$data['shippingType'] = '1'; // [1 => Encomenda normal (PAC), 2 => SEDEX, 3 => Não expecificado (Entregadoras);
+		$data['shippingCost'] = '1.00';
+		$data['creditCardToken'] = '4as56d4a56d456as456dsa';
+		$data['installmentQuantity'] = '5';
+		$data['installmentValue'] = '125.22';
+		$data['noInterestInstallmentQuantity'] = '2';
+		$data['creditCardHolderName'] = 'Jose Comprador';
+		$data['creditCardHolderCPF'] = '22111944785';
+		$data['creditCardHolderBirthDate'] = '27/10/1987';
+		$data['creditCardHolderAreaCode'] = '11';
+		$data['creditCardHolderPhone'] = '56273440';
+		$data['billingAddressStreet'] = 'Av. Brig. Faria Lima';
+		$data['billingAddressNumber'] = '1384';
+		$data['billingAddressComplement'] = '5o andar';
+		$data['billingAddressDistrict'] = 'Jardim Paulistano';
+		$data['billingAddressPostalCode'] = '01452002';
+		$data['billingAddressCity'] = 'Sao Paulo';
+		$data['billingAddressState'] = 'SP';
+		$data['billingAddressCountry'] = 'BRA';
+		*/
+	}
+
+	/**
 	 * Update the specified resource in storage.
 	 */
 	public function postCheckout(OrderCheckoutRequest $request){
 		try {
-			//$this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
-			//$order = $this->repository->update($request->all(), $id);
-			$data = [
-				'email' => 'maiglonl@gmail.com',
-				'token' => 'AA06F28B1DBB4CB3939D6BE9FF9E5FB0',
-				'paymentMode' => 'default',
-				'paymentMethod' => 'creditCard',
-				'receiverEmail' => 'maiglonl@gmail.com',
-				'currency' => 'BRL',
-				'senderName' => 'Maiglon A Lubacheuski',
-				'senderCPF' => '02557961027',
-				'senderEmail' => 'comprador@sandbox.pagseguro.com.br',
-				'senderPhone' => '997398991',
-				'senderAreaCode' => '51',
-				'installmentValue' => number_format($data['installmentValue'], 2, '.', ''),
-				'shippingAddressCountry' => 'BRA',
-				'billingAddressCountry' => 'BRA',
-
-				/*
-				'paymentMode' => 'default',
-				'paymentMethod' => 'creditCard',
-				'receiverEmail' => 'suporte@lojamodelo.com.br',
-				'currency' => 'BRL',
-				'extraAmount' => '1.00',
-				'itemId1' => '0001',
-				'itemDescription1' => 'Notebook Prata',
-				'itemAmount1' => '24300.00',
-				'itemQuantity1' => '1',
-				'notificationURL' => 'https://sualoja.com.br/notifica.html',
-				'reference' => 'REF1234',
-				'senderName' => 'Jose Comprador',
-				'senderCPF' => '22111944785',
-				'senderAreaCode' => '11',
-				'senderPhone' => '56273440',
-				'senderEmail' => 'comprador@sandbox.pagseguro.com.br',
-				'senderHash' => 'abc123',
-				'shippingAddressStreet' => 'Av. Brig. Faria Lima',
-				'shippingAddressNumber' => '1384',
-				'shippingAddressComplement' => '5o andar',
-				'shippingAddressDistrict' => 'Jardim Paulistano',
-				'shippingAddressPostalCode' => '01452002',
-				'shippingAddressCity' => 'Sao Paulo',
-				'shippingAddressState' => 'SP',
-				'shippingAddressCountry' => 'BRA',
-				'shippingType' => '1', // [1 => Encomenda normal (PAC), 2 => SEDEX, 3 => Não expecificado (Entregadoras)]
-				'shippingCost' => '1.00',
-				'creditCardToken' => '4as56d4a56d456as456dsa',
-				'installmentQuantity' => '5',
-				'installmentValue' => '125.22',
-				'noInterestInstallmentQuantity' => '2',
-				'creditCardHolderName' => 'Jose Comprador',
-				'creditCardHolderCPF' => '22111944785',
-				'creditCardHolderBirthDate' => '27/10/1987',
-				'creditCardHolderAreaCode' => '11',
-				'creditCardHolderPhone' => '56273440',
-				'billingAddressStreet' => 'Av. Brig. Faria Lima',
-				'billingAddressNumber' => '1384',
-				'billingAddressComplement' => '5o andar',
-				'billingAddressDistrict' => 'Jardim Paulistano',
-				'billingAddressPostalCode' => '01452002',
-				'billingAddressCity' => 'Sao Paulo',
-				'billingAddressState' => 'SP',
-				'billingAddressCountry' => 'BRA',
-				*/
-			];
-			// number_format($product->value, 2, '.', '')
-			
+			$order = $this->repository->current();
+			if(!$this->orderIsReady($order)){
+				return response()->json([
+					'error'   => true,
+					'message' => "Pedido não encontrado"
+				]);
+			}
+			$data = $this->getCheckoutData($order);
 			try{
 				$response = (new PagSeguro)->request(PagSeguro::CHECKOUT_SANDBOX, $data);
 			} catch (\Exception $e) {
@@ -208,6 +266,8 @@ class OrdersController extends Controller{
 		}else{
 			$data['amount'] = 1;
 			$data['value'] = $product[\App\Helpers\PermHelper::lowerValueText()];
+			$data['interest_free'] = $product->interest_free;
+			$data['free_shipping'] = $product->free_shipping;
 			$result = $this->itemRepository->create($data);
 		}
 		return $result;

@@ -29,7 +29,9 @@ class Order extends Model implements Transformable {
 		'district',
 		'street',
 		'number',
-		'complement'
+		'complement',
+		'payment_method',
+		'delivery_form'
 	];
 
 	protected $with = ['items'];

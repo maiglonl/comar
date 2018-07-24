@@ -11,8 +11,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  *
  * @package namespace App\Models;
  */
-class Status extends Model implements Transformable
-{
+class Status extends Model implements Transformable {
     use TransformableTrait;
 
     /**

@@ -1,26 +1,28 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 /**
  * Class CreateItemsTable.
  */
-class CreateItemsTable extends Migration
-{
+class CreateItemsTable extends Migration{
 	/**
 	 * Run the migrations.
 	 *
 	 * @return void
 	 */
-	public function up()
-	{
+	public function up(){
 		Schema::create('items', function(Blueprint $table) {
             $table->increments('id');
 			$table->integer('order_id')->nullable()->unsigned();
 			$table->integer('product_id')->nullable()->unsigned();
 			$table->integer('amount')->nullable()->default(1);
 			$table->float('value', 9, 2);
+			$table->integer('interest_free')->nullable();
+			$table->boolean('free_shipping')->nullable();
+			$table->string('delivery_form')->nullable();
 			$table->timestamps();
 
 			$table->foreign('order_id')->references('id')->on('orders');
@@ -33,8 +35,7 @@ class CreateItemsTable extends Migration
 	 *
 	 * @return void
 	 */
-	public function down()
-	{
+	public function down(){
 		Schema::drop('items');
 	}
 }

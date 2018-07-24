@@ -1,20 +1,16 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-/**
- * Class CreateOrdersTable.
- */
-class CreateOrdersTable extends Migration
-{
+class CreateOrdersTable extends Migration {
 	/**
 	 * Run the migrations.
 	 *
 	 * @return void
 	 */
-	public function up()
-	{
+	public function up(){
 		Schema::create('orders', function(Blueprint $table) {
 			$table->increments('id');
 			$table->integer('user_id')->nullable()->unsigned();
@@ -25,6 +21,7 @@ class CreateOrdersTable extends Migration
 			$table->string('district', 100)->nullable();
 			$table->string('street', 150)->nullable();
 			$table->integer('number')->nullable();
+			$table->string('payment_method')->nullable();
 			$table->string('complement', 150)->nullable();
 			$table->timestamps();
 
@@ -38,8 +35,7 @@ class CreateOrdersTable extends Migration
 	 *
 	 * @return void
 	 */
-	public function down()
-	{
+	public function down(){
 		Schema::drop('orders');
 	}
 }

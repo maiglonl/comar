@@ -56,10 +56,10 @@
 							</h4>
 							<h5 :class="[ product.interest_free == 12 ? 'text-success' : 'text-muted' ]">
 								@if(\App\Helpers\PermHelper::viewValues())
-									<span v-if="showVals"><i class="far fa-credit-card"></i><small>12x <span v-html="$options.filters.currency_sup(product.value_seller/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small><br></span>
-									<span><i class="far fa-credit-card"></i><small>12x <span v-html="$options.filters.currency_sup(product.value_partner/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small></span>
+									<span v-if="showVals"><i class="far fa-credit-card"></i><small> 12x <span v-html="$options.filters.currency_sup(product.value_seller/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small><br></span>
+									<span><i class="far fa-credit-card"></i><small> 12x <span v-html="$options.filters.currency_sup(product.value_partner/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small></span>
 								@else
-									<i class="far fa-credit-card"></i><small>12x <span v-html="$options.filters.currency_sup(product.value_partner/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small>
+									<i class="far fa-credit-card"></i><small> 12x <span v-html="$options.filters.currency_sup(product.value_partner/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small>
 								@endif
 							</h5>
 							<h5 v-if="product.free_shipping" class="text-success">
@@ -70,10 +70,12 @@
 					</div>
 				</div>
 			</div>
-			<a class="btn btn-light btn-lg back-to-top text-muted toogle-value" role="button" @click.prevent="toogleView">
-				<i class="far fa-eye" v-if="showVals"></i>
-				<i class="far fa-eye-slash" v-else></i>
-			</a>
+			@if(\App\Helpers\PermHelper::viewValues())
+				<a class="btn btn-light btn-lg back-to-top text-muted toogle-value" role="button" @click.prevent="toogleView">
+					<i class="far fa-eye" v-if="showVals"></i>
+					<i class="far fa-eye-slash" v-else></i>
+				</a>
+			@endif
 		</div>
 	</div>
 	

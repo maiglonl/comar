@@ -12,8 +12,7 @@ use App\Models\Product;
  *
  * @package namespace App\Models;
  */
-class Item extends Model implements Transformable
-{
+class Item extends Model implements Transformable {
 	use TransformableTrait;
 
 	/**
@@ -25,7 +24,9 @@ class Item extends Model implements Transformable
 		'order_id',
 		'product_id',
 		'amount',
-		'value'
+		'value',
+		'interest_free',
+		'free_shipping'
 	];
 
 	protected $with = ['product'];
