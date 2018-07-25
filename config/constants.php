@@ -35,3 +35,6 @@
 
 	/* BUSINESS RULES */
 	define('PARTNER_MULTIPLIER', '0.9');
+
+	/* DELIVERY */
+	define('CEP_ORIGEM', '95890000');

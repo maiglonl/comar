@@ -14899,8 +14899,9 @@ sup {
   cursor: pointer;
 }
 
-.bl-primary {
+.list-group-item.selected {
   border-left: 4px solid #2c97de;
+  padding-left: 16px;
 }
 
 html,

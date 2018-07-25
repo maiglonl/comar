@@ -5,8 +5,9 @@ namespace App\Repositories;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use App\Repositories\ItemRepository;
-use App\Models\Item;
 use App\Validators\ItemValidator;
+use App\Presenters\ItemPresenter;
+use App\Models\Item;
 
 /**
  * Class ItemRepositoryEloquent.
@@ -27,6 +28,10 @@ class ItemRepositoryEloquent extends BaseRepository implements ItemRepository{
 	public function validator(){
 		return ItemValidator::class;
 	}
+
+	// public function presenter(){
+	// 	return ItemPresenter::class;
+	// }
 
 	/**
 	 * Boot up the repository, pushing criteria

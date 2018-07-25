@@ -70,7 +70,7 @@ class OrdersController extends Controller{
 	public function cart(){
 		$order = $this->repository->current();
 		if($this->orderIsReady($order)){
-			$this->updateDeliveryCost();
+			$this->updateDeliveryCost($order);
 			$order = $this->repository->current();
 		}
 		return view('app.orders.cart', compact('order'));
@@ -79,15 +79,14 @@ class OrdersController extends Controller{
 	/**
 	 * Calculate delivery cost
 	 */
-	public function updateDeliveryCost(){
+	public function updateDeliveryCost($order){
 		$deliveryMethods = [];
-		$order = $this->repository->current();
 		foreach ($order->items as $key => $item) {
 			$dados = [
 				'tipo'			=> 'sedex,pac',
 				'formato'		=> 'caixa',
+				'cep_origem'	=> CEP_ORIGEM,
 				'cep_destino'	=> $order->zipcode,
-				'cep_origem'	=> '95890000',
 				'peso'			=> $item->product['weight'],
 				'comprimento'	=> $item->product['length'],
 				'altura'		=> $item->product['height'],
@@ -95,16 +94,33 @@ class OrdersController extends Controller{
 				'diametro'		=> $item->product['diameter'],
 			];
 			$deliveryMethods = Correios::frete($dados);
-			$order->items[$key]['delivery_methods'] = $deliveryMethods;
 			$orderItem = $order->items[$key];
-			foreach ($deliveryMethods as $key => $method) {
-				if($method['erro']['codigo'] == 0 && ($method['valor'] <= $orderItem['delivery_cost'] || $orderItem['delivery_cost'] == null)){
-					$orderItem['delivery_form'] = $method['codigo'];
-					$orderItem['delivery_time'] = $method['prazo'];
-					$orderItem['delivery_cost'] = $orderItem['free_shipping'] ? 0 : $method['valor'];
+			$validMethods = [];
+			$orderItem['delivery_form'] = null;
+			$orderItem['delivery_time'] = null;
+			$orderItem['delivery_cost'] = null;
+			foreach ($deliveryMethods as $method) {
+				if($method['erro']['codigo'] == 0){
+					$validMethods[] = [
+						'codigo' => $method['codigo'],
+						'prazo' => $method['prazo'],
+						'valor' => $method['valor']
+					];
+					if($method['valor'] <= $orderItem['delivery_cost'] || $orderItem['delivery_cost'] == null){
+						$orderItem['delivery_form'] = $method['codigo'];
+						$orderItem['delivery_time'] = $method['prazo'];
+						$orderItem['delivery_cost'] = $orderItem['free_shipping'] ? 0 : $method['valor'];
+					}
 				}
-				$this->itemRepository->update($orderItem->toArray(), $orderItem['id']);
 			}
+			// Adiciona opção de 'Retirada em loja'
+			$validMethods[] = [
+				'codigo' => 0,
+				'prazo' => 0,
+				'valor' => 0
+			];
+			$orderItem['delivery_methods'] = json_encode($validMethods);
+			$this->itemRepository->update($orderItem->toArray(), $orderItem['id']);
 		}
 	}
 
@@ -160,7 +176,7 @@ class OrdersController extends Controller{
 			$order->number = $address['number'] ? $address['number'] : '';
 			$order->complement = $address['complement'] ? $address['complement'] : '';
 			$this->repository->update($order->toArray(), $order->id);
-			$this->updateDeliveryCost();
+			$this->updateDeliveryCost($order);
 			$order = $this->repository->current();
 			$response = [
 				'message' => 'Endereço atualizado',

@@ -1,4 +1,17 @@
 window.filters = {
+	delivery_form: function (value){
+		if (value == null) return '-';
+		switch(parseInt(value)){
+			case 0: return "Retirar na Loja"; break;
+			case 1: return "Masculino"; break;
+			case 1: return "Masculino"; break;
+			case 1: return "Masculino"; break;
+			default: return "Feminino"; break;
+		}
+	},
+	deadline: function (value){
+
+	},
 	currency: function (n, r=false) {
 		var z = n,
 		c = 2, 

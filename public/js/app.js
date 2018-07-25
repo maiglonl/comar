@@ -101499,6 +101499,22 @@ $.widget("custom.wAutocomplete", $.ui.autocomplete, {
 /***/ (function(module, exports) {
 
 window.filters = {
+	delivery_form: function delivery_form(value) {
+		if (value == null) return '-';
+		switch (parseInt(value)) {
+			case 0:
+				return "Retirar na Loja";break;
+			case 1:
+				return "Masculino";break;
+			case 1:
+				return "Masculino";break;
+			case 1:
+				return "Masculino";break;
+			default:
+				return "Feminino";break;
+		}
+	},
+	deadline: function deadline(value) {},
 	currency: function currency(n) {
 		var r = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 

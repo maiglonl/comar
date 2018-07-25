@@ -24,8 +24,9 @@ sup {
 	cursor: pointer;
 }
 
-.bl-primary{
+.list-group-item.selected{
 	border-left: 4px solid $primary;
+	padding-left: 16px;
 }
 
 html, body {

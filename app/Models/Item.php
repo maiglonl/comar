@@ -29,13 +29,20 @@ class Item extends Model implements Transformable {
 		'free_shipping',
 		'delivery_form',
 		'delivery_cost',
-		'delivery_time'
+		'delivery_time',
+		'delivery_methods'
 	];
 
 	protected $with = ['product'];
+	protected $appends = ['delivery_avaliables'];
 
 	public function product(){
 		return $this->belongsTo(Product::class);
 	}
+
+	public function getDeliveryAvaliablesAttribute(){
+		return $this->delivery_methods == null ? null : json_decode($this->delivery_methods);
+	}
+
 
 }
