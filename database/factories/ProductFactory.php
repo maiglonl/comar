@@ -14,17 +14,17 @@ use Faker\Generator as Faker;
 */
 
 $factory->define(App\Models\Product::class, function (Faker $faker) {
-	$value = rand(1,100)*100;
+	$value = rand(1,100)*10;
 	return [
 		'name' => $faker->name(),
 		'description' => $faker->paragraph(),
 		'category_id' => rand(1,5),
 		'value_partner' => $value,
 		'value_seller' => $value*0.7,
-		'weight' => rand(1,100),
-		'height' => rand(1,100),
-		'width' => rand(1,100),
-		'length' => rand(1,100),
+		'weight' => rand(0.1,10),
+		'height' => rand(2,65),
+		'width' => rand(11,65),
+		'length' => rand(16,65),
 		'diameter' => rand(1,100),
 		'amount' => rand(1,100),
 		'free_shipping' => rand(1,100) < 50 ? 0 : 1,

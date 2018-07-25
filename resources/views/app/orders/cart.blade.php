@@ -60,6 +60,26 @@
 						</div>
 					</div>
 				</div>
+				<div class="row mt-3">
+					<div class="col-10 text-right">
+						<h4 class="mt-2"><small>Envio para @{{ order.street }}, @{{ order.city }}</small></h4>
+					</div>
+					<div class="col-2 text-right">
+						<h3 class="mt-2 font-weight-light" v-html="$options.filters.currency_sup(order.total_delivery)" v-if="order.total_delivery > 0"></h3>
+						<h3 class="mt-2 font-weight-light text-success" v-else>Grátis</h3>
+					</div>
+					<div class="col-10 text-right">
+						<h4 class="mt-2"><b>Total</b></h4>
+					</div>
+					<div class="col-2 text-right">
+						<h3 class="mt-2 font-weight-light" v-html="$options.filters.currency_sup(order.total)"></h3>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12 pt-1">
+						<hr>
+					</div>
+				</div>
 				<div class="row text-right mt-4">
 					<div class="col">
 						<a href="{{ route('orders.delivery') }}" class="btn btn-primary">Finalizar Compra</a>

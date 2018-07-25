@@ -45,7 +45,7 @@ class Order extends Model implements Transformable {
 	public function getTotalItemsAttribute(){
 		$result = 0;
 		foreach ($this->items as $item) {
-			$result += $item['product'][PermHelper::lowerValueText()];
+			$result += $item['product'][PermHelper::lowerValueText()] * $item['amount'];
 		}
 		return $result;
 	}
@@ -53,7 +53,7 @@ class Order extends Model implements Transformable {
 	public function getTotalDeliveryAttribute(){
 		$result = 0;
 		foreach ($this->items as $item) {
-			$result += $item['product']['free_shipping'] == 1 ? $item['delivery_cost'] : 0;
+			$result += $item['product']['free_shipping'] == 1 ? 0 : $item['delivery_cost']*$item['amount'];
 		}
 		return $result;
 	}

@@ -69,7 +69,43 @@ class OrdersController extends Controller{
 	 */
 	public function cart(){
 		$order = $this->repository->current();
+		if($this->orderIsReady($order)){
+			$this->updateDeliveryCost();
+			$order = $this->repository->current();
+		}
 		return view('app.orders.cart', compact('order'));
+	}
+
+	/**
+	 * Calculate delivery cost
+	 */
+	public function updateDeliveryCost(){
+		$deliveryMethods = [];
+		$order = $this->repository->current();
+		foreach ($order->items as $key => $item) {
+			$dados = [
+				'tipo'			=> 'sedex,pac',
+				'formato'		=> 'caixa',
+				'cep_destino'	=> $order->zipcode,
+				'cep_origem'	=> '95890000',
+				'peso'			=> $item->product['weight'],
+				'comprimento'	=> $item->product['length'],
+				'altura'		=> $item->product['height'],
+				'largura'		=> $item->product['width'],
+				'diametro'		=> $item->product['diameter'],
+			];
+			$deliveryMethods = Correios::frete($dados);
+			$order->items[$key]['delivery_methods'] = $deliveryMethods;
+			$orderItem = $order->items[$key];
+			foreach ($deliveryMethods as $key => $method) {
+				if($method['erro']['codigo'] == 0 && ($method['valor'] <= $orderItem['delivery_cost'] || $orderItem['delivery_cost'] == null)){
+					$orderItem['delivery_form'] = $method['codigo'];
+					$orderItem['delivery_time'] = $method['prazo'];
+					$orderItem['delivery_cost'] = $orderItem['free_shipping'] ? 0 : $method['valor'];
+				}
+				$this->itemRepository->update($orderItem->toArray(), $orderItem['id']);
+			}
+		}
 	}
 
 	/**
@@ -81,22 +117,6 @@ class OrdersController extends Controller{
 		if(!$this->orderIsReady($order)){
 			return view('app.orders.cart', compact('order'));
 		}
-		foreach ($order->items as $key => $item) {
-			$dados = [
-				'tipo'              => 'sedex,pac', // Separar opções por vírgula (,) caso queira consultar mais de um (1) serviço. > Opções: `sedex`, `sedex_a_cobrar`, `sedex_10`, `sedex_hoje`, `pac`, 'pac_contrato', 'sedex_contrato' , 'esedex'
-				'formato'           => 'caixa', // opções: `caixa`, `rolo`, `envelope`
-				'cep_destino'       => $order->zipcode, // Obrigatório
-				'cep_origem'        => '95890000', // Obrigatorio
-				'peso'              => $item->product['weight'], // Peso em kilos
-				'comprimento'       => $item->product['length'], // Em centímetros
-				'altura'            => $item->product['height'], // Em centímetros
-				'largura'           => $item->product['width'], // Em centímetros
-				'diametro'          => $item->product['diameter'], // Em centímetros
-			];
-
-			$order->items[$key]['delivery_methods'] = Correios::frete($dados);
-		}
-
 		return view('app.orders.delivery', compact('order'));
 	}
 
@@ -140,6 +160,8 @@ class OrdersController extends Controller{
 			$order->number = $address['number'] ? $address['number'] : '';
 			$order->complement = $address['complement'] ? $address['complement'] : '';
 			$this->repository->update($order->toArray(), $order->id);
+			$this->updateDeliveryCost();
+			$order = $this->repository->current();
 			$response = [
 				'message' => 'Endereço atualizado',
 				'data'    => $order->toArray(),

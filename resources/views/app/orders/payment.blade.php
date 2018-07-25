@@ -72,16 +72,9 @@
 					<a href="{{ route('orders.checkout') }}" class="btn btn-primary">Continuar</a>
 				</div>
 			</div>
-			<div class="col-xs-11 col-sm-3 bg-gray-50 vh-100">
-				<div class="py-5 px-4 mt-3">
-					<p class="mb-2"><b>Resumo da Compra</b></p>
-					<hr class="mt-0 mb-4">
-					<p class="mb-2">Produtos(X) <span class="float-right">R$123,12</span></p>
-					<p>Envio <span class="float-right">R$123,12</span></p>
-					<hr class="my-4">
-					<p>Total <span class="float-right">R$123,12</span></p>
-				</div>
-			</div>
+			
+			@include('app.orders._resume')
+
 		</div>
 	</div>
 	
