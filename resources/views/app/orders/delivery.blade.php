@@ -29,25 +29,31 @@
 					<div class="row pt-4" v-for="(item, index) in order.items">
 						<div class="col">
 							<p>Encomenda @{{ index+1 }}</p>
-							<div class="card">
-								<div class="card-header">
-									<h5 class="card-title p-4 m-0">Modificar envio <span class="float-right"><i class="fas fa-angle-up"></i></span></h5>
+							<div class="card closed-card">
+								<div class="card-header pointer" onclick="toogleHeader(this)">
+									<h5 class="card-title py-4 m-0">Modificar envio <span class="float-right"><i class="fas fa-angle-up"></i></span></h5>
 								</div>
 								<ul class="list-group list-group-flush">
-									<li class="list-group-item align-items-center hover-item" v-for="method in item.delivery_avaliables" :class="{'selected': method.codigo == item.delivery_form }">
-										<div class="row align-items-center" >
-											<div class="col">
-												@{{ method.codigo | delivery_form }}<br>
-												@{{ method.prazo | deadline }}
+									<span v-for="method in item.delivery_avaliables" 
+										:class="[method.codigo == item.delivery_form ? 'selected-item' : 'unselected-item']"
+										onclick="toogleItem(this)">
+										<li class="list-group-item align-items-center" style="cursor:pointer;">
+											<div class="row align-items-center" >
+												<div class="col text-center text-md-left">
+													<h4 class="m-0 p-0"><small>@{{ method.codigo | delivery_form }}</small></h4>
+													<span class="text-muted" v-if="method.codigo != 0">@{{ method.prazo | deadline }}</span>
+													<span class="text-muted" v-else>Entraremos em contato para definir a melhor data</span>
+												</div>
+												<div class="col-md-3">
+													<h5 class="item-price text-center text-md-right m-0 p-0">
+														<span v-html="$options.filters.currency_sup(method.valor, true)" v-if="method.valor > 0"></span>
+														<span class="free-text"	v-else>Grátis</span>
+														<span class="itemIconArrow float-right text-primary pl-2"><i class="fas fa-angle-down"></i></span>
+													</h5>
+												</div>
 											</div>
-											<div class="col">
-												<h5 class="text-right m-0 p-0">
-													<span v-html="$options.filters.currency_sup(method.valor, true)" v-if="method.valor > 0"></span>
-													<span class="text-success" v-else>Grátis</span>
-												</h5>
-											</div>
-										</div>
-									</li>
+										</li>
+									</span>
 								</ul>
 								<div class="card-body">
 									<a href="#" class="card-link">Card link</a>
@@ -115,5 +121,35 @@
 			},
 			filters: filters
 		});
+
+		function toogleHeader(elHeader){
+			$(elHeader).slideToggle('show').next('ul').children('.unselected-item').slideToggle('show', function(){
+				$(elHeader).next('ul').children('span.selected-item');
+				$(elHeader).find('.item-price').addClass('text-primary');
+				$(elHeader).parent().removeClass('opened-card');
+				$(elHeader).parent().addClass('closed-card');
+			});
+			//$(elHeader).slideToggle();
+			//$('.tooglable').slideToggle('show');
+
+		}
+		function toogleItem(elItem){
+			var elBase = $(elItem).parent().parent();
+			var isOpen = elBase.hasClass('opened-card');
+			if(!isOpen){
+				elBase.find('.unselected-item').slideToggle();
+				elBase.find('.card-header').slideToggle();
+				$(elBase).removeClass('closed-card').addClass('opened-card');
+			}else{
+				elBase.find('.selected-item').removeClass('selected-item').addClass('unselected-item');
+				elItem.removeClass('unselected-item').addClass('selected-item');
+				elBase.find('.unselected-item').slideToggle();
+				elBase.find('.card-header').slideToggle();
+				elBase.removeClass('closed-card').addClass('opened-card');
+			}
+			//$(elHeader).slideToggle();
+			//$('.tooglable').slideToggle('show');
+
+		}
 	</script>
 @endsection

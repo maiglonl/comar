@@ -17,17 +17,58 @@ sup {
 	transition: all 0.55s;
 }
 
-.list-group-item.hover-item:hover{
+:not(.primary-text) .free-text{
+	color: $success;
+}
+.primary-text .free-text{
+	color: $primary;
+}
+
+.opened-card .selected-item > li{
 	background-color: $gray-50;
-	border-left: 4px solid $primary;
-	padding-left: 16px;
+	box-shadow: inset 4px 0 0 0px $primary;
 	cursor: pointer;
 }
 
-.list-group-item.selected{
-	border-left: 4px solid $primary;
-	padding-left: 16px;
+.opened-card .list-group-item:hover{
+	background-color: $gray-50;
+	box-shadow: inset 4px 0 0 0px $primary;
+	cursor: pointer;
 }
+
+.opened-card .list-group-item{
+	transition: all 0.4s ease-in-out;
+}
+
+.opened-card .itemIconArrow {
+	display: none;
+	transition: all 0.4s ease-in-out;
+}
+
+.closed-card .list-group-item{
+	transition: all 0.4s ease-in-out;
+}
+
+.closed-card .selected-item .itemIconArrow{
+	display: inline !important;
+}
+
+.closed-card .card-header{
+	display: none;
+}
+
+.closed-card .unselected-item{
+	display: none;
+}
+
+.closed-card .item-price:not(.text-muted){
+	color: $primary;
+}
+
+.closed-card .selected-item > li{
+	transition: all 0.4s ease-in-out;
+}
+
 
 html, body {
   height: 100%;

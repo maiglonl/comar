@@ -16,6 +16,10 @@ window._axios = axios.create({
 	headers: {'X-CSRF-TOKEN': token.content}
 });
 
+/* Moment */
+window.moment = require('moment');
+moment.locale('pt-br');
+
 /* VueJs */
 window.Vue = require('vue');
 var VueResource = require('vue-resource');

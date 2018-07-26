@@ -1,16 +1,19 @@
 window.filters = {
-	delivery_form: function (value){
-		if (value == null) return '-';
-		switch(parseInt(value)){
-			case 0: return "Retirar na Loja"; break;
-			case 1: return "Masculino"; break;
-			case 1: return "Masculino"; break;
-			case 1: return "Masculino"; break;
-			default: return "Feminino"; break;
+	delivery_form: function (cod){
+		if (cod == null) return '-';
+		switch(parseInt(cod)){
+			case 0: return "Retirar na loja"; break;
+			case 4014: return "Rápido"; break;
+			case 4510: return "Normal"; break;
+			default: return "-"; break;
 		}
 	},
-	deadline: function (value){
-
+	deadline: function (days, startDay = null){
+		var result = "Chegará entre ";
+		var dates = startDay == null ? 
+			moment().add(days, 'days').format('D')+" de "+moment().add(days, 'days').format('MMMM')+" e "+moment().add(days+4, 'days').format('D')+" de "+moment().add(days+4, 'days').format('MMMM'):
+			moment(startDay, 'YYYY-MM-DD').add(days, 'days').format('D')+" de "+moment(startDay, 'YYYY-MM-DD').add(days, 'days').format('MMMM')+" e "+moment(startDay, 'YYYY-MM-DD').add(days+4, 'days').format('D')+" de "+moment(startDay, 'YYYY-MM-DD').add(days+4, 'days').format('MMMM');
+		return "Chegará entre "+dates;
 	},
 	currency: function (n, r=false) {
 		var z = n,
