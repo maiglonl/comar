@@ -17,10 +17,10 @@ sup {
 	transition: all 0.55s;
 }
 
-:not(.primary-text) .free-text{
+.opened-card .free-text{
 	color: $success;
 }
-.primary-text .free-text{
+.closed-card .free-text{
 	color: $primary;
 }
 

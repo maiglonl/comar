@@ -53,7 +53,7 @@ class Order extends Model implements Transformable {
 	public function getTotalDeliveryAttribute(){
 		$result = 0;
 		foreach ($this->items as $item) {
-			$result += $item['product']['free_shipping'] == 1 ? 0 : $item['delivery_cost']*$item['amount'];
+			$result += $item['delivery_cost']*$item['amount'];
 		}
 		return $result;
 	}

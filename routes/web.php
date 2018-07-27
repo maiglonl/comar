@@ -70,6 +70,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('orders/find/{id}', 'OrdersController@find')->name('orders.find');
 	Route::get('orders/form/address', 'OrdersController@formAddress')->name('orders.form.address');
 	Route::get('orders/delivery/cost', 'OrdersController@calcDeliveryCost')->name('orders.delivery.cost');
+	Route::put('orders/item/method', 'OrdersController@changeItemMethod')->name('orders.item.method.change');
 	Route::post('orders/checkout', 'OrdersController@postCheckout')->name('orders.checkout.post');
 	Route::post('orders/item/{product_id}', 'OrdersController@addItem')->name('orders.item.add');
 	Route::post('orders/address', 'OrdersController@storeAddress')->name('orders.address.store');

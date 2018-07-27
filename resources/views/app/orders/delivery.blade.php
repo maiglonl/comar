@@ -31,16 +31,16 @@
 							<p>Encomenda @{{ index+1 }}</p>
 							<div class="card closed-card">
 								<div class="card-header pointer" onclick="toogleHeader(this)">
-									<h5 class="card-title py-4 m-0">Modificar envio <span class="float-right"><i class="fas fa-angle-up"></i></span></h5>
+									<h5 class="card-title py-4 m-0">Modificar envio <span class="float-right"><i class="icon-arrow-up icons"></i></span></h5>
 								</div>
 								<ul class="list-group list-group-flush">
-									<span v-for="method in item.delivery_avaliables" 
+									<span v-for="method in item.delivery_avaliables" :data-method="method.codigo" :data-item="item.id"
 										:class="[method.codigo == item.delivery_form ? 'selected-item' : 'unselected-item']"
 										onclick="toogleItem(this)">
 										<li class="list-group-item align-items-center" style="cursor:pointer;">
-											<div class="row align-items-center" >
+											<div class="row align-items-center p-2">
 												<div class="col text-center text-md-left">
-													<h4 class="m-0 p-0"><small>@{{ method.codigo | delivery_form }}</small></h4>
+													<h5 class="m-0 p-0"><b>@{{ method.codigo | delivery_form }}</b></h5>
 													<span class="text-muted" v-if="method.codigo != 0">@{{ method.prazo | deadline }}</span>
 													<span class="text-muted" v-else>Entraremos em contato para definir a melhor data</span>
 												</div>
@@ -48,7 +48,7 @@
 													<h5 class="item-price text-center text-md-right m-0 p-0">
 														<span v-html="$options.filters.currency_sup(method.valor, true)" v-if="method.valor > 0"></span>
 														<span class="free-text"	v-else>Grátis</span>
-														<span class="itemIconArrow float-right text-primary pl-2"><i class="fas fa-angle-down"></i></span>
+														<span class="itemIconArrow float-right text-primary pl-3"><i class="icon-arrow-down icons"></i></span>
 													</h5>
 												</div>
 											</div>
@@ -65,7 +65,10 @@
 					<div class="col rounded bg-gray-50 mt-5">
 						<div class="row py-2 align-items-center">
 							<div class="col text-right">
-								<h4 class="mb-0 py-2">Custo de envio <span class="text-muted pl-3">R$123,12</span></h4>
+								<h4 class="mb-0 py-2">Custo de envio 
+									<span class="text-muted pl-3" v-if="order.total_delivery > 0" v-html="$options.filters.currency_sup(order.total_delivery, true)"></span>
+									<span class="text-success pl-3" v-else>Grátis</span>
+								</h4>
 							</div>
 						</div>
 					</div>
@@ -84,7 +87,7 @@
 		$(document).ready(function() {
 			
 		});
-		new Vue({
+		var appDelivery = new Vue({
 			el: '#orderDeliveryApp',
 			data: {
 				order: {!! $order->toJson() !!},
@@ -117,7 +120,7 @@
 							},
 						}
 					});
-				},
+				}
 			},
 			filters: filters
 		});
@@ -134,6 +137,7 @@
 
 		}
 		function toogleItem(elItem){
+			console.log(elItem);
 			var elBase = $(elItem).parent().parent();
 			var isOpen = elBase.hasClass('opened-card');
 			if(!isOpen){
@@ -142,10 +146,17 @@
 				$(elBase).removeClass('closed-card').addClass('opened-card');
 			}else{
 				elBase.find('.selected-item').removeClass('selected-item').addClass('unselected-item');
-				elItem.removeClass('unselected-item').addClass('selected-item');
+				$(elItem).removeClass('unselected-item').addClass('selected-item');
 				elBase.find('.unselected-item').slideToggle();
-				elBase.find('.card-header').slideToggle();
-				elBase.removeClass('closed-card').addClass('opened-card');
+				elBase.find('.card-header').slideToggle(function(){
+					elBase.removeClass('opened-card').addClass('closed-card');
+				});
+				let url = "{{ route('orders.item.method.change') }}";
+				_axios.put(url, {id: $(elItem).attr('data-item'), codigo: $(elItem).attr('data-method') }).then(function (resp) {
+					appDelivery.reloadData();
+				}).catch(function(error) {
+					toastr.error("Falha ao alterar forma de entrega");
+				});
 			}
 			//$(elHeader).slideToggle();
 			//$('.tooglable').slideToggle('show');

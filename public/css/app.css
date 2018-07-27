@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Roboto:300,400);@import url(https://fonts.googleapis.com/css?family=Proxima+Nova);/*
+@import url(https://fonts.googleapis.com/css?family=Lato:300);/*
 $white:     #ffffff;
 $gray-100:  #f8f9fa;
 $gray-200:  #e9ecef;
@@ -127,7 +127,7 @@ section {
 
 body {
   margin: 0;
-  font-family: "Proxima Nova", Roboto;
+  font-family: "Lato", Roboto;
   font-size: 0.95rem;
   font-weight: 400;
   line-height: 1.5;
@@ -9358,7 +9358,7 @@ button.close {
   z-index: 1070;
   display: block;
   margin: 0;
-  font-family: "Proxima Nova", Roboto;
+  font-family: "Lato", Roboto;
   font-style: normal;
   font-weight: 400;
   line-height: 1.5;
@@ -9483,7 +9483,7 @@ button.close {
   z-index: 1060;
   display: block;
   max-width: 276px;
-  font-family: "Proxima Nova", Roboto;
+  font-family: "Lato", Roboto;
   font-style: normal;
   font-weight: 400;
   line-height: 1.5;
@@ -14892,11 +14892,11 @@ sup {
   transition: all 0.55s;
 }
 
-:not(.primary-text) .free-text {
+.opened-card .free-text {
   color: #2cbf6d;
 }
 
-.primary-text .free-text {
+.closed-card .free-text {
   color: #2c97de;
 }
 

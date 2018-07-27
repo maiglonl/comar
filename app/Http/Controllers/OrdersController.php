@@ -104,7 +104,7 @@ class OrdersController extends Controller{
 					$validMethods[] = [
 						'codigo' => $method['codigo'],
 						'prazo' => $method['prazo'],
-						'valor' => $method['valor']
+						'valor' => $orderItem['free_shipping'] && $method['codigo'] == '04510' ? 0 : $method['valor']
 					];
 					if($method['valor'] <= $orderItem['delivery_cost'] || $orderItem['delivery_cost'] == null){
 						$orderItem['delivery_form'] = $method['codigo'];
@@ -335,6 +335,58 @@ class OrdersController extends Controller{
 			return response()->json([
 				'error'   => true,
 				'message' => $e->getMessageBag()
+			]);
+		}
+	}
+
+	/**
+	 * Change delivery form from item.
+	 */
+	public function changeItemMethod(Request $request){
+		try {
+			$order = $this->repository->current();
+			if(!$this->orderIsReady($order)){
+				return response()->json([
+					'error'   => true,
+					'message' => "Pedido não encontrado"
+				]);
+			}
+			$item = null;
+			error_log($request->id);
+			error_log($request->codigo);
+			foreach ($order->items as $key => $val) {
+				if($val->id == $request->id){
+					$item = $val;
+				}
+			}
+			if($item == null){
+				return response()->json([
+					'error'   => true,
+					'message' => "Item não encontrado"
+				]);
+			}
+			$methods = json_decode($item->delivery_methods, true);
+			foreach ($methods as $key => $value) {
+				if($value['codigo'] == $request->codigo){
+					$item['delivery_cost'] = $value['valor'];
+					$item['delivery_time'] = $value['prazo'];
+					$item['delivery_form'] = $value['codigo'];
+					$this->itemRepository->update($item->toArray(), $item->id);
+					return response()->json([
+						'message' => 'Forma de entrega alterada'
+					]);
+				}
+			}
+			return response()->json([
+				'error'   => true,
+				'message' => "Forma de entrega inválida"
+			]);
+			
+		} catch (\Exception $e) {
+			dd($e);
+			return response()->json([
+				'error' => true,
+				'message' => $e
 			]);
 		}
 	}
