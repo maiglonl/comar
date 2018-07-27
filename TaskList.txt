@@ -39,7 +39,9 @@ REFERENCE
 	
 
 
-Usar Preço de venda e Preço vendedor
+Impedir cadastro de endereço na compra quando CEP for inválido
+Corrigir botão voltar da pagina Payment para a pagina Delivery, o DOM volta ao primeiro estado, quando a pagina foi carregada pela primeira vez
+ 
 
 
 	- Página Inicial

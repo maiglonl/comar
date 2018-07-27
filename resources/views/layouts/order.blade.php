@@ -25,9 +25,9 @@
 <body class="bg-gray-100">
 	@include('app.menu')
 
+	<main>
 	@yield('body_top')
 
-	<main>
 		<div class="container-fluid min-100 align-items-stretch">
 			<div class="row justify-content-md-center">
 				<div class="col-md-10">

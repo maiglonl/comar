@@ -11,3 +11,4 @@ require('./filters');
 require('./cAutocomplete');
 require('./cValidate');
 require('./pagseguro');
+require('./custom');

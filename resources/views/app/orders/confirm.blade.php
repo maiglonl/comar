@@ -5,7 +5,7 @@
 		<div class="row justify-content-md-center">
 			<div class="col-12 col-sm-8 pb-4">
 				<div class="pt-5 pb-3 px-sm-4 mt-3">
-					<h4 class="pb-4">Opções de envio para</h4>
+					<h4 class="pb-4">Revise e confirme sua compra</h4>
 					<div class="card border-0 bg-gray-50">
 						<div class="card-body">
 							<div class="row align-items-center">

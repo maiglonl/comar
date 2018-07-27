@@ -96,29 +96,43 @@ class OrdersController extends Controller{
 			$deliveryMethods = Correios::frete($dados);
 			$orderItem = $order->items[$key];
 			$validMethods = [];
-			$orderItem['delivery_form'] = null;
-			$orderItem['delivery_time'] = null;
-			$orderItem['delivery_cost'] = null;
+			$form = null;
+			$time = null;
+			$cost = null;
 			foreach ($deliveryMethods as $method) {
-				if($method['erro']['codigo'] == 0){
+				if($method['valor'] > 0){
 					$validMethods[] = [
 						'codigo' => $method['codigo'],
 						'prazo' => $method['prazo'],
-						'valor' => $orderItem['free_shipping'] && $method['codigo'] == '04510' ? 0 : $method['valor']
+						'valor' => $method['valor']
 					];
-					if($method['valor'] <= $orderItem['delivery_cost'] || $orderItem['delivery_cost'] == null){
-						$orderItem['delivery_form'] = $method['codigo'];
-						$orderItem['delivery_time'] = $method['prazo'];
-						$orderItem['delivery_cost'] = $orderItem['free_shipping'] ? 0 : $method['valor'];
+					if($method['valor'] <= $cost || $cost == null){
+						$form = $method['codigo'];
+						$time = $method['prazo'];
+						$cost = $method['valor'];
 					}
 				}
 			}
+
+			if($orderItem['free_shipping'] == 1 && $form != null){
+				foreach ($validMethods as $key => $method) {
+					if($method['codigo'] == $form){
+						$validMethods[$key]['valor'] = 0;
+					}
+				}
+				$cost = 0;
+			}
+
 			// Adiciona opção de 'Retirada em loja'
 			$validMethods[] = [
 				'codigo' => 0,
 				'prazo' => 0,
 				'valor' => 0
 			];
+			$orderItem['delivery_form'] = $form == null ? 0 : $form;
+			$orderItem['delivery_time'] = $time == null ? 0 : $time;
+			$orderItem['delivery_cost'] = $cost == null ? 0 : $cost;
+			
 			$orderItem['delivery_methods'] = json_encode($validMethods);
 			$this->itemRepository->update($orderItem->toArray(), $orderItem['id']);
 		}
@@ -168,6 +182,7 @@ class OrdersController extends Controller{
 				return view('app.orders.cart', compact('order'));
 			}
 			$address = $request->all();
+			$updateCost = $order->zipcode == $address['zipcode'] ? false : true;
 			$order->zipcode = $address['zipcode'] ? $address['zipcode'] : '';
 			$order->district = $address['district'] ? $address['district'] : '';
 			$order->city = $address['city'] ? $address['city'] : '';
@@ -176,7 +191,9 @@ class OrdersController extends Controller{
 			$order->number = $address['number'] ? $address['number'] : '';
 			$order->complement = $address['complement'] ? $address['complement'] : '';
 			$this->repository->update($order->toArray(), $order->id);
-			$this->updateDeliveryCost($order);
+			if($updateCost){
+				$this->updateDeliveryCost($order);
+			}
 			$order = $this->repository->current();
 			$response = [
 				'message' => 'Endereço atualizado',
@@ -352,8 +369,6 @@ class OrdersController extends Controller{
 				]);
 			}
 			$item = null;
-			error_log($request->id);
-			error_log($request->codigo);
 			foreach ($order->items as $key => $val) {
 				if($val->id == $request->id){
 					$item = $val;
