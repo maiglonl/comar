@@ -153,6 +153,25 @@ class OrdersController extends Controller{
 	/**
 	 * Display the specified resource.
 	 */
+	public function billet(){
+		$order = $this->repository->current();
+		if(!$this->orderIsReady($order)){
+			return view('app.orders.cart', compact('order'));
+		}
+		$order->payment_method = PAYMENT_METHOD_BILLET;
+		foreach ($order->items as $item) {
+			//$item->payment_installments = 1;
+			//$item->payment_installment = $item[PermHelper::lowerValueText()];
+			$this->itemRepository->update($item-toArray(), $item->id);
+		}
+		
+		$this->repository->update($order->toArray(), $order->id);
+		return redirect(route('orders.checkout'));
+	}
+
+	/**
+	 * Display the specified resource.
+	 */
 	public function payment(){
 		$order = $this->repository->current();
 		if(!$this->orderIsReady($order)){
@@ -213,7 +232,18 @@ class OrdersController extends Controller{
 	 */
 	public function checkout(){
 		$order = $this->repository->current();
-		if(!$this->orderIsReady($order)){
+		if(!$this->orderIsReady($order) || $order->payment_method == null){
+			return view('app.orders.cart', compact('order'));
+		}
+		return view('app.orders.checkout', compact('order'));
+	}
+
+	/**
+	 * Display the specified resource.
+	 */
+	public function checkout_confirm(){
+		$order = $this->repository->current();
+		if(!$this->orderIsReady($order) || $order->payment_method == null){
 			return view('app.orders.cart', compact('order'));
 		}
 		$data = [

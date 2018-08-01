@@ -33,7 +33,7 @@
 							<p>Outros meios</p>
 							<div class="card shadow-sm">
 								<ul class="list-group list-group-flush">
-									<a href="{{ route('orders.card.form') }}" class="list-group-item hover-item text-dark">
+									<a href="{ { route('orders.card.form') }}" class="list-group-item hover-item text-dark">
 										<div class="row py-2 align-items-center">
 											<div class="col-auto px-4 text-center">
 												<div class="text-primary rounded bg-white"><i class="far fa-credit-card fa-2x rounded px-3 py-2 border border-primary"></i></div>
@@ -46,20 +46,7 @@
 											</div>
 										</div>
 									</a>
-									<a href="{{ route('orders.billet') }}" class="list-group-item hover-item text-dark">
-										<div class="row py-2 align-items-center">
-											<div class="col-auto px-4 text-center">
-												<div class="text-primary rounded bg-white"><i class="far fa-credit-card fa-2x rounded px-3 py-2 border border-primary"></i></div>
-											</div>
-											<div class="col pl-0">
-												<p class="m-0 p-0">
-													<strong>Cartão de crédito</strong><br>
-													<span class="text-success">Em até 12 parcelas sem juros</span>
-												</p>
-											</div>
-										</div>
-									</a>
-									<li class="list-group-item hover-item">
+									<a href="{{ route('orders.payment.billet') }}" class="list-group-item hover-item text-dark">
 										<div class="row py-2 align-items-center">
 											<div class="col-auto px-4 text-center">
 												<div class="text-primary rounded bg-white"><i class="fas fa-barcode fa-2x rounded px-3 py-2 border border-primary"></i></div>
@@ -68,21 +55,11 @@
 												<h5 class="m-0 p-0">Boleto</h5>
 											</div>
 										</div>
-									</li>
+									</a>
 								</ul>
 							</div>
 						</div>	
 					</div>
-					<div class="col rounded bg-gray-50 mt-5">
-						<div class="row py-2 align-items-center">
-							<div class="col text-right">
-								<h4 class="mb-0 py-2">Custo de envio <span class="text-muted pl-3">R$123,12</span></h4>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col px-4 text-right">
-					<a href="{{ route('orders.checkout') }}" class="btn btn-primary">Continuar</a>
 				</div>
 			</div>
 			

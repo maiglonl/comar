@@ -32,7 +32,8 @@ class Order extends Model implements Transformable {
 		'number',
 		'complement',
 		'payment_method',
-		'delivery_form'
+		'payment_installments',
+		'payment_installment'
 	];
 
 	protected $with = ['items'];
@@ -45,7 +46,11 @@ class Order extends Model implements Transformable {
 	public function getTotalItemsAttribute(){
 		$result = 0;
 		foreach ($this->items as $item) {
-			$result += $item['product'][PermHelper::lowerValueText()] * $item['amount'];
+			if($item['payment_installments'] > 0 && $item['payment_installment'] > 0){
+				$result += $item['payment_installments'] * $item['payment_installment'];
+			}else{
+				$result += $item['product'][PermHelper::lowerValueText()] * $item['amount'];
+			}
 		}
 		return $result;
 	}

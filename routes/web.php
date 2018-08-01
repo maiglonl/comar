@@ -65,6 +65,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('orders/current', 'OrdersController@current')->name('orders.current');
 	Route::get('orders/delivery', 'OrdersController@delivery')->name('orders.delivery');
 	Route::get('orders/payment', 'OrdersController@payment')->name('orders.payment');
+	Route::get('orders/payment/billet', 'OrdersController@billet')->name('orders.payment.billet');
 	Route::get('orders/checkout', 'OrdersController@checkout')->name('orders.checkout');
 	Route::get('orders/card', 'OrdersController@card')->name('orders.card');
 	Route::get('orders/find/{id}', 'OrdersController@find')->name('orders.find');

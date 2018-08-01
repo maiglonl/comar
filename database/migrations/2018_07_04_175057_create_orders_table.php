@@ -21,8 +21,8 @@ class CreateOrdersTable extends Migration {
 			$table->string('district', 100)->nullable();
 			$table->string('street', 150)->nullable();
 			$table->integer('number')->nullable();
-			$table->string('payment_method')->nullable();
 			$table->string('complement', 150)->nullable();
+			$table->string('payment_method')->nullable();
 			$table->timestamps();
 
 			$table->foreign('user_id')->references('id')->on('users');

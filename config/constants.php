@@ -19,6 +19,10 @@
 	define('USER_ROLES_PARTNER','partner');
 	define('USER_ROLES_CLIENT', 'client');
 
+	/* PAYMENT_METHOD */
+	define('PAYMENT_METHOD_BILLET', 'billet');
+	define('PAYMENT_METHOD_CREDIT_CARD','credit_card');
+
 	/* USER_ROLES */
 	define('STATUS_ORDER_EM_ABERTO',	'1');
 	define('STATUS_ORDER_CANCELADO',	'2');
