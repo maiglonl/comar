@@ -3,8 +3,8 @@
 @section('body_top')
 	<div id="orderDeliveryApp" class="container-fluid">
 		<div class="row justify-content-md-center">
-			<div class="col-xs-11 col-sm-7">
-				<div class="pt-5 pb-3 px-4 mt-3">
+			<div class="col-12 col-sm-8 pb-4">
+				<div class="pt-5 pb-3 px-sm-4 mt-3">
 					<h4 class="pb-4">Opções de pagamento</h4>
 					<div class="row pt-4">
 						<div class="col">

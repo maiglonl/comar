@@ -30,7 +30,9 @@ class Item extends Model implements Transformable {
 		'delivery_form',
 		'delivery_cost',
 		'delivery_time',
-		'delivery_methods'
+		'delivery_methods',
+		'payment_installments',
+		'payment_installment'
 	];
 
 	protected $with = ['product'];

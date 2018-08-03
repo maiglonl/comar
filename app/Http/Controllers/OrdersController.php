@@ -160,11 +160,11 @@ class OrdersController extends Controller{
 		}
 		$order->payment_method = PAYMENT_METHOD_BILLET;
 		foreach ($order->items as $item) {
-			//$item->payment_installments = 1;
-			//$item->payment_installment = $item[PermHelper::lowerValueText()];
-			$this->itemRepository->update($item-toArray(), $item->id);
+			$item->payment_installments = 1;
+			$item->payment_installment = $item->product[PermHelper::lowerValueText()];
+			$this->itemRepository->update($item->toArray(), $item->id);
 		}
-		
+
 		$this->repository->update($order->toArray(), $order->id);
 		return redirect(route('orders.checkout'));
 	}

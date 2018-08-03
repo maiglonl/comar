@@ -8,9 +8,18 @@
 		{{-- <p>Desconto <span class="float-right"></span></p> --}}
 		<hr class="my-4">
 		<p class="h5">Você pagará 
-			<span class="float-right" v-for="payment_installments_groups"></span>
+			<span class="float-right" v-for="payment_installments_groups">
+				<span v-for="(val, key) in payment_installments_groups.sem" class="float-right">
+					@{{ key }} <span v-html="$options.filters.currency_sup(val)"></span><br>
+					<small class="text-success float-right">sem juros</small>
+				</span>
+				<span v-for="(val, key) in payment_installments_groups.com" class="float-right">@{{ key }} <span v-html="$options.filters.currency_sup(val)"></span></span>
+			</span>
 		</p>
 		<hr class="my-4">
 		<p>Total <span class="float-right" v-html="$options.filters.currency_sup(order.total)"></span></p>
+	</div>
+	<div class="px-sm-4 text-right">
+		<a href="{{ route('orders.payment') }}" class="btn btn-block btn-primary">Finalizar compra</a>
 	</div>
 </div>

@@ -71,24 +71,6 @@
 							</div>
 						</div>
 					</div>
-					<div class="row text-right">
-						<div class="col">
-							<a href="{{ route('orders.delivery') }}" class="btn btn-link">Alterar formas de envio</a>
-						</div>
-					</div>
-					<div class="col rounded bg-gray-50 mt-5">
-						<div class="row py-2 align-items-center">
-							<div class="col text-right">
-								<h4 class="mb-0 py-2">Custo de envio 
-									<span class="text-muted pl-3" v-if="order.total_delivery > 0" v-html="$options.filters.currency_sup(order.total_delivery, true)"></span>
-									<span class="text-success pl-3" v-else>Grátis</span>
-								</h4>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="px-sm-4 text-right">
-					<a href="{{ route('orders.payment') }}" class="btn btn-primary">Continuar</a>
 				</div>
 			</div>
 			@include('app.orders._confirm')
@@ -108,10 +90,22 @@
 			computed: {
 				payment_installments_groups: function(){
 					let self = this;
-					let res = {};
+					let res = {
+						sem: {},
+						com: {}
+					};
 					$.each(self.order.items, function(index, item) {
-						// verificar se existe no array e somar valor
+						console.log(item);
+						if(item.payment_installments <= item.product.interest_free){
+							let val = res.sem[item.payment_installments+'x'] ? res.sem[item.payment_installments+'x'] : 0;
+							res.sem[item.payment_installments+'x'] = val + item.payment_installment;
+						}else{
+							let val = res.com[item.payment_installments+'x'] ? res.com[item.payment_installments+'x'] : 0;
+							res.com[item.payment_installments+'x'] = val + item.payment_installment;
+						}
 					});
+					console.log(res);
+					return res;
 				}
 			},
 			mounted: function(){
