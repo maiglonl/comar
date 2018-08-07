@@ -1,5 +1,9 @@
 @extends('layouts.order')
 
+@section('pre-scripts')
+	<script type="text/javascript" src="https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js"></script>
+@endsection
+
 @section('body_top')
 	<div id="orderDeliveryApp" class="container-fluid">
 		<div class="row justify-content-md-center">
@@ -81,11 +85,13 @@
 		if(performance.navigation.type == 2){
 		   location.reload(true);
 		}
+		PagSeguroDirectPayment.setSessionId('{!! $session !!}');
 		var appDelivery = new Vue({
 			el: '#orderDeliveryApp',
 			data: {
 				order: {!! $order->toJson() !!},
-				user: {!! Auth::user()->toJson() !!}
+				user: {!! Auth::user()->toJson() !!},
+				senderHash: ""
 			},
 			computed: {
 				payment_installments_groups: function(){
@@ -95,7 +101,6 @@
 						com: {}
 					};
 					$.each(self.order.items, function(index, item) {
-						console.log(item);
 						if(item.payment_installments <= item.product.interest_free){
 							let val = res.sem[item.payment_installments+'x'] ? res.sem[item.payment_installments+'x'] : 0;
 							res.sem[item.payment_installments+'x'] = val + item.payment_installment;
@@ -104,14 +109,31 @@
 							res.com[item.payment_installments+'x'] = val + item.payment_installment;
 						}
 					});
-					console.log(res);
 					return res;
 				}
 			},
 			mounted: function(){
-				console.log(this.order);
+				let self = this;
+				/*pagSeguro.getSenderHash().then(function(data){
+					console.log(data);
+					self.senderHash = data.senderHash ? data.senderHash : "";
+					console.log(data);
+				});*/
 			},
 			methods:{
+				confirmBuy: function (){
+					var self = this;
+					pagSeguro.getSenderHash().then(function(data){
+						self.senderHash = data ? data : "";
+						$.post('{{ route('orders.checkout') }}', { senderHash: self.senderHash }, function(data) {
+							if(data.error){
+								toastr.error('Falha ao realizar operação!');
+							}else{
+								console.log(data);
+							}
+						});
+					});
+				},
 				reloadData: function (){
 					var self = this;
 					$.get('{{ route('orders.find', [$order->id]) }}', function(data) {

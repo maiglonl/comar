@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 use App\Models\Product;
+use App\Helpers\PermHelper;
 
 /**
  * Class Item.
@@ -36,7 +37,7 @@ class Item extends Model implements Transformable {
 	];
 
 	protected $with = ['product'];
-	protected $appends = ['delivery_avaliables'];
+	protected $appends = ['delivery_avaliables', 'value'];
 
 	public function product(){
 		return $this->belongsTo(Product::class);
@@ -44,6 +45,10 @@ class Item extends Model implements Transformable {
 
 	public function getDeliveryAvaliablesAttribute(){
 		return $this->delivery_methods == null ? null : json_decode($this->delivery_methods);
+	}
+
+	public function getValueAttribute(){
+		return $this->product[PermHelper::lowerValueText()];
 	}
 
 

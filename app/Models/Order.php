@@ -7,6 +7,7 @@ use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 use App\Helpers\PermHelper;
 use App\Models\Item;
+use App\Models\User;
 
 /**
  * Class Order.
@@ -31,12 +32,10 @@ class Order extends Model implements Transformable {
 		'street',
 		'number',
 		'complement',
-		'payment_method',
-		'payment_installments',
-		'payment_installment'
+		'payment_method'
 	];
 
-	protected $with = ['items'];
+	protected $with = ['items', 'client'];
 	protected $appends = ['total', 'total_items', 'total_delivery'];
 
 	public function getTotalAttribute(){
@@ -49,7 +48,7 @@ class Order extends Model implements Transformable {
 			if($item['payment_installments'] > 0 && $item['payment_installment'] > 0){
 				$result += $item['payment_installments'] * $item['payment_installment'];
 			}else{
-				$result += $item['product'][PermHelper::lowerValueText()] * $item['amount'];
+				$result += $item['value'] * $item['amount'];
 			}
 		}
 		return $result;
@@ -65,6 +64,10 @@ class Order extends Model implements Transformable {
 
 	public function items(){
 		return $this->hasMany(Item::class);
+	}
+
+	public function client(){
+		return $this->belongsTo(User::class, 'user_id');
 	}
 
 }

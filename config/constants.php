@@ -42,3 +42,7 @@
 
 	/* DELIVERY */
 	define('CEP_ORIGEM', '95890000');
+
+	/* PAGSEGURO */
+	define('PAGSEGURO_TOKEN', 'AA06F28B1DBB4CB3939D6BE9FF9E5FB0');
+	define('PAGSEGURO_EMAIL', 'maiglonl@gmail.com');

@@ -50,11 +50,12 @@ class PagSeguro {
 			$url = $url.'?'.http_build_query($data);
 			$options = [];
 		}
-
-		
 		$client = new Client;
+		error_log($request['method']);
+		error_log($url);
+		//dd($options);
 		$response = $client->request($request['method'], $url, $options);
-
+		dd($response->getBody());
 		return $response->getBody();
 	}
 }

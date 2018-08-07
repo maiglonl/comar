@@ -19,11 +19,7 @@ use \Correios;
 class OrdersController extends Controller{
 	protected $repository;
 
-	public function __construct(
-		OrderRepository $repository, 
-		ItemRepository $itemRepository, 
-		ProductRepository $productRepository)
-	{
+	public function __construct( OrderRepository $repository, ItemRepository $itemRepository, ProductRepository $productRepository){
 		$this->repository = $repository;
 		$this->itemRepository = $itemRepository;
 		$this->productRepository = $productRepository;
@@ -53,7 +49,8 @@ class OrdersController extends Controller{
 	 * Verify if order is ready
 	 */
 	public function orderIsReady($order){
-		return $order && $order->status_id == STATUS_ORDER_EM_ABERTO && count($order->items) > 0;
+		$isReady = $order && $order->status_id == STATUS_ORDER_EM_ABERTO && count($order->items) > 0;
+		return $isReady;
 	}
 
 	/**
@@ -235,110 +232,69 @@ class OrdersController extends Controller{
 		if(!$this->orderIsReady($order) || $order->payment_method == null){
 			return view('app.orders.cart', compact('order'));
 		}
-		return view('app.orders.checkout', compact('order'));
+		$session = $this->getSession();
+		return view('app.orders.checkout', compact('order', 'session'));
 	}
 
 	/**
 	 * Display the specified resource.
 	 */
-	public function checkout_confirm(){
-		$order = $this->repository->current();
-		if(!$this->orderIsReady($order) || $order->payment_method == null){
-			return view('app.orders.cart', compact('order'));
-		}
+	private function getSession(){
 		$data = [
-			'email' => 'maiglonl@gmail.com',
-			'token' => 'AA06F28B1DBB4CB3939D6BE9FF9E5FB0'
+			'email' => PAGSEGURO_EMAIL,
+			'token' => PAGSEGURO_TOKEN
 		];
 		$response = (new PagSeguro)->request(PagSeguro::SESSION_SANDBOX, $data);
-
 		$session = new \SimpleXMLElement($response->getContents());
-		$session = $session->id;
-
-		$amount = number_format(24301, 2, '.', '');
-
-		return view('app.orders.checkout', compact('order', 'session', 'amount'));
+		return $session->id;
 	}
 
 	/**
 	 * Return formatted data to checkout request
 	 */
-	public function getCheckoutData($order){
-		$data = [];
+	public function getCheckoutData($order, $senderHash){
+		$base = []; $data = [];
+		$cpType = strlen($order->client->cp) == 14 ? "CPF" : "CNPJ"; 
+		$paymentMethod = $order->payment_method == PAYMENT_METHOD_BILLET ? "boleto" : "creditCard";
 
-		$data['email'] = 'maiglonl@gmail.com';
-		$data['token'] = 'AA06F28B1DBB4CB3939D6BE9FF9E5FB0';
-		$data['paymentMode'] = 'default';
-		
-		$data['receiverEmail'] = 'maiglonl@gmail.com';
-		$data['paymentMethod'] = 'creditCard';
-		$data['currency'] = 'BRL';
-		$data['senderName'] = 'Maiglon A Lubacheuski';
-		$data['senderCPF'] = '02557961027';
-		$data['senderEmail'] = 'comprador@sandbox.pagseguro.com.br';
-		$data['senderPhone'] = '997398991';
-		$data['senderAreaCode'] = '51';
-		$data['installmentValue'] = number_format($data['installmentValue'], 2, '.', '');
-		$data['shippingAddressCountry'] = 'BRA';
-		$data['billingAddressCountry'] = 'BRA';
+		$base['email'] = PAGSEGURO_EMAIL;
+		$base['token'] = PAGSEGURO_TOKEN;
+		$base['paymentMode'] = 'default';
+		$base['paymentMethod'] = $paymentMethod;
+		$base['currency'] = 'BRL';
+		$base['receiverEmail'] = PAGSEGURO_EMAIL;
+		$base['senderHash'] = $senderHash;
+		$base['senderName'] = $order->client->name;
+		$base['sender'.$cpType] = preg_replace('/\W/', '', $order->client->cp);
+		$base['senderAreaCode'] = substr($order->client->phone1, 0, 2);;
+		$base['senderPhone'] = substr($order->client->phone1, 2, strlen($order->client->phone1));
+		$base['senderEmail'] = 'c06040234054953856267@sandbox.pagseguro.com.br';
+		$base['shippingAddressStreet'] = $order->street;
+		$base['shippingAddressNumber'] = $order->number;
+		$base['shippingAddressComplement'] = $order->complement ? $order->complement : "";
+		$base['shippingAddressDistrict'] = $order->district;
+		$base['shippingAddressPostalCode'] = $order->zipcode;
+		$base['shippingAddressCity'] = $order->city;
+		$base['shippingAddressState'] = $order->state;
+		$base['shippingAddressCountry'] = 'BRA';
+		$base['shippingType'] = '3';
+		$base['shippingCost'] = number_format($order->total_delivery, 2, '.', '');
+		foreach ($order->items as $key => $item) {
+			$index = $key+1;
+			$base['itemId'.$index] = $item->id;
+			$base['itemDescription'.$index] = $item->product->name;
+			$base['itemAmount'.$index] = number_format($item->value, 2, '.', '');
+			$base['itemQuantity'.$index] = $item->amount;
+		}
+		return $base;
+		//$base['notificationURL'] = 'https://sualoja.com.br/notifica.html';
+		//$base['reference'] = 'REF1234';
 
+		// Boleto
 
-		$data['paymentMode'] = 'default';
-		$data['paymentMethod'] = 'boleto';
-		$data['receiverEmail'] = 'maiglonl@gmail.com';
-		$data['currency'] = 'BRL';
-		$data['extraAmount'] = '0.00';
-		$data['itemId1'] = '0001';
-		$data['itemDescription1'] = 'Notebook Prata';
-		$data['itemAmount1'] = '24300.00';
-		$data['itemQuantity1'] = '1';
-		$data['notificationURL'] = 'https://sualoja.com.br/notifica.html';
-		$data['reference'] = 'REF1234';
-		$data['senderName'] = 'Jose Comprador';
-		$data['senderCPF'] = '22111944785';
-		$data['senderAreaCode'] = '11';
-		$data['senderPhone'] = '56273440';
-		$data['senderEmail'] = 'comprador@uol.com.br';
-		$data['senderHash'] = 'abc123';
-		$data['shippingAddressStreet'] = 'Av. Brig. Faria Lima';
-		$data['shippingAddressNumber'] = '1384';
-		$data['shippingAddressComplement'] = '5o andar';
-		$data['shippingAddressDistrict'] = 'Jardim Paulistano';
-		$data['shippingAddressPostalCode'] = '01452002';
-		$data['shippingAddressCity'] = 'Sao Paulo';
-		$data['shippingAddressState'] = 'SP';
-		$data['shippingAddressCountry'] = 'BRA';
-		$data['shippingType'] = '1';
-		$data['shippingCost'] = '1.00';
+		// CC
 
 		/*
-		$data['paymentMode'] = 'default';
-		$data['paymentMethod'] = 'creditCard';
-		$data['receiverEmail'] = 'maiglonl@gmail.com';
-		$data['currency'] = 'BRL';
-		$data['extraAmount'] = '1.00';
-		$data['itemId1'] = '0001';
-		$data['itemDescription1'] = 'Notebook Prata';
-		$data['itemAmount1'] = '24300.00';
-		$data['itemQuantity1'] = '1';
-		$data['notificationURL'] = 'https://sualoja.com.br/notifica.html';
-		$data['reference'] = 'REF1234';
-		$data['senderName'] = 'Jose Comprador';
-		$data['senderCPF'] = '22111944785';
-		$data['senderAreaCode'] = '11';
-		$data['senderPhone'] = '56273440';
-		$data['senderEmail'] = 'comprador@sandbox.pagseguro.com.br';
-		$data['senderHash'] = 'abc123';
-		$data['shippingAddressStreet'] = 'Av. Brig. Faria Lima';
-		$data['shippingAddressNumber'] = '1384';
-		$data['shippingAddressComplement'] = '5o andar';
-		$data['shippingAddressDistrict'] = 'Jardim Paulistano';
-		$data['shippingAddressPostalCode'] = '01452002';
-		$data['shippingAddressCity'] = 'Sao Paulo';
-		$data['shippingAddressState'] = 'SP';
-		$data['shippingAddressCountry'] = 'BRA';
-		$data['shippingType'] = '1'; // [1 => Encomenda normal (PAC), 2 => SEDEX, 3 => Não expecificado (Entregadoras);
-		$data['shippingCost'] = '1.00';
 		$data['creditCardToken'] = '4as56d4a56d456as456dsa';
 		$data['installmentQuantity'] = '5';
 		$data['installmentValue'] = '125.22';
@@ -356,7 +312,8 @@ class OrdersController extends Controller{
 		$data['billingAddressCity'] = 'Sao Paulo';
 		$data['billingAddressState'] = 'SP';
 		$data['billingAddressCountry'] = 'BRA';
-		*/
+		 */
+		
 	}
 
 	/**
@@ -371,13 +328,23 @@ class OrdersController extends Controller{
 					'message' => "Pedido não encontrado"
 				]);
 			}
-			$data = $this->getCheckoutData($order);
+			if(!$request->senderHash){
+				return response()->json([
+					'error'   => true,
+					'message' => "Falha na conexão com o PagSeguro"
+				]);
+			}
+			$data = $this->getCheckoutData($order, $request->senderHash);
 			try{
 				$response = (new PagSeguro)->request(PagSeguro::CHECKOUT_SANDBOX, $data);
+				dd($response);
 			} catch (\Exception $e) {
-				//dd($e->getMessage());
+				$response = [
+					'error'   => true,
+					'message' => $e->getMessage()
+				];
+				return response()->json($response);
 			}
-			return response()->json($response);
 		} catch (ValidatorException $e) {
 			return response()->json([
 				'error'   => true,
