@@ -245,8 +245,7 @@ class OrdersController extends Controller{
 			'token' => PAGSEGURO_TOKEN
 		];
 		$response = (new PagSeguro)->request(PagSeguro::SESSION_SANDBOX, $data);
-		$session = new \SimpleXMLElement($response->getContents());
-		return $session->id;
+		return $response->id;
 	}
 
 	/**
@@ -336,8 +335,13 @@ class OrdersController extends Controller{
 			}
 			$data = $this->getCheckoutData($order, $request->senderHash);
 			try{
-				$response = (new PagSeguro)->request(PagSeguro::CHECKOUT_SANDBOX, $data);
-				dd($response);
+				$request = (new PagSeguro)->request(PagSeguro::CHECKOUT_SANDBOX, $data);
+				$response = [
+					'error'   => false,
+					'data' => $request
+				];
+				return response()->json($response);
+				//dd($response);
 			} catch (\Exception $e) {
 				$response = [
 					'error'   => true,

@@ -20,6 +20,7 @@
 				});
 				$("#formEditUser").cValidate({
 					data: self.user,
+					unmask: ['phone1', 'phone2'],
 					success: 'Usuário atualizado com sucesso!',
 					error: 'Falha ao atualizar usuário!',
 				});

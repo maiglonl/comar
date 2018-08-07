@@ -33,7 +33,7 @@ class UserValidator extends LaravelValidator {
 			'number' => 'required',
 			'complement' => 'max:150',
 			'role' => 'required',
-			'parent_id' => 'exists:users,id'
+			//'parent_id' => 'exists:users,id'
 		],
 		ValidatorInterface::RULE_UPDATE => [
 			'name' => 'required|string|max:100',
@@ -51,7 +51,7 @@ class UserValidator extends LaravelValidator {
 			'number' => 'required',
 			'complement' => 'max:150',
 			'role' => 'required',
-			'parent_id' => 'exists:users,id'
+			//'parent_id' => 'exists:users,id'
 		],
 	];
 }

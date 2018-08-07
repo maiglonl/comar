@@ -118176,6 +118176,7 @@ $.widget("custom.wAutocomplete", $.ui.autocomplete, {
 		var method = options.hasOwnProperty("method") ? options.method : 'post';
 		var reload = options.hasOwnProperty("reload") ? options.reload : false;
 		var isPut = options.hasOwnProperty("isPut") ? options.isPut : false;
+		var unmask = options.hasOwnProperty("unmask") ? options.unmask : [];
 		isPut = $(form).attr('method') == 'PUT' ? true : isPut;
 		var handler = options.hasOwnProperty("handler") ? options.handler : function (data) {
 			if (data.error) {
@@ -118212,6 +118213,9 @@ $.widget("custom.wAutocomplete", $.ui.autocomplete, {
 			errorClass: 'invalid-feedback',
 			errorElement: 'div',
 			submitHandler: function submitHandler() {
+				options.unmask.each(function (index, el) {
+					options.data[el] = options.data[el] ? options.data[el].replace(/\W/g, '') : "";
+				});
 				if (isPut) {
 					$.put(action, options.data, handler);
 				} else {

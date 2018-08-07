@@ -37,9 +37,10 @@
 				});
 				$("#formCreateUser").cValidate({
 					data: self.user,
+					unmask: ['phone1', 'phone2'],
 					success: 'Usuário criado com sucesso!',
 					error: 'Falha ao criar usuário!',
-					redirect: {!! !Auth::user() ? "'".route('login')."'" : 'false' !!}
+					redirect: {!! !Auth::user() ? "'".route('login')."'" : 'false' !!},
 				});
 			},
 			watch:{

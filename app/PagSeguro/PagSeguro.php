@@ -51,11 +51,7 @@ class PagSeguro {
 			$options = [];
 		}
 		$client = new Client;
-		error_log($request['method']);
-		error_log($url);
-		//dd($options);
 		$response = $client->request($request['method'], $url, $options);
-		dd($response->getBody());
-		return $response->getBody();
+		return new \SimpleXMLElement($response->getBody()->getContents());
 	}
 }

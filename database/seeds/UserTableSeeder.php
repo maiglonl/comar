@@ -18,7 +18,7 @@ class UserTableSeeder extends Seeder {
 			'email' => 'maiglonl@gmail.com',
 			'phone1' => '51997398991',
 			'phone2' => '51997394125',
-			'cp' => '025.579.610-27',
+			'cp' => '111.111.111-11',
 			'gender' => 'male',
 			'birthdate' => '1993-07-08',
 			'zipcode' => '95890000',
