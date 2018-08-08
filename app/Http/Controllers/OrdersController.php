@@ -239,6 +239,18 @@ class OrdersController extends Controller{
 	/**
 	 * Display the specified resource.
 	 */
+	public function success(){
+		$order = $this->repository->current();
+		if(!$this->orderIsReady($order) || $order->payment_method == null){
+			return view('app.orders.cart', compact('order'));
+		}
+		$session = $this->getSession();
+		return view('app.orders.success', compact('order', 'session'));
+	}
+
+	/**
+	 * Display the specified resource.
+	 */
 	private function getSession(){
 		$data = [
 			'email' => PAGSEGURO_EMAIL,
@@ -336,11 +348,10 @@ class OrdersController extends Controller{
 			$data = $this->getCheckoutData($order, $request->senderHash);
 			try{
 				$request = (new PagSeguro)->request(PagSeguro::CHECKOUT_SANDBOX, $data);
-				$response = [
-					'error'   => false,
-					'data' => $request
-				];
-				return response()->json($response);
+				$order->status_id = STATUS_ORDER_AG_PAG;
+				$order->payment_link = $request->paymentLink ? $request->paymentLink : "";
+				$this->repository->update($order->toArray(), $order->id);
+				return redirect(route('orders.checkout'));
 				//dd($response);
 			} catch (\Exception $e) {
 				$response = [

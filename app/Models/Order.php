@@ -32,7 +32,8 @@ class Order extends Model implements Transformable {
 		'street',
 		'number',
 		'complement',
-		'payment_method'
+		'payment_method',
+		'payment_link'
 	];
 
 	protected $with = ['items', 'client'];
