@@ -68,6 +68,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('orders/payment/billet', 'OrdersController@billet')->name('orders.payment.billet');
 	Route::get('orders/checkout', 'OrdersController@checkout')->name('orders.checkout');
 	Route::get('orders/card', 'OrdersController@card')->name('orders.card');
+	Route::get('orders/card/form', 'OrdersController@formCard')->name('orders.card.form');
 	Route::get('orders/find/{id}', 'OrdersController@find')->name('orders.find');
 	Route::get('orders/form/address', 'OrdersController@formAddress')->name('orders.form.address');
 	Route::get('orders/delivery/cost', 'OrdersController@calcDeliveryCost')->name('orders.delivery.cost');
@@ -82,6 +83,12 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('items/decrease/{id}', 'ItemsController@decrease')->name('items.decrease');
 	Route::delete('items/destroy/{id}', 'ItemsController@destroy')->name('items.destroy');
 
+	// Cards
+	Route::get('cards/all', 'CardsController@all')->name('cards.all');
+	Route::get('cards/edit/{id}', 'CardsController@edit')->name('cards.edit');
+
+	// Resources
+	Route::resource('cards', 'CardsController')->only(['create','store','update']);
 	Route::resource('orders', 'OrdersController');
 	Route::resource('users', 'UsersController')->except('store');
 });

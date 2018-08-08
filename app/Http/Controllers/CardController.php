@@ -4,17 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Repositories\CategoryRepository;
 
-class CategoriesController extends Controller{
+class CardsController extends Controller{
 
 	public function __construct(CategoryRepository $repository){
 		$this->repository = $repository;
 		$this->names = [
-			'plural' => 'categories',
-			'singular' => 'category',
-			'pt_plural' => 'categorias',
-			'pt_singular' => 'categoria',
-			'pt_gender' => 'a',
-			'base_blades' => 'categories'
+			'plural' => 'cards',
+			'singular' => 'card',
+			'pt_plural' => 'cartões',
+			'pt_singular' => 'cartão',
+			'pt_gender' => 'o',
+			'base_blades' => 'cards'
 		];
 	}
 

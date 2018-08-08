@@ -1,7 +1,7 @@
 @extends('layouts.order')
 
 @section('body_top')
-	<div id="orderDeliveryApp" class="container-fluid">
+	<div id="orderPaymentApp" class="container-fluid">
 		<div class="row justify-content-md-center">
 			<div class="col-12 col-sm-8 pb-4">
 				<div class="pt-5 pb-3 px-sm-4 mt-3">
@@ -33,7 +33,7 @@
 							<p>Outros meios</p>
 							<div class="card shadow-sm">
 								<ul class="list-group list-group-flush">
-									<a href="{ { route('orders.card.form') }}" class="list-group-item hover-item text-dark">
+									<a href="{{ route('orders.card.form') }}" class="list-group-item hover-item text-dark">
 										<div class="row py-2 align-items-center">
 											<div class="col-auto px-4 text-center">
 												<div class="text-primary rounded bg-white"><i class="far fa-credit-card fa-2x rounded px-3 py-2 border border-primary"></i></div>
@@ -73,7 +73,7 @@
 			
 		});
 		new Vue({
-			el: '#orderDeliveryApp',
+			el: '#orderPaymentApp',
 			data: {
 				order: {!! $order->toJson() !!},
 				user: {!! Auth::user()->toJson() !!}
