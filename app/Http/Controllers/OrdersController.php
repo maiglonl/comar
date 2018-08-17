@@ -8,6 +8,7 @@ use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\OrderCheckoutRequest;
 use App\Repositories\OrderRepository;
+use App\Repositories\CardRepository;
 use App\Repositories\ItemRepository;
 use App\Repositories\ProductRepository;
 use App\PagSeguro\PagSeguro;
@@ -19,10 +20,16 @@ use \Correios;
 class OrdersController extends Controller{
 	protected $repository;
 
-	public function __construct( OrderRepository $repository, ItemRepository $itemRepository, ProductRepository $productRepository){
+	public function __construct( 
+		OrderRepository $repository, 
+		ItemRepository $itemRepository, 
+		ProductRepository $productRepository,
+		CardRepository $cardRepository
+	){
 		$this->repository = $repository;
 		$this->itemRepository = $itemRepository;
 		$this->productRepository = $productRepository;
+		$this->cardRepository = $cardRepository;
 
 		$this->names = [
 			'plural' => 'orders',
@@ -77,61 +84,68 @@ class OrdersController extends Controller{
 	 * Calculate delivery cost
 	 */
 	public function updateDeliveryCost($order){
-		$deliveryMethods = [];
-		foreach ($order->items as $key => $item) {
-			$dados = [
-				'tipo'			=> 'sedex,pac',
-				'formato'		=> 'caixa',
-				'cep_origem'	=> CEP_ORIGEM,
-				'cep_destino'	=> $order->zipcode,
-				'peso'			=> $item->product['weight'],
-				'comprimento'	=> $item->product['length'],
-				'altura'		=> $item->product['height'],
-				'largura'		=> $item->product['width'],
-				'diametro'		=> $item->product['diameter'],
-			];
-			$deliveryMethods = Correios::frete($dados);
-			$orderItem = $order->items[$key];
-			$validMethods = [];
-			$form = null;
-			$time = null;
-			$cost = null;
-			foreach ($deliveryMethods as $method) {
-				if($method['valor'] > 0){
-					$validMethods[] = [
-						'codigo' => $method['codigo'],
-						'prazo' => $method['prazo'],
-						'valor' => $method['valor']
-					];
-					if($method['valor'] <= $cost || $cost == null){
-						$form = $method['codigo'];
-						$time = $method['prazo'];
-						$cost = $method['valor'];
+		try {
+			$deliveryMethods = [];
+			foreach ($order->items as $key => $item) {
+				$dados = [
+					'tipo'			=> 'sedex,pac',
+					'formato'		=> 'caixa',
+					'cep_origem'	=> CEP_ORIGEM,
+					'cep_destino'	=> $order->zipcode,
+					'peso'			=> $item->product['weight'],
+					'comprimento'	=> $item->product['length'],
+					'altura'		=> $item->product['height'],
+					'largura'		=> $item->product['width'],
+					'diametro'		=> $item->product['diameter'],
+				];
+				$deliveryMethods = Correios::frete($dados);
+				$orderItem = $order->items[$key];
+				$validMethods = [];
+				$form = null;
+				$time = null;
+				$cost = null;
+				foreach ($deliveryMethods as $method) {
+					if($method['valor'] > 0){
+						$validMethods[] = [
+							'codigo' => $method['codigo'] == 4510 ? DELIVERY_METHOD_NORMAL : DELIVERY_METHOD_EXPRESS,
+							'prazo' => $method['prazo'],
+							'valor' => $method['valor'] * $item->amount
+						];
+						if($method['valor'] <= $cost || $cost == null){
+							$form = $method['codigo'] == 4510 ? DELIVERY_METHOD_NORMAL : DELIVERY_METHOD_EXPRESS;
+							$time = $method['prazo'];
+							$cost = $method['valor'] * $item->amount;
+						}
 					}
 				}
-			}
 
-			if($orderItem['free_shipping'] == 1 && $form != null){
-				foreach ($validMethods as $key => $method) {
-					if($method['codigo'] == $form){
-						$validMethods[$key]['valor'] = 0;
+				if($orderItem['free_shipping'] == 1 && $form != null){
+					foreach ($validMethods as $key => $method) {
+						if($method['codigo'] == $form){
+							$validMethods[$key]['valor'] = 0;
+						}
 					}
+					$cost = 0;
 				}
-				$cost = 0;
-			}
 
-			// Adiciona opção de 'Retirada em loja'
-			$validMethods[] = [
-				'codigo' => 0,
-				'prazo' => 0,
-				'valor' => 0
-			];
-			$orderItem['delivery_form'] = $form == null ? 0 : $form;
-			$orderItem['delivery_time'] = $time == null ? 0 : $time;
-			$orderItem['delivery_cost'] = $cost == null ? 0 : $cost;
-			
-			$orderItem['delivery_methods'] = json_encode($validMethods);
-			$this->itemRepository->update($orderItem->toArray(), $orderItem['id']);
+				// Adiciona opção de 'Retirada em loja'
+				$validMethods[] = [
+					'codigo' => 0,
+					'prazo' => 0,
+					'valor' => 0
+				];
+				$orderItem['delivery_form'] = $form == null ? 0 : $form;
+				$orderItem['delivery_time'] = $time == null ? 0 : $time;
+				$orderItem['delivery_cost'] = $cost == null ? 0 : $cost;
+				
+				$orderItem['delivery_methods'] = json_encode($validMethods);
+				$this->itemRepository->update($orderItem->toArray(), $orderItem['id']);
+			}
+		} catch (ValidatorException $e) {
+			return response()->json([
+				'error'   => true,
+				'message' => "Falha ao atualizar formas de entrega!"
+			]);
 		}
 	}
 
@@ -169,23 +183,35 @@ class OrdersController extends Controller{
 	/**
 	 * Display the specified resource.
 	 */
+	public function card(){
+		$order = $this->repository->current();
+		$cards = $this->cardRepository->all();
+		if(!$this->orderIsReady($order)){
+			return view('app.orders.cart', compact('order'));
+		}
+		
+		/*
+		$order->payment_method = PAYMENT_METHOD_BILLET;
+		foreach ($order->items as $item) {
+			$item->payment_installments = 1;
+			$item->payment_installment = $item->product[PermHelper::lowerValueText()];
+			$this->itemRepository->update($item->toArray(), $item->id);
+		}
+		$this->repository->update($order->toArray(), $order->id);
+		*/
+
+		return view('app.orders.card', compact('order'));
+	}
+
+	/**
+	 * Display the specified resource.
+	 */
 	public function payment(){
 		$order = $this->repository->current();
 		if(!$this->orderIsReady($order)){
 			return view('app.orders.cart', compact('order'));
 		}
 		return view('app.orders.payment', compact('order'));
-	}
-
-	/**
-	 * Display the specified resource.
-	 */
-	public function card(){
-		$order = $this->repository->current();
-		if(!$this->orderIsReady($order)){
-			return view('app.orders.cart', compact('order'));
-		}
-		return view('app.orders.card', compact('order'));
 	}
 
 	/**
@@ -207,9 +233,9 @@ class OrdersController extends Controller{
 			$order->number = $address['number'] ? $address['number'] : '';
 			$order->complement = $address['complement'] ? $address['complement'] : '';
 			$this->repository->update($order->toArray(), $order->id);
-			if($updateCost){
+			//if($updateCost){
 				$this->updateDeliveryCost($order);
-			}
+			//}
 			$order = $this->repository->current();
 			$response = [
 				'message' => 'Endereço atualizado',
@@ -351,7 +377,11 @@ class OrdersController extends Controller{
 				$order->status_id = STATUS_ORDER_AG_PAG;
 				$order->payment_link = $request->paymentLink ? $request->paymentLink : "";
 				$this->repository->update($order->toArray(), $order->id);
-				return redirect(route('orders.checkout'));
+				$response = [
+					'error'   => false,
+					'message' => "Compra finalizada"
+				];
+				return response()->json($response);
 				//dd($response);
 			} catch (\Exception $e) {
 				$response = [
@@ -380,40 +410,37 @@ class OrdersController extends Controller{
 					'message' => "Pedido não encontrado"
 				]);
 			}
-			$item = null;
-			foreach ($order->items as $key => $val) {
-				if($val->id == $request->id){
-					$item = $val;
+			foreach ($request->ids as $id) {
+				$item = null;
+				foreach ($order->items as $key => $val) {
+					if($val->id == $id){
+						$item = $val;
+					}
 				}
-			}
-			if($item == null){
-				return response()->json([
-					'error'   => true,
-					'message' => "Item não encontrado"
-				]);
-			}
-			$methods = json_decode($item->delivery_methods, true);
-			foreach ($methods as $key => $value) {
-				if($value['codigo'] == $request->codigo){
-					$item['delivery_cost'] = $value['valor'];
-					$item['delivery_time'] = $value['prazo'];
-					$item['delivery_form'] = $value['codigo'];
-					$this->itemRepository->update($item->toArray(), $item->id);
+				if($item == null){
 					return response()->json([
-						'message' => 'Forma de entrega alterada'
+						'error'   => true,
+						'message' => "Item não encontrado"
 					]);
+				}
+				$methods = json_decode($item->delivery_methods, true);
+				foreach ($methods as $key => $value) {
+					if($value['codigo'] == $request->codigo){
+						$item['delivery_cost'] = $value['valor'];
+						$item['delivery_time'] = $value['prazo'];
+						$item['delivery_form'] = $value['codigo'];
+						$this->itemRepository->update($item->toArray(), $item->id);
+					}
 				}
 			}
 			return response()->json([
-				'error'   => true,
-				'message' => "Forma de entrega inválida"
+				'message' => 'Forma de entrega alterada'
 			]);
 			
 		} catch (\Exception $e) {
-			dd($e);
 			return response()->json([
 				'error' => true,
-				'message' => $e
+				'message' => "Falha ao alterar forma de entrega"
 			]);
 		}
 	}

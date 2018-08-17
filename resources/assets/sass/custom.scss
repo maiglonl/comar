@@ -24,6 +24,16 @@ sup {
 	color: $primary;
 }
 
+.list-group-item:hover{
+	background-color: $gray-50;
+	box-shadow: inset 4px 0 0 0px $primary;
+	cursor: pointer;
+}
+
+.list-group-item{
+	transition: all 0.6s ease-in-out;
+}
+
 .opened-card .selected-item > li{
 	background-color: $gray-50;
 	box-shadow: inset 4px 0 0 0px $primary;

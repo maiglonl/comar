@@ -17,6 +17,7 @@
 		isPut = $(form).attr('method') == 'PUT' ? true : isPut;
 		var handler = options.hasOwnProperty("handler") ? options.handler : function(data) {
 			if(data.error){
+				console.log(1);
 				var msgs = {};
 				$.each(data.message, function(index, val) {
 					 msgs[prefix+index] = val[0];
@@ -29,11 +30,14 @@
 					toastr.error(error);
 				}
 			}else{
+				console.log(2);
 				if(redirect != null && redirect != false){
+					console.log(2.2);
 					location.href = redirect;
 					return true;
 				}
 				if(reload){
+					console.log(2.3);
 					location.reload();
 					return true;
 				}
@@ -50,12 +54,14 @@
 			errorClass: 'invalid-feedback',
 			errorElement: 'div',
 			submitHandler: function(){
-				options.unmask.each(function(index, el) {
+				$.each(unmask, function(index, el) {
 					options.data[el] = options.data[el] ? options.data[el].replace(/\W/g, '') : "";
 				});
 				if(isPut){ 
 					$.put(action, options.data, handler); 
 				}else{
+					console.log(action);
+					console.log(options.data);
 					$.post(action, options.data, handler);
 				}
 			},

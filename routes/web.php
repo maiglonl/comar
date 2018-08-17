@@ -66,7 +66,9 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('orders/delivery', 'OrdersController@delivery')->name('orders.delivery');
 	Route::get('orders/payment', 'OrdersController@payment')->name('orders.payment');
 	Route::get('orders/payment/billet', 'OrdersController@billet')->name('orders.payment.billet');
+	Route::get('orders/payment/card', 'OrdersController@card')->name('orders.payment.card');
 	Route::get('orders/checkout', 'OrdersController@checkout')->name('orders.checkout');
+	Route::get('orders/checkout/success', 'OrdersController@success')->name('orders.checkout.success');
 	Route::get('orders/card', 'OrdersController@card')->name('orders.card');
 	Route::get('orders/card/form', 'OrdersController@formCard')->name('orders.card.form');
 	Route::get('orders/find/{id}', 'OrdersController@find')->name('orders.find');

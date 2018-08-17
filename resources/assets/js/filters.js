@@ -3,8 +3,8 @@ window.filters = {
 		if (cod == null) return '-';
 		switch(parseInt(cod)){
 			case 0: return "Retirar na loja"; break;
-			case 4014: return "Rápido"; break;
-			case 4510: return "Normal"; break;
+			case 1: return "Normal"; break;
+			case 2: return "Rápido"; break;
 			default: return "-"; break;
 		}
 	},

@@ -34,5 +34,12 @@ class CardRepositoryEloquent extends BaseRepository implements CardRepository{
 	public function boot(){
 		$this->pushCriteria(app(RequestCriteria::class));
 	}
+
+	/**
+	 * Boot up the repository, pushing criteria
+	 */
+	public function boot(){
+		$this->pushCriteria(app(RequestCriteria::class));
+	}
 	
 }

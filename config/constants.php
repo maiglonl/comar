@@ -19,6 +19,11 @@
 	define('USER_ROLES_PARTNER','partner');
 	define('USER_ROLES_CLIENT', 'client');
 
+	/* DELIVERY_METHOD */
+	define('DELIVERY_METHOD_STORE', 0);
+	define('DELIVERY_METHOD_NORMAL', 1);
+	define('DELIVERY_METHOD_EXPRESS', 2);
+
 	/* PAYMENT_METHOD */
 	define('PAYMENT_METHOD_BILLET', 'billet');
 	define('PAYMENT_METHOD_CREDIT_CARD','credit_card');

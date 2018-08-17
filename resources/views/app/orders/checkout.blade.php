@@ -129,7 +129,7 @@
 							if(data.error){
 								toastr.error('Falha ao realizar operação!');
 							}else{
-								console.log(data);
+								location.href = '{{ route('orders.checkout.success')}}';
 							}
 						});
 					});

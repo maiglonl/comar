@@ -34,7 +34,7 @@
 									<h5 class="card-title py-4 m-0">Modificar envio <span class="float-right"><i class="icon-arrow-up icons"></i></span></h5>
 								</div>
 								<ul class="list-group list-group-flush">
-									<span v-for="method in item.delivery_avaliables" :data-method="method.codigo" :data-item="item.id"
+									<span v-for="method in item.delivery_availables" :data-method="method.codigo" :data-item="item.id"
 										:class="[method.codigo == item.delivery_form ? 'selected-item' : 'unselected-item']"
 										onclick="toogleItemHandler(this)">
 										<li class="list-group-item align-items-center" style="cursor:pointer;">

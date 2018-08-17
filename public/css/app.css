@@ -14900,6 +14900,18 @@ sup {
   color: #2c97de;
 }
 
+.list-group-item:hover {
+  background-color: #f4f5f6;
+  -webkit-box-shadow: inset 4px 0 0 0px #2c97de;
+          box-shadow: inset 4px 0 0 0px #2c97de;
+  cursor: pointer;
+}
+
+.list-group-item {
+  -webkit-transition: all 0.6s ease-in-out;
+  transition: all 0.6s ease-in-out;
+}
+
 .opened-card .selected-item > li {
   background-color: #f4f5f6;
   -webkit-box-shadow: inset 4px 0 0 0px #2c97de;

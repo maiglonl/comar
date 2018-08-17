@@ -37,13 +37,13 @@ class Item extends Model implements Transformable {
 	];
 
 	protected $with = ['product'];
-	protected $appends = ['delivery_avaliables', 'value'];
+	protected $appends = ['delivery_availables', 'value'];
 
 	public function product(){
 		return $this->belongsTo(Product::class);
 	}
 
-	public function getDeliveryAvaliablesAttribute(){
+	public function getDeliveryAvailablesAttribute(){
 		return $this->delivery_methods == null ? null : json_decode($this->delivery_methods);
 	}
 

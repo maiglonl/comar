@@ -1,7 +1,7 @@
 <div>
 	<div id="orderAddressApp">
 		<h2 class="page-title">Endereço <small> | Cadastro de endereço de entrega</small></h2>
-		<form action="{{ route('orders.address.store') }}" id="formOrderAddress" data-prefix="addr">
+		<form action="{{ route('orders.address.store') }}" id="formOrderAddress" data-prefix="addr" method="POST">
 			<div class="row">
 				<div class="col-xs-12 col-sm-6">
 					<div class="form-label-group">
