@@ -19,6 +19,6 @@ class Card extends Model implements Transformable {
      *
      * @var array
      */
-    protected $fillable = ['number', 'name', 'date_due', 'code'];
+    protected $fillable = ['number', 'name', 'date_due', 'cvv', 'brand', 'hash', 'user_id'];
 
 }

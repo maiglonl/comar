@@ -185,11 +185,9 @@ class OrdersController extends Controller{
 	 */
 	public function card(){
 		$order = $this->repository->current();
-		$cards = $this->cardRepository->all();
 		if(!$this->orderIsReady($order)){
 			return view('app.orders.cart', compact('order'));
 		}
-		
 		/*
 		$order->payment_method = PAYMENT_METHOD_BILLET;
 		foreach ($order->items as $item) {
@@ -200,7 +198,39 @@ class OrdersController extends Controller{
 		$this->repository->update($order->toArray(), $order->id);
 		*/
 
-		return view('app.orders.card', compact('order'));
+		return view('app.orders.card', compact(['order']));
+	}
+
+	/**
+	 * Display the specified resource.
+	 */
+	public function cardCreate(){
+		$order = $this->repository->current();
+		$cards = $this->cardRepository->all();
+		if(!$this->orderIsReady($order)){
+			return view('app.orders.cart', compact('order'));
+		}
+		return view('app.orders.card_create', compact(['order']));
+	}
+
+	/**
+	 * Display the specified resource.
+	 */
+	public function selectCard(Request $request){
+		$req = $request->all();
+		$order = $this->repository->current();
+		$card = $this->cardRepository->find($req['card_id']);
+		if(!$card || $order->user_id != $card->user_id){
+			return $this->payment();
+		}
+		$order->payment_method = "creditCard";
+		$order->card_id = $card->id;
+		$this->repository->update($order->toArray(), $order->id);
+		$response = [
+			'message' => 'Forma de pagamento atualizado',
+			'data'    => $order->toArray(),
+		];
+		return response()->json($response);
 	}
 
 	/**
@@ -211,7 +241,11 @@ class OrdersController extends Controller{
 		if(!$this->orderIsReady($order)){
 			return view('app.orders.cart', compact('order'));
 		}
-		return view('app.orders.payment', compact('order'));
+		$cards = $this->cardRepository->all();
+		$session = $this->getSession();
+		$order->session = $session;
+		$this->repository->update($order->toArray(), $order->id);
+		return view('app.orders.payment', compact(['order', 'cards', 'session']));
 	}
 
 	/**
@@ -258,8 +292,7 @@ class OrdersController extends Controller{
 		if(!$this->orderIsReady($order) || $order->payment_method == null){
 			return view('app.orders.cart', compact('order'));
 		}
-		$session = $this->getSession();
-		return view('app.orders.checkout', compact('order', 'session'));
+		return view('app.orders.checkout', compact('order'));
 	}
 
 	/**
@@ -270,8 +303,7 @@ class OrdersController extends Controller{
 		if(!$this->orderIsReady($order) || $order->payment_method == null){
 			return view('app.orders.cart', compact('order'));
 		}
-		$session = $this->getSession();
-		return view('app.orders.success', compact('order', 'session'));
+		return view('app.orders.success', compact('order'));
 	}
 
 	/**
@@ -350,7 +382,6 @@ class OrdersController extends Controller{
 		$data['billingAddressState'] = 'SP';
 		$data['billingAddressCountry'] = 'BRA';
 		 */
-		
 	}
 
 	/**

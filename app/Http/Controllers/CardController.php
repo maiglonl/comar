@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\CategoryRepository;
+use App\Repositories\CardRepository;
 
 class CardsController extends Controller{
 
-	public function __construct(CategoryRepository $repository){
+	public function __construct(CardRepository $repository){
 		$this->repository = $repository;
 		$this->names = [
 			'plural' => 'cards',

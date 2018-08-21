@@ -85,7 +85,7 @@
 		if(performance.navigation.type == 2){
 		   location.reload(true);
 		}
-		PagSeguroDirectPayment.setSessionId('{!! $session !!}');
+		PagSeguroDirectPayment.setSessionId('{!! $order->session !!}');
 		var appDelivery = new Vue({
 			el: '#orderDeliveryApp',
 			data: {

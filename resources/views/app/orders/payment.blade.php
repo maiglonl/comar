@@ -6,19 +6,19 @@
 			<div class="col-12 col-sm-8 pb-4">
 				<div class="pt-5 pb-3 px-sm-4 mt-3">
 					<h4 class="pb-4">Opções de pagamento</h4>
-					<div class="row pt-4" v-if="">
+					<div class="row pt-4" v-if="cards.length > 0">
 						<div class="col">
 							<p>Cartões registrados</p>
 							<div class="card shadow-sm">
 								<ul class="list-group list-group-flush">
-									<li class="list-group-item" v-for="cards">
+									<li class="list-group-item" v-for="card in cards">
 										<div class="row py-2 align-items-center">
 											<div class="col-auto px-4 text-center">
 												<div class="text-primary rounded bg-white"><i class="fab fa-cc-mastercard fa-2x rounded px-3 py-2 border border-primary"></i></div>
 											</div>
 											<div class="col pl-0">
 												<p class="m-0 p-0">
-													<strong>@{{ card.brand }} com final @{{  }}</strong><br>
+													<strong>@{{ card.brand }} com final </strong><br>
 													<span class="text-success">Em até 12 parcelas</span>
 												</p>
 											</div>
@@ -33,7 +33,7 @@
 							<p>Meios disponíveis</p>
 							<div class="card shadow-sm">
 								<ul class="list-group list-group-flush">
-									<a href="{{ route('orders.payment.card') }}" class="list-group-item text-dark">
+									<a href="{{ route('orders.card.create') }}" class="list-group-item text-dark">
 										<div class="row py-2 align-items-center">
 											<div class="col-auto px-4 text-center">
 												<div class="text-primary rounded bg-white"><i class="far fa-credit-card fa-2x rounded px-3 py-2 border border-primary"></i></div>
@@ -69,9 +69,6 @@
 	</div>
 	
 	<script type="text/javascript">
-		$(document).ready(function() {
-			
-		});
 		new Vue({
 			el: '#orderPaymentApp',
 			data: {

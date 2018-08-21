@@ -24,8 +24,11 @@ class CreateOrdersTable extends Migration {
 			$table->string('complement', 150)->nullable();
 			$table->string('payment_method')->nullable();
 			$table->string('payment_link')->nullable();
+			$table->integer('card_id')->nullable()->unsigned();
+			$table->string('session')->nullable();
 			$table->timestamps();
 
+			$table->foreign('card_id')->references('id')->on('cards');
 			$table->foreign('user_id')->references('id')->on('users');
 			$table->foreign('status_id')->references('id')->on('status');
 		});

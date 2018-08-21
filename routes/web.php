@@ -69,8 +69,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('orders/payment/card', 'OrdersController@card')->name('orders.payment.card');
 	Route::get('orders/checkout', 'OrdersController@checkout')->name('orders.checkout');
 	Route::get('orders/checkout/success', 'OrdersController@success')->name('orders.checkout.success');
-	Route::get('orders/card', 'OrdersController@card')->name('orders.card');
-	Route::get('orders/card/form', 'OrdersController@formCard')->name('orders.card.form');
+	Route::get('orders/card/create', 'OrdersController@cardCreate')->name('orders.card.create');
 	Route::get('orders/find/{id}', 'OrdersController@find')->name('orders.find');
 	Route::get('orders/form/address', 'OrdersController@formAddress')->name('orders.form.address');
 	Route::get('orders/delivery/cost', 'OrdersController@calcDeliveryCost')->name('orders.delivery.cost');
@@ -78,6 +77,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('orders/checkout', 'OrdersController@postCheckout')->name('orders.checkout.post');
 	Route::post('orders/item/{product_id}', 'OrdersController@addItem')->name('orders.item.add');
 	Route::post('orders/address', 'OrdersController@storeAddress')->name('orders.address.store');
+	Route::post('orders/payment/select_card', 'OrdersController@selectCard')->name('orders.payment.select_card');
 
 	// Items
 	Route::post('items/store', 'ItemsController@store')->name('items.store');

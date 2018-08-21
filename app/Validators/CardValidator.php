@@ -20,7 +20,7 @@ class CardValidator extends LaravelValidator {
         'number' => 'required',
         'name' => 'required|string|max:255|min:3',
         'date_due' => 'required',
-        'code' => 'required',
+        'cvv' => 'required',
         'user_id' => 'required|exists:users,id'
 	];
 }

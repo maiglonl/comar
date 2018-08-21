@@ -7,6 +7,7 @@ use Prettus\Repository\Criteria\RequestCriteria;
 use App\Repositories\CardRepository;
 use App\Models\Card;
 use App\Validators\CardValidator;
+use Auth;
 
 /**
  * Class CardRepositoryEloquent.
@@ -38,8 +39,9 @@ class CardRepositoryEloquent extends BaseRepository implements CardRepository{
 	/**
 	 * Boot up the repository, pushing criteria
 	 */
-	public function boot(){
+	public function all($columns = Array()){
 		$this->pushCriteria(app(RequestCriteria::class));
+		return $this->findWhere(['user_id' => Auth::id()]);
 	}
 	
 }

@@ -122,7 +122,6 @@
 					var self = this;
 					self.itemGroups = {};
 					$.each(self.order.items, function(index, item) {
-						console.log(item);
 						switch(item['delivery_availables'].length){
 							case 1:
 								self.addItemToGroup(item, 'str');
@@ -194,7 +193,6 @@
 				$.each(appDelivery.itemGroups[$(el).attr('data-group')].items, function(index, item) {
 					ids.push(item.id);
 				});
-				console.log(ids);
 				_axios.put(url, {ids: ids, codigo: $(el).attr('data-method') }).then(function (resp) {
 					appDelivery.reloadData();
 				}).catch(function(error) {

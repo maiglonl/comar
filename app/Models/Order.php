@@ -33,10 +33,12 @@ class Order extends Model implements Transformable {
 		'number',
 		'complement',
 		'payment_method',
-		'payment_link'
+		'payment_link',
+		'card_id',
+		'session'
 	];
 
-	protected $with = ['items', 'client'];
+	protected $with = ['items', 'client', 'card'];
 	protected $appends = ['total', 'total_items', 'total_delivery'];
 
 	public function getTotalAttribute(){
@@ -69,6 +71,10 @@ class Order extends Model implements Transformable {
 
 	public function client(){
 		return $this->belongsTo(User::class, 'user_id');
+	}
+
+	public function card(){
+		return $this->belongsTo(Card::class, 'card_id');
 	}
 
 }
