@@ -65,7 +65,7 @@
 										<div class="col pl-0">
 											<p class="m-0 p-0">
 												<span class="text-muted">@{{ item.product.name }}</span><br>
-												<span class="text-muted">Quantidade: @{{ item.amount }}</span>
+												<span class="text-muted">Quantidade: @{{ item.quantity }}</span>
 											</p>
 										</div>
 									</div>

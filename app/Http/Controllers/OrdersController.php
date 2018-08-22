@@ -109,12 +109,12 @@ class OrdersController extends Controller{
 						$validMethods[] = [
 							'codigo' => $method['codigo'] == 4510 ? DELIVERY_METHOD_NORMAL : DELIVERY_METHOD_EXPRESS,
 							'prazo' => $method['prazo'],
-							'valor' => $method['valor'] * $item->amount
+							'valor' => $method['valor'] * $item->quantity
 						];
 						if($method['valor'] <= $cost || $cost == null){
 							$form = $method['codigo'] == 4510 ? DELIVERY_METHOD_NORMAL : DELIVERY_METHOD_EXPRESS;
 							$time = $method['prazo'];
-							$cost = $method['valor'] * $item->amount;
+							$cost = $method['valor'] * $item->quantity;
 						}
 					}
 				}
@@ -353,7 +353,7 @@ class OrdersController extends Controller{
 			$base['itemId'.$index] = $item->id;
 			$base['itemDescription'.$index] = $item->product->name;
 			$base['itemAmount'.$index] = number_format($item->value, 2, '.', '');
-			$base['itemQuantity'.$index] = $item->amount;
+			$base['itemQuantity'.$index] = $item->quantity;
 		}
 		return $base;
 		//$base['notificationURL'] = 'https://sualoja.com.br/notifica.html';
@@ -512,11 +512,11 @@ class OrdersController extends Controller{
 		$items = $this->itemRepository->findWhere($data);
 		if(count($items) > 0){
 			$item = $items[0];
-			$item->amount++;
+			$item->quantity++;
 			$item->value = $product[PermHelper::lowerValueText()];
 			$result = $this->itemRepository->update($item->toArray(), $item->id);
 		}else{
-			$data['amount'] = 1;
+			$data['quantity'] = 1;
 			$data['value'] = $product[PermHelper::lowerValueText()];
 			$data['interest_free'] = $product->interest_free;
 			$data['free_shipping'] = $product->free_shipping;

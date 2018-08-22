@@ -27,7 +27,7 @@ class ProductValidator extends LaravelValidator {
 		'width' => 'required',
 		'length' => 'required',
 		'diameter' => 'required',
-		'amount' => 'required',
+		'quantity' => 'required',
 		'status' => 'required'
 	];
 }

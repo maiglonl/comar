@@ -15,7 +15,7 @@ class CreateItemsTable extends Migration{
             $table->increments('id');
 			$table->integer('order_id')->nullable()->unsigned();
 			$table->integer('product_id')->nullable()->unsigned();
-			$table->integer('amount')->nullable()->default(1);
+			$table->integer('quantity')->nullable()->default(1);
 			$table->float('value', 9, 2);
 			$table->integer('interest_free')->nullable();
 			$table->boolean('free_shipping')->nullable();

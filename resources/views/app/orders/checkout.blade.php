@@ -44,7 +44,7 @@
 								<div class="col pl-0">
 									<p class="m-0 p-0">
 										<strong>@{{ item.product.name }}</strong><br>
-										<span class="text-muted pr-3">Quantidade: @{{ item.amount }}</span>
+										<span class="text-muted pr-3">Quantidade: @{{ item.quantity }}</span>
 										<span class="text-muted">Prazo: 
 											<span class="text-muted" v-if="item.delivery_form != 0">@{{ item.delivery_time | deadline }}</span>
 											<span class="text-muted" v-else>Entraremos em contato para definir a melhor data</span>

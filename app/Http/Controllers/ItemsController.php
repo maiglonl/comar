@@ -29,11 +29,11 @@ class ItemsController extends Controller{
 	}
 
 	/**
-	 * Increase the Item amount in 1.
+	 * Increase the Item quantity in 1.
 	 */
 	public function increase($id){
 		$item = $this->repository->find($id);
-		$item->amount++;
+		$item->quantity++;
 		$item = $this->repository->update($item->toArray(), $id);
 		return response()->json([
 			'data' => $item,
@@ -42,17 +42,17 @@ class ItemsController extends Controller{
 	}
 
 	/**
-	 * Decrease the Item amount in 1.
+	 * Decrease the Item quantity in 1.
 	 */
 	public function decrease($id){
 		$item = $this->repository->find($id);
-		if($item->amount <= 1){
+		if($item->quantity <= 1){
 			return response()->json([
 				'error' => true,
 				'message' => "Quantidade mínima atingida"
 			]);
 		}
-		$item->amount--;
+		$item->quantity--;
 		$item = $this->repository->update($item->toArray(), $id);
 		return response()->json([
 			'data' => $item,

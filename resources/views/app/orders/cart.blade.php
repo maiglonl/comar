@@ -42,16 +42,16 @@
 						<div class="col-2">
 							<div class="input-group mt-2">
 								<div class="input-group-prepend">
-									<button class="btn btn-outline-secondary text-monospace" type="button" id="button-addon1" @click.prevent="decreaseItem(item.id)" :disabled="item.amount<=1">-</button>
+									<button class="btn btn-outline-secondary text-monospace" type="button" id="button-addon1" @click.prevent="decreaseItem(item.id)" :disabled="item.quantity<=1">-</button>
 								</div>
-								<div class="form-control text-center">@{{ item.amount }}</div>
+								<div class="form-control text-center">@{{ item.quantity }}</div>
 								<div class="input-group-append">
 									<button class="btn btn-outline-secondary text-monospace" type="button" id="button-addon2" @click.prevent="increaseItem(item.id)">+</button>
 								</div>
 							</div>
 						</div>
 						<div class="col-2 text-right">
-							<h3 class="mt-2 font-weight-light" v-html="$options.filters.currency_sup(item.amount * item.product.{{ \App\Helpers\PermHelper::lowerValueText() }})"></h3>
+							<h3 class="mt-2 font-weight-light" v-html="$options.filters.currency_sup(item.quantity * item.product.{{ \App\Helpers\PermHelper::lowerValueText() }})"></h3>
 						</div>
 					</div>
 					<div class="row">

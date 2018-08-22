@@ -46,7 +46,7 @@
 												</div>
 												<div class="col-md-3 mt-3 mt-sm-0">
 													<h5 class="item-price text-center text-md-right m-0 p-0">
-														<span v-html="$options.filters.currency_sup(method.valor*item.amount, true)" v-if="method.valor > 0"></span>
+														<span v-html="$options.filters.currency_sup(method.valor*item.quantity, true)" v-if="method.valor > 0"></span>
 														<span class="free-text"	v-else>Grátis</span>
 														<span class="item-icon-arrow float-right text-primary pl-3"><i class="icon-arrow-down icons"></i></span>
 													</h5>
@@ -64,7 +64,7 @@
 										<div class="col pl-0">
 											<p class="m-0 p-0">
 												<span class="text-muted">@{{ item.product.name }}</span><br>
-												<span class="text-muted">Quantidade: @{{ item.amount }}</span>
+												<span class="text-muted">Quantidade: @{{ item.quantity }}</span>
 											</p>
 										</div>
 									</div>

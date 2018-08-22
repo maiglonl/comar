@@ -19,7 +19,7 @@ class ItemValidator extends LaravelValidator{
 	protected $rules = [
 		'order_id' => 'required|exists:orders,id',
 		'product_id' => 'required|exists:products,id',
-		'amount' => 'required|min:1',
+		'quantity' => 'required|min:1',
 		'value' => 'required|min:1'
 	];
 }

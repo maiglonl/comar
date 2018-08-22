@@ -33,7 +33,7 @@ class Product extends Model implements Transformable {
 		'width',
 		'length',
 		'diameter',
-		'amount',
+		'quantity',
 		'interest_free',
 		'free_shipping',
 		'status'
@@ -68,10 +68,7 @@ class Product extends Model implements Transformable {
 	}
 
 	public function getValueAttribute(){
-		if(\App\Helpers\PermHelper::lowerValue()){
-			return $this->value_seller;
-		}
-		return $this->value_partner;
+		return $this[\App\Helpers\PermHelper::lowerValueText()];
 	}
 
 }

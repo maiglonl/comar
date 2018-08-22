@@ -32,7 +32,7 @@ class ProductTransformer extends TransformerAbstract
 			'width' 		=> $model->width,
 			'length' 		=> $model->length,
 			'diameter' 		=> $model->diameter,
-			'amount' 		=> $model->amount,
+			'quantity' 		=> $model->quantity,
 			'status' 		=> $model->status
 		];
 	}

@@ -24,7 +24,7 @@ class Item extends Model implements Transformable {
 	protected $fillable = [
 		'order_id',
 		'product_id',
-		'amount',
+		'quantity',
 		'value',
 		'interest_free',
 		'free_shipping',
@@ -37,7 +37,7 @@ class Item extends Model implements Transformable {
 	];
 
 	protected $with = ['product'];
-	protected $appends = ['delivery_availables', 'value'];
+	protected $appends = ['delivery_availables', 'total'];
 
 	public function product(){
 		return $this->belongsTo(Product::class);
@@ -47,8 +47,8 @@ class Item extends Model implements Transformable {
 		return $this->delivery_methods == null ? null : json_decode($this->delivery_methods);
 	}
 
-	public function getValueAttribute(){
-		return $this->product[PermHelper::lowerValueText()];
+	public function getTotalAttribute(){
+		return ($this->value + $this->delivery_cost) * $this->quantity;
 	}
 
 

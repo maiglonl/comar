@@ -51,7 +51,7 @@ class Order extends Model implements Transformable {
 			if($item['payment_installments'] > 0 && $item['payment_installment'] > 0){
 				$result += $item['payment_installments'] * $item['payment_installment'];
 			}else{
-				$result += $item['value'] * $item['amount'];
+				$result += $item['value'] * $item['quantity'];
 			}
 		}
 		return $result;
@@ -60,7 +60,7 @@ class Order extends Model implements Transformable {
 	public function getTotalDeliveryAttribute(){
 		$result = 0;
 		foreach ($this->items as $item) {
-			$result += $item['delivery_cost']*$item['amount'];
+			$result += $item['delivery_cost']*$item['quantity'];
 		}
 		return $result;
 	}

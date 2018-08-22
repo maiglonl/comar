@@ -46,10 +46,10 @@ class ItemRepositoryEloquent extends BaseRepository implements ItemRepository{
 	public function create(Array $attributes){
 		$item = $this->findWhere(['order_id' => $attributes['order_id'], 'product_id' => $attributes['product_id']])->first();
 		if($item){
-			$item->amount++;
+			$item->quantity++;
 			return parent::update($item->toArray(), $item->id);
 		}else{
-			$attributes['amount'] = 1;
+			$attributes['quantity'] = 1;
 			return parent::create($attributes);
 		}
 	}	

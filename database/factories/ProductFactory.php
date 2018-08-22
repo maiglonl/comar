@@ -27,7 +27,7 @@ $factory->define(App\Models\Product::class, function (Faker $faker) {
 		'width' => rand(11,65),
 		'length' => rand(16,65),
 		'diameter' => rand(1,100),
-		'amount' => rand(1,100),
+		'quantity' => rand(1,100),
 		'free_shipping' => rand(1,100) < 50 ? 0 : 1,
 		'interest_free' => rand(1,100) < 50 ? 6 : 12,
 		'status' => 1
