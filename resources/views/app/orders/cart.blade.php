@@ -22,7 +22,7 @@
 							<h5 v-if="item.product.interest_free == 12 || item.product.free_shipping">
 								<span v-if="item.product.interest_free == 12" class="pr-3">
 									<i class="far fa-credit-card text-success"></i>
-									<small class="text-muted">Até 12 parcelas de <span v-html="$options.filters.currency_sup(item.product.{{ \App\Helpers\PermHelper::lowerValueText() }}/12)"></span> s/ juros</small>
+									<small class="text-muted">Até 12 parcelas de <span v-html="$options.filters.currency_sup(item.value/12)"></span> s/ juros</small>
 								</span>
 								<span v-if="item.product.free_shipping">
 									<i class="fas fa-truck text-success"></i> 
@@ -51,7 +51,7 @@
 							</div>
 						</div>
 						<div class="col-2 text-right">
-							<h3 class="mt-2 font-weight-light" v-html="$options.filters.currency_sup(item.quantity * item.product.{{ \App\Helpers\PermHelper::lowerValueText() }})"></h3>
+							<h3 class="mt-2 font-weight-light" v-html="$options.filters.currency_sup(item.quantity * item.value)"></h3>
 						</div>
 					</div>
 					<div class="row">

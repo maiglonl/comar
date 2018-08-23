@@ -118223,6 +118223,8 @@ $.widget("custom.wAutocomplete", $.ui.autocomplete, {
 				}
 			},
 			highlight: function highlight(element) {
+				console.log(form);
+				console.log(element);
 				if (!element) {
 					element = form;
 				}
