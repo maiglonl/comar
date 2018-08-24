@@ -14,6 +14,7 @@ use App\Repositories\ProductRepository;
 use App\PagSeguro\PagSeguro;
 use App\Helpers\PermHelper;
 use \Correios;
+
 /**
  * Class OrdersController.
  */
@@ -172,10 +173,9 @@ class OrdersController extends Controller{
 		$order->payment_method = PAYMENT_METHOD_BILLET;
 		foreach ($order->items as $item) {
 			$item->payment_installments = 1;
-			$item->payment_installment = $item->product[PermHelper::lowerValueText()];
+			$item->payment_installment = $item->total;
 			$this->itemRepository->update($item->toArray(), $item->id);
 		}
-
 		$this->repository->update($order->toArray(), $order->id);
 		return redirect(route('orders.checkout'));
 	}
@@ -184,20 +184,36 @@ class OrdersController extends Controller{
 	 * Display the specified resource.
 	 */
 	public function card(){
+		\PagSeguro\Configuration\Configure::setEnvironment('sandbox');//production or sandbox
+		\PagSeguro\Configuration\Configure::setAccountCredentials( PAGSEGURO_EMAIL, PAGSEGURO_TOKEN );
+		\PagSeguro\Configuration\Configure::setCharset('UTF-8');// UTF-8 or ISO-8859-1
+		\PagSeguro\Library::initialize();
+		$credentials = \PagSeguro\Configuration\Configure::getAccountCredentials();
+		
+
 		$order = $this->repository->current();
 		if(!$this->orderIsReady($order)){
 			return view('app.orders.cart', compact('order'));
 		}
-		/*
-		$order->payment_method = PAYMENT_METHOD_BILLET;
+		$order->payment_method = PAYMENT_METHOD_CREDIT_CARD;
+		$this->repository->update($order->toArray(), $order->id);
+		$order = $this->repository->current();
 		foreach ($order->items as $item) {
 			$item->payment_installments = 1;
-			$item->payment_installment = $item->product[PermHelper::lowerValueText()];
+			$item->payment_installment = $item->total;
+			$options = [
+				'amount' => $item->value + $item->delivery_cost, //Required
+				'card_brand' => $order->card->brand, //Optional
+				'max_installment_no_interest' => $item->interest_free //Optional
+			];
+			$installments = \PagSeguro\Services\Installment::create(
+				$credentials,
+				$options
+			);
+			$item->installments_available = json_encode($installments);
+			error_log(json_encode($installments));
 			$this->itemRepository->update($item->toArray(), $item->id);
 		}
-		$this->repository->update($order->toArray(), $order->id);
-		*/
-
 		return view('app.orders.card', compact(['order']));
 	}
 

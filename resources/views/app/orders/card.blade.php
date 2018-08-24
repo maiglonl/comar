@@ -58,15 +58,39 @@
 		var appCard = new Vue({
 			el: '#orderCardApp',
 			data: {
-				order: {!! $order->toJson() !!}
+				order: {!! $order->toJson() !!},
+				itemsGroup: { 
+					'free_0': { groupTotal: 0, items: []}, 
+					'free_6': { groupTotal: 0, items: []}, 
+					'free_12': { groupTotal: 0, items: []} 
+				}
 			},
 			methods: {
-				
+				loadGroups: function(){
+					let self = this;
+					$.each(self.order.items, function(index, item) {
+						switch(parseInt(item.interest_free)){
+							case 12: 
+								self.itemsGroup['free_12'].items.push(item); 
+								self.itemsGroup['free_12'].groupTotal += parseFloat(item.total); 
+								break;
+							case 6: 
+								self.itemsGroup['free_6'].items.push(item); 
+								self.itemsGroup['free_6'].groupTotal += parseFloat(item.total); 
+								break;
+							default: 
+								self.itemsGroup['free_0'].items.push(item); 
+								self.itemsGroup['free_0'].groupTotal += parseFloat(item.total); 
+								break;
+						}
+					});
+					console.log(self.itemsGroup);
+				}
 			},
 			mounted: function(){
 				var self = this;
 				PagSeguroDirectPayment.setSessionId('{{ $order->session }}');
-
+				self.loadGroups();
 				$("#formCreateCard").cValidate({
 					data: self.card,
 					success: function(result){

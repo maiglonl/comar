@@ -32,6 +32,7 @@ class Item extends Model implements Transformable {
 		'delivery_cost',
 		'delivery_time',
 		'delivery_methods',
+		'installments_available',
 		'payment_installments',
 		'payment_installment'
 	];
@@ -48,7 +49,11 @@ class Item extends Model implements Transformable {
 	}
 
 	public function getTotalAttribute(){
-		return ($this->value + $this->delivery_cost) * $this->quantity;
+		if($this->payment_installments > 0 && $this->payment_installment > 0){
+			return $this->payment_installments * $this->payment_installment * $this->quantity;
+		}else{
+			return ($this->value + $this->delivery_cost) * $this->quantity;
+		}
 	}
 
 
