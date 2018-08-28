@@ -70,7 +70,7 @@
 									</div>
 								</div>
 							</div>
-						</div>	
+						</div>
 					</div>
 					<div class="col rounded bg-gray-50 mt-5">
 						<div class="row py-2 align-items-center">
@@ -143,7 +143,7 @@
 					if(!self.itemGroups.hasOwnProperty(pref+group)){
 						self.itemGroups[pref+group] = {delivery_availables: [], delivery_cost: 0, delivery_form: 0, delivery_time: 0, items: [] };
 					}
-					self.itemGroups[pref+group]['delivery_cost'] += parseFloat(item.delivery_cost);
+					self.itemGroups[pref+group]['delivery_cost'] += parseFloat(item.delivery_cost)*parseInt(item.quantity);
 					self.itemGroups[pref+group]['delivery_form'] = parseFloat(item.delivery_form);
 					self.itemGroups[pref+group]['delivery_time'] = Math.max(parseFloat(self.itemGroups[pref+group]['delivery_time']), parseFloat(item.delivery_time));
 					self.itemGroups[pref+group]['items'].push(item);
@@ -159,10 +159,10 @@
 							self.itemGroups[pref+group].delivery_availables.push({
 								'codigo': parseFloat(item_del.codigo),
 								'prazo': parseFloat(item_del.prazo),
-								'valor': parseFloat(item_del.valor),
+								'valor': parseFloat(item_del.valor)*parseInt(item.quantity),
 							});
 						}else{
-							self.itemGroups[pref+group].delivery_availables[key]['valor'] += parseFloat(item_del.valor);
+							self.itemGroups[pref+group].delivery_availables[key]['valor'] += parseFloat(item_del.valor)*parseInt(item.quantity);
 							self.itemGroups[pref+group].delivery_availables[key]['prazo'] = Math.max(parseFloat(self.itemGroups[pref+group].delivery_availables[key]['prazo']), parseFloat(item_del.prazo));
 						}
 					});

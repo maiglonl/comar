@@ -22,10 +22,12 @@ class CreateItemsTable extends Migration{
 			$table->string('delivery_form')->nullable();
 			$table->string('delivery_cost')->nullable();
 			$table->integer('delivery_time')->nullable();
-			$table->string('delivery_methods')->nullable();
-			$table->string('installments_available')->nullable();
-			$table->integer('payment_installments')->nullable();
-			$table->float('payment_installment',9,2)->nullable();
+			$table->text('delivery_methods')->nullable();
+			$table->text('installments_available')->nullable();
+			$table->text('payment_installments')->nullable();
+			$table->integer('payment_quantity')->nullable();
+			$table->float('payment_value',9,2)->nullable();
+			$table->float('payment_total',9,2)->nullable();
 			$table->timestamps();
 
 			$table->foreign('order_id')->references('id')->on('orders');

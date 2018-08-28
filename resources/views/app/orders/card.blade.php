@@ -29,8 +29,51 @@
 						</div>
 					</div>
 					<h4 class="pb-2 pt-4">Opções de parcelamento</h4>
-					<div class="row pt-2">
-						
+					<div class="row pt-2" v-for="group in itemGroups">
+						<div class="col">
+							<div class="card closed-card">
+								<div class="card-header pointer" onclick="toogleHeader(this)">
+									<h5 class="card-title py-4 m-0">Modificar parcelamento <span class="float-right"><i class="icon-arrow-up icons"></i></span></h5>
+								</div>
+								<ul class="list-group list-group-flush">
+									<span v-for="method in group.delivery_availables" 
+										:data-method="method.codigo" 
+										:data-group="index"
+										:class="[method.codigo == group.delivery_form ? 'selected-item' : 'unselected-item']"
+										onclick="toogleItemHandler(this)">
+										<li class="list-group-item align-items-center" style="cursor:pointer;">
+											<div class="row align-items-center p-2">
+												<div class="col text-center text-md-left">
+													<h5 class="m-0 p-0"><b>@{{ method.codigo | delivery_form }}</b></h5>
+													<span class="text-muted" v-if="method.codigo != 0">@{{ method.prazo | deadline }}</span>
+													<span class="text-muted" v-else>Entraremos em contato para definir a melhor data</span>
+												</div>
+												<div class="col-md-3 mt-3 mt-sm-0">
+													<h5 class="item-price text-center text-md-right m-0 p-0">
+														<span v-html="$options.filters.currency_sup(method.valor, true)" v-if="method.valor > 0"></span>
+														<span class="free-text"	v-else>Grátis</span>
+														<span class="item-icon-arrow float-right text-primary pl-3"><i class="icon-arrow-down icons"></i></span>
+													</h5>
+												</div>
+											</div>
+										</li>
+									</span>
+								</ul>
+								<div class="card-body">
+									<div class="row align-items-center" v-for="item in group.items">
+										<div class="col-auto text-center" style="width: 70px">
+											<img v-if="item.product.thumbnails.length > 0" :src="item.product.thumbnails[0]" class="img-fluid">
+											<img v-else src="{{ DEFAULT_IMAGE_PRODUCTS }}" class="img-fluid">
+										</div>
+										<div class="col pl-0">
+											<p class="m-0 p-0">
+												<span class="text-muted">@{{ item.quantity }} x @{{ item.product.name }}</span><br>
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 					<div class="col rounded bg-gray-50 mt-5">
 						<div class="row py-2 align-items-center">
@@ -59,32 +102,34 @@
 			el: '#orderCardApp',
 			data: {
 				order: {!! $order->toJson() !!},
-				itemsGroup: { 
-					'free_0': { groupTotal: 0, items: []}, 
-					'free_6': { groupTotal: 0, items: []}, 
-					'free_12': { groupTotal: 0, items: []} 
-				}
+				itemGroups: {}
 			},
 			methods: {
 				loadGroups: function(){
 					let self = this;
 					$.each(self.order.items, function(index, item) {
-						switch(parseInt(item.interest_free)){
-							case 12: 
-								self.itemsGroup['free_12'].items.push(item); 
-								self.itemsGroup['free_12'].groupTotal += parseFloat(item.total); 
-								break;
-							case 6: 
-								self.itemsGroup['free_6'].items.push(item); 
-								self.itemsGroup['free_6'].groupTotal += parseFloat(item.total); 
-								break;
-							default: 
-								self.itemsGroup['free_0'].items.push(item); 
-								self.itemsGroup['free_0'].groupTotal += parseFloat(item.total); 
-								break;
-						}
+						console.log(item.payment_total);
+						let maxInstallments = item.installments_available.length;
+						self.addItemToGroup(item, 'free_'+maxInstallments+'_'+item.interest_free);
 					});
-					console.log(self.itemsGroup);
+					console.log(self.itemGroups);
+				},
+				addItemToGroup: function(item, group){
+					let self = this;
+					if(self.itemGroups.hasOwnProperty(group)){
+						self.itemGroups[group].items.push(item);
+						self.itemGroups[group].total += parseFloat(item.payment_total);
+						$.each(self.itemGroups[group].installments, function(index, val) {
+							self.itemGroups[group].installments[index].amount += parseFloat(item.installments_available[index].amount);
+							self.itemGroups[group].installments[index].totalAmount += parseFloat(item.installments_available[index].totalAmount);
+						});
+					}else{
+						self.itemGroups[group] = {
+							items: [ item ],
+							total: parseFloat(item.payment_total),
+							installments: item.installments_available
+						};
+					}
 				}
 			},
 			mounted: function(){

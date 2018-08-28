@@ -101,12 +101,12 @@
 						com: {}
 					};
 					$.each(self.order.items, function(index, item) {
-						if(item.payment_installments <= item.product.interest_free){
-							let val = res.sem[item.payment_installments+'x'] ? res.sem[item.payment_installments+'x'] : 0;
-							res.sem[item.payment_installments+'x'] = val + item.payment_installment;
+						if(item.payment_quantity <= item.product.interest_free){
+							let val = res.sem[item.payment_quantity+'x'] ? res.sem[item.payment_quantity+'x'] : 0;
+							res.sem[item.payment_quantity+'x'] = val + item.payment_value;
 						}else{
-							let val = res.com[item.payment_installments+'x'] ? res.com[item.payment_installments+'x'] : 0;
-							res.com[item.payment_installments+'x'] = val + item.payment_installment;
+							let val = res.com[item.payment_quantity+'x'] ? res.com[item.payment_quantity+'x'] : 0;
+							res.com[item.payment_quantity+'x'] = val + item.payment_value;
 						}
 					});
 					return res;

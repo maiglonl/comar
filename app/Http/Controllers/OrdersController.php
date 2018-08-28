@@ -172,8 +172,9 @@ class OrdersController extends Controller{
 		}
 		$order->payment_method = PAYMENT_METHOD_BILLET;
 		foreach ($order->items as $item) {
-			$item->payment_installments = 1;
-			$item->payment_installment = $item->total;
+			$item->payment_quantity = 1;
+			$item->payment_value = ($item->value + $item->delivery_cost);
+			$item->payment_total = ($item->value + $item->delivery_cost);
 			$this->itemRepository->update($item->toArray(), $item->id);
 		}
 		$this->repository->update($order->toArray(), $order->id);
@@ -189,7 +190,6 @@ class OrdersController extends Controller{
 		\PagSeguro\Configuration\Configure::setCharset('UTF-8');// UTF-8 or ISO-8859-1
 		\PagSeguro\Library::initialize();
 		$credentials = \PagSeguro\Configuration\Configure::getAccountCredentials();
-		
 
 		$order = $this->repository->current();
 		if(!$this->orderIsReady($order)){
@@ -199,22 +199,37 @@ class OrdersController extends Controller{
 		$this->repository->update($order->toArray(), $order->id);
 		$order = $this->repository->current();
 		foreach ($order->items as $item) {
-			$item->payment_installments = 1;
-			$item->payment_installment = $item->total;
+			$item->payment_quantity = 1;
+			$item->payment_value = ($item->value + $item->delivery_cost);
+			$item->payment_total = ($item->value + $item->delivery_cost);
 			$options = [
 				'amount' => $item->value + $item->delivery_cost, //Required
 				'card_brand' => $order->card->brand, //Optional
 				'max_installment_no_interest' => $item->interest_free //Optional
 			];
-			$installments = \PagSeguro\Services\Installment::create(
+			$inst = \PagSeguro\Services\Installment::create(
 				$credentials,
 				$options
 			);
-			$item->installments_available = json_encode($installments);
-			error_log(json_encode($installments));
+			$item->payment_installments = $this->convertInstallments($inst->getInstallments());
 			$this->itemRepository->update($item->toArray(), $item->id);
 		}
 		return view('app.orders.card', compact(['order']));
+	}
+
+	/**
+	 * Conver Installmento array to json
+	 */
+	private function convertInstallments(Array $installments){
+		$result = [];
+		foreach ($installments as $key => $value) {
+			$result[$key] = [
+				"quantity" => $value->getQuantity(),
+				"amount" => $value->getAmount(),
+				"totalAmount" => $value->getTotalAmount(),
+			];
+		}
+		return json_encode($result);
 	}
 
 	/**
