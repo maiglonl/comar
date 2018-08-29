@@ -108,9 +108,11 @@
 				loadGroups: function(){
 					let self = this;
 					$.each(self.order.items, function(index, item) {
-						console.log(item.payment_total);
-						let maxInstallments = item.installments_available.length;
-						self.addItemToGroup(item, 'free_'+maxInstallments+'_'+item.interest_free);
+						console.log(item.installments);
+						self.addItemToGroup(item, 'free_'+item.interest_free);
+					});
+					$.each(self.itemGroups, function(index, group) {
+						
 					});
 					console.log(self.itemGroups);
 				},
@@ -118,18 +120,19 @@
 					let self = this;
 					if(self.itemGroups.hasOwnProperty(group)){
 						self.itemGroups[group].items.push(item);
-						self.itemGroups[group].total += parseFloat(item.payment_total);
-						$.each(self.itemGroups[group].installments, function(index, val) {
-							self.itemGroups[group].installments[index].amount += parseFloat(item.installments_available[index].amount);
-							self.itemGroups[group].installments[index].totalAmount += parseFloat(item.installments_available[index].totalAmount);
-						});
+						self.itemGroups[group].total += parseFloat(item.total);
 					}else{
 						self.itemGroups[group] = {
 							items: [ item ],
-							total: parseFloat(item.payment_total),
-							installments: item.installments_available
+							total: parseFloat(item.total),
+							installments: []
 						};
 					}
+				},
+				getInstallments: function(interest_free){
+					let self = this;
+					console.log(self.order.card.brand);
+					
 				}
 			},
 			mounted: function(){

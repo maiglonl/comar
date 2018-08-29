@@ -24,10 +24,7 @@ class CreateItemsTable extends Migration{
 			$table->integer('delivery_time')->nullable();
 			$table->text('delivery_methods')->nullable();
 			$table->text('installments_available')->nullable();
-			$table->text('payment_installments')->nullable();
-			$table->integer('payment_quantity')->nullable();
-			$table->float('payment_value',9,2)->nullable();
-			$table->float('payment_total',9,2)->nullable();
+			$table->integer('payment_installments')->nullable();
 			$table->timestamps();
 
 			$table->foreign('order_id')->references('id')->on('orders');

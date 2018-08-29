@@ -101,6 +101,7 @@
 						com: {}
 					};
 					$.each(self.order.items, function(index, item) {
+						/*
 						if(item.payment_quantity <= item.product.interest_free){
 							let val = res.sem[item.payment_quantity+'x'] ? res.sem[item.payment_quantity+'x'] : 0;
 							res.sem[item.payment_quantity+'x'] = val + item.payment_value;
@@ -108,6 +109,7 @@
 							let val = res.com[item.payment_quantity+'x'] ? res.com[item.payment_quantity+'x'] : 0;
 							res.com[item.payment_quantity+'x'] = val + item.payment_value;
 						}
+						*/
 					});
 					return res;
 				}

@@ -172,9 +172,7 @@ class OrdersController extends Controller{
 		}
 		$order->payment_method = PAYMENT_METHOD_BILLET;
 		foreach ($order->items as $item) {
-			$item->payment_quantity = 1;
-			$item->payment_value = ($item->value + $item->delivery_cost);
-			$item->payment_total = ($item->value + $item->delivery_cost);
+			$item->payment_installments = 1;
 			$this->itemRepository->update($item->toArray(), $item->id);
 		}
 		$this->repository->update($order->toArray(), $order->id);
@@ -199,19 +197,7 @@ class OrdersController extends Controller{
 		$this->repository->update($order->toArray(), $order->id);
 		$order = $this->repository->current();
 		foreach ($order->items as $item) {
-			$item->payment_quantity = 1;
-			$item->payment_value = ($item->value + $item->delivery_cost);
-			$item->payment_total = ($item->value + $item->delivery_cost);
-			$options = [
-				'amount' => $item->value + $item->delivery_cost, //Required
-				'card_brand' => $order->card->brand, //Optional
-				'max_installment_no_interest' => $item->interest_free //Optional
-			];
-			$inst = \PagSeguro\Services\Installment::create(
-				$credentials,
-				$options
-			);
-			$item->payment_installments = $this->convertInstallments($inst->getInstallments());
+			$item->payment_installments = 1;
 			$this->itemRepository->update($item->toArray(), $item->id);
 		}
 		return view('app.orders.card', compact(['order']));

@@ -32,10 +32,7 @@ class Item extends Model implements Transformable {
 		'delivery_cost',
 		'delivery_time',
 		'delivery_methods',
-		'payment_installments',
-		'payment_quantity',
-		'payment_value',
-		'payment_total'
+		'payment_installments'
 	];
 
 	protected $with = ['product'];
@@ -49,16 +46,8 @@ class Item extends Model implements Transformable {
 		return $this->delivery_methods == null ? null : json_decode($this->delivery_methods);
 	}
 
-	public function getInstallmentsAvailableAttribute(){
-		return $this->payment_installments == null ? null : json_decode($this->payment_installments);
-	}
-
 	public function getTotalAttribute(){
-		if($this->payment_total > 0){
-			return $this->payment_total * $this->quantity;
-		}else{
-			return ($this->value + $this->delivery_cost) * $this->quantity;
-		}
+		return ($this->value + $this->delivery_cost) * $this->quantity;
 	}
 
 
