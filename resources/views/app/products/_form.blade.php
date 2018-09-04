@@ -115,7 +115,7 @@
 		<div class="form-label-group">
 			<select class="form-control float-label-select" id="prod_interest_free" name="prod_interest_free" v-model="product.interest_free" required>
 				<option value selected disabled></option>
-				<option value="0">0</option>
+				<option value="1">1</option>
 				<option value="6">6</option>
 				<option value="12">12</option>
 			</select>

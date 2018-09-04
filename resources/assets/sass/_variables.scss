@@ -13,7 +13,7 @@ $gray-800:  #353c45;
 $gray-900:  #2e353d;
 $black:     #23292f;
 
-$blue:      #2c97de;
+$blue:      #5C66FC;
 $indigo:    #6610f2;
 $purple:    #7049a3;
 $pink:      #d96eae;
@@ -21,6 +21,8 @@ $red:       #cc3e4a;
 $orange:    #e76d3b;
 $yellow:    #d9a322;
 $green:     #84b547;
+$green-l:   #8DD1B7;
+$blue-l:    #8DB7D1;
 $teal:      #2dbda8;
 $cyan:      #17a2b8;
 
@@ -86,6 +88,8 @@ $theme-colors: map-merge((
   "orange":     $orange,
   "yellow":     $yellow,
   "green":      $green,
+  "green-l":    $green-l,
+  "blue-l":     $blue-l,
   "teal":       $teal,
   "cyan":       $cyan,
   "white":      $white,

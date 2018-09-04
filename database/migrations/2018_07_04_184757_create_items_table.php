@@ -23,7 +23,6 @@ class CreateItemsTable extends Migration{
 			$table->string('delivery_cost')->nullable();
 			$table->integer('delivery_time')->nullable();
 			$table->text('delivery_methods')->nullable();
-			$table->text('installments_available')->nullable();
 			$table->integer('payment_installments')->nullable();
 			$table->timestamps();
 

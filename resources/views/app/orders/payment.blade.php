@@ -11,14 +11,14 @@
 							<p>Cartões registrados</p>
 							<div class="card shadow-sm">
 								<ul class="list-group list-group-flush">
-									<li class="list-group-item" v-for="card in cards">
+									<li class="list-group-item" v-for="card in cards" @click="setCard(card.id)">
 										<div class="row py-2 align-items-center">
 											<div class="col-auto px-4 text-center">
 												<div class="text-primary rounded bg-white"><i class="fab fa-cc-mastercard fa-2x rounded px-3 py-2 border border-primary"></i></div>
 											</div>
 											<div class="col pl-0">
 												<p class="m-0 p-0">
-													<strong>@{{ card.brand }} com final </strong><br>
+													<strong>@{{ card.brand | name }} com final @{{ card.number.substr(12,4) }}</strong><br>
 													<span class="text-success">Em até 12 parcelas</span>
 												</p>
 											</div>
@@ -81,6 +81,11 @@
 			methods:{
 				changeAdress: function(){
 					swal("Alterar dados de entrega");
+				},
+				setCard: function(id){
+					$.post('{{ route('orders.payment.select_card') }}', { 'card_id': id }).then(function(){
+						location.href = "{{ route('orders.payment.card') }}";
+					});
 				}
 			},
 			filters: filters

@@ -7,17 +7,19 @@
 		<p v-else>Envio <span class="float-right text-success">Grátis</span></p>
 		{{-- <p>Desconto <span class="float-right"></span></p> --}}
 		<hr class="my-4">
-		<p class="h5">Você pagará 
-			<span class="float-right">
-				<span v-for="(val, key) in payment_installments_groups.sem" class="float-right">
-					@{{ key }} <span v-html="$options.filters.currency_sup(val)"></span><br>
-					<small class="text-success float-right">sem juros</small>
-				</span>
-				<span v-for="(val, key) in payment_installments_groups.com" class="float-right">@{{ key }} <span v-html="$options.filters.currency_sup(val)"></span></span>
-			</span>
+		<p class="mb-2"><b>Você pagará</b></p>
+		<span v-if="order.payment_method == '{{ PAYMENT_METHOD_CREDIT_CARD }}'">
+			<p class="h5 mb-2" v-for="group in order.payment_groups" v-if="group.installments.length >= group.selected -1">
+				@{{ group.selected }}x <small class="text-success" v-if="group.installments[group.selected-1].interestFree">sem juros</small>
+				<span class="float-right" v-html="$options.filters.currency_sup(group.installments[group.selected-1].installmentAmount)"></span>
+			</p>
+		</span>
+		<span v-else>
+			<p class="h5 mb-2">1x <span class="float-right" v-html="$options.filters.currency_sup(order.total)"></span></p>
+		</span>
 		</p>
 		<hr class="my-4">
-		<p>Total <span class="float-right" v-html="$options.filters.currency_sup(order.total)"></span></p>
+		<p>Total <span class="float-right" v-html="$options.filters.currency_sup(total)"></span></p>
 	</div>
 	<div class="px-sm-4 text-right">
 		<button class="btn btn-block btn-primary" @click="confirmBuy">Confirmar compra</button>

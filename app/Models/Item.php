@@ -36,7 +36,7 @@ class Item extends Model implements Transformable {
 	];
 
 	protected $with = ['product'];
-	protected $appends = ['delivery_availables', 'installments_available', 'total'];
+	protected $appends = ['delivery_availables', 'total'];
 
 	public function product(){
 		return $this->belongsTo(Product::class);

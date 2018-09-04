@@ -10,27 +10,6 @@
 			<div class="col-12 col-sm-8 pb-4">
 				<div class="pt-5 pb-3 px-sm-4 mt-3">
 					<h4 class="pb-4">Revise e confirme sua compra</h4>
-					<p>Local de entrega</p>
-					<div class="card border-0 bg-gray-50 mb-4">
-						<div class="card-body">
-							<div class="row align-items-center">
-								<div class="col-auto text-center">
-									<div class="text-primary rounded bg-white">
-										<i class="fas fa-map-marker-alt fa-2x rounded px-3 py-2 border border-primary"></i>
-									</div>
-								</div>
-								<div class="col pl-0">
-									<p class="m-0 p-0">
-										<strong>@{{ order.street }}, @{{ order.number }}</strong><br>
-										<span class="text-muted"><span v-if="order.complement">@{{ order.complement }}, </span>@{{ order.district }} - @{{ order.city }}/@{{ order.state }}</span>
-									</p>
-								</div>
-								<div class="col-sm-4 col-12 text-sm-right text-center">
-									<a href="{{ route('orders.delivery') }}" class="btn btn-link">Alterar local</a>
-								</div>
-							</div>
-						</div>
-					</div>
 					<p>Produtos e prazos</p>
 					<div class="card border-0 bg-gray-50" v-for="(item, index) in order.items">
 						<div class="card-body">
@@ -54,7 +33,7 @@
 							</div>
 						</div>
 					</div>
-					<p class="mt-4">Forma e dados de pagamento</p>
+					<p class="mt-4">Local de entrega</p>
 					<div class="card border-0 bg-gray-50 mb-4">
 						<div class="card-body">
 							<div class="row align-items-center">
@@ -70,9 +49,37 @@
 									</p>
 								</div>
 								<div class="col-sm-4 col-12 text-sm-right text-center">
-									<a href="{{ route('orders.delivery') }}" class="btn btn-link">Alterar local</a>
+									<a href="{{ route('orders.delivery') }}" class="btn btn-link">Alterar entrega</a>
 								</div>
 							</div>
+						</div>
+					</div>
+					<p class="mt-4">Forma e dados de pagamento</p>
+					<div class="card border-0 bg-gray-50 mb-4">
+						<div class="card-body">
+							<div class="row align-items-center" v-if="order.payment_method == '{{ PAYMENT_METHOD_CREDIT_CARD }}'">
+								<div class="col-auto text-center">
+									<div class="text-primary rounded bg-white"><i class="far fa-credit-card fa-2x rounded px-3 py-2 border border-primary"></i></div>
+								</div>
+								<div class="col pl-0">
+									<p class="m-0 p-0">
+										<strong>Cartão de Crédito @{{ order.card.brand | name }} com final @{{ order.card.number.substr(12,4) }}</strong>
+									</p>
+								</div>
+								<div class="col-sm-4 col-12 text-sm-right text-center">
+									<a href="{{ route('orders.payment') }}" class="btn btn-link">Alterar pagamento</a>
+								</div>
+							</div>
+							<div class="row align-items-center" v-else>
+								<div class="col-auto text-center">
+									<div class="text-primary rounded bg-white"><i class="fas fa-barcode fa-2x rounded px-3 py-2 border border-primary"></i></div>
+								</div>
+								<div class="col pl-0"><p class="m-0 p-0"><strong>Boleto</strong></p></div>
+								<div class="col-sm-4 col-12 text-sm-right text-center">
+									<a href="{{ route('orders.payment') }}" class="btn btn-link">Alterar pagamento</a>
+								</div>
+							</div>
+
 						</div>
 					</div>
 				</div>
@@ -85,95 +92,112 @@
 		if(performance.navigation.type == 2){
 		   location.reload(true);
 		}
-		PagSeguroDirectPayment.setSessionId('{!! $order->session !!}');
 		var appDelivery = new Vue({
 			el: '#orderDeliveryApp',
 			data: {
 				order: {!! $order->toJson() !!},
 				user: {!! Auth::user()->toJson() !!},
-				senderHash: ""
-			},
-			computed: {
-				payment_installments_groups: function(){
-					let self = this;
-					let res = {
-						sem: {},
-						com: {}
-					};
-					$.each(self.order.items, function(index, item) {
-						/*
-						if(item.payment_quantity <= item.product.interest_free){
-							let val = res.sem[item.payment_quantity+'x'] ? res.sem[item.payment_quantity+'x'] : 0;
-							res.sem[item.payment_quantity+'x'] = val + item.payment_value;
-						}else{
-							let val = res.com[item.payment_quantity+'x'] ? res.com[item.payment_quantity+'x'] : 0;
-							res.com[item.payment_quantity+'x'] = val + item.payment_value;
-						}
-						*/
-					});
-					return res;
-				}
+				senderHash: "",
+				total: 0
 			},
 			mounted: function(){
 				let self = this;
-				/*pagSeguro.getSenderHash().then(function(data){
-					console.log(data);
-					self.senderHash = data.senderHash ? data.senderHash : "";
-					console.log(data);
-				});*/
+				PagSeguroDirectPayment.setSessionId('{!! $order->session !!}');
+				self.loadGroups();
+				self.reloadTotal();
 			},
 			methods:{
 				confirmBuy: function (){
 					var self = this;
 					pagSeguro.getSenderHash().then(function(data){
 						self.senderHash = data ? data : "";
-						$.post('{{ route('orders.checkout') }}', { senderHash: self.senderHash }, function(data) {
+						let postData = { 
+							senderHash: self.senderHash,
+							installments: self.order.payment_groups,
+							token: ''
+						};
+						let postCallback = function(data) {
 							if(data.error){
 								toastr.error('Falha ao realizar operação!');
 							}else{
-								location.href = '{{ route('orders.checkout.success')}}';
+								location.href = '{{ route('orders.checkout.success', [$order->id])}}';
 							}
-						});
-					});
-				},
-				reloadData: function (){
-					var self = this;
-					$.get('{{ route('orders.find', [$order->id]) }}', function(data) {
-						if(data.error){
-							toastr.error('Falha ao atualizar o pedido!');
+						};
+						if(self.order.payment_method == '{{ PAYMENT_METHOD_CREDIT_CARD }}'){
+							PagSeguroDirectPayment.createCardToken({
+								cardNumber: self.order.card.number,
+								brand: self.order.card.brand,
+								cvv: self.order.card.cvv,
+								expirationMonth: self.order.card.date_due.substr(0,2),
+								expirationYear: '20'+self.order.card.date_due.substr(3,2),
+								success: function(response){
+									postData.token = response.card.token;
+									$.post('{{ route('orders.checkout') }}', postData , postCallback);
+								},
+								error: function(response){
+									toastr.error('Falha na validação do cartão!');
+								}
+							});
 						}else{
-							self.order = data;
+							$.post('{{ route('orders.checkout') }}', postData , postCallback);
+						}
+						
+						
+					});
+				},
+				loadGroups: function(){
+					let self = this;
+					$.each(self.order.payment_groups, function(index, group) {
+						let max = index.split('_')[1];
+						if(group.items.length > 0){
+							self.setGroupInstallments(max, group.total);
 						}
 					});
 				},
-				changeAdress: function(){
-					var self = this;
-					$.fancybox.open({
-						src: '{{ route('orders.form.address') }}',
-						type: 'ajax',
-						opts: { 
-							clickOutside: false,
-							clickSlide: false,
-							afterClose : function(){
-								self.reloadData(); 
-							},
+				setGroupInstallments: function(interest_free, value){
+					let self = this;
+					PagSeguroDirectPayment.getInstallments({	
+						amount: parseFloat(value),
+						brand: self.order.card.brand,
+						maxInstallmentNoInterest: parseInt(interest_free),
+						success: function(response) {
+							if(response.error){
+								toastr.error('Falha ao carregar parcelamento!');
+							}
+							let installments = response.installments[Object.keys(response.installments)[0]];
+							let count = self.countInstallmentsFreeInterest(installments);
+							self.order.payment_groups['free_'+count].installments = installments;
+							self.reloadTotal();
+						},
+						error: function(response) {
+							if(response.error){
+								toastr.error('Falha ao carregar parcelamento!');
+							}
 						}
 					});
+				},
+				countInstallmentsFreeInterest: function(installments){
+					let result = 0;
+					$.each(installments, function(index, installment){
+						result += installment.interestFree ? 1 : 0;
+					})
+					return result;
+				},
+				reloadTotal: function(){
+					let self = this;
+					let result = parseFloat(0);
+					$.each(self.order.payment_groups, function(index, group){
+						if(group.installments.length >= group.selected-1){
+							result += parseFloat(group.installments[group.selected-1].totalAmount);
+						}else{
+							result += parseFloat(group.total);
+						}
+					});
+					self.total = result;
 				}
 			},
 			filters: filters
 		});
 
-		function toogleItemHandler(el){
-			toogleItem(el, function(){
-				let url = "{{ route('orders.item.method.change') }}";
-				_axios.put(url, {id: $(el).attr('data-item'), codigo: $(el).attr('data-method') }).then(function (resp) {
-					appDelivery.reloadData();
-				}).catch(function(error) {
-					toastr.error("Falha ao alterar forma de entrega");
-					location.reload();
-				});
-			});
-		}
 	</script>
 @endsection

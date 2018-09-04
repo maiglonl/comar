@@ -39,7 +39,7 @@ class Order extends Model implements Transformable {
 	];
 
 	protected $with = ['items', 'client', 'card'];
-	protected $appends = ['total', 'total_items', 'total_delivery'];
+	protected $appends = ['total', 'total_items', 'total_delivery', 'payment_groups'];
 
 	public function getTotalAttribute(){
 		return $this->total_delivery + $this->total_items;
@@ -57,6 +57,45 @@ class Order extends Model implements Transformable {
 		$result = 0;
 		foreach ($this->items as $item) {
 			$result += $item['delivery_cost'] * $item['quantity'];
+		}
+		return $result;
+	}
+
+	public function getPaymentGroupsAttribute(){
+		$result = [];
+		if($this->payment_method != PAYMENT_METHOD_CREDIT_CARD){
+			return array("free_1" => [
+				'items' => $this->items,
+				'total' => $this->total,
+				'installments' => [[
+					'quantity' => 1,
+					'totalAmount' => $this->total,
+					'installmentAmount' => $this->total,
+					'interestFree' => true
+				]],
+				'selected' => 1
+			]);
+		}
+		foreach ($this->items as $item) {
+			$index = "free_".$item['interest_free'];
+			error_log($index." -> ".$item['total']);
+			if(!isset($result[$index])){
+				$result[$index] = [
+					'items' => [],
+					'total' => 0,
+					'installments' => [],
+					'selected' => 1
+				];
+			}
+			$result[$index]['items'][] = $item;
+			$result[$index]['total'] += $item['total'];
+			$result[$index]['installments'] = [[
+				'quantity' => 1,
+				'totalAmount' => $item['total'],
+				'installmentAmount' => $item['total'],
+				'interestFree' => true
+			]];
+			$result[$index]['selected'] = $item['payment_installments'];
 		}
 		return $result;
 	}

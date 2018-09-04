@@ -61,6 +61,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('users/all', 'UsersController@all')->name('users.all');
 
 	// Orders
+	Route::get('orders/home/{id}', 'OrdersController@home')->name('orders.home');
 	Route::get('orders/cart', 'OrdersController@cart')->name('orders.cart');
 	Route::get('orders/current', 'OrdersController@current')->name('orders.current');
 	Route::get('orders/delivery', 'OrdersController@delivery')->name('orders.delivery');
@@ -68,12 +69,13 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('orders/payment/billet', 'OrdersController@billet')->name('orders.payment.billet');
 	Route::get('orders/payment/card', 'OrdersController@card')->name('orders.payment.card');
 	Route::get('orders/checkout', 'OrdersController@checkout')->name('orders.checkout');
-	Route::get('orders/checkout/success', 'OrdersController@success')->name('orders.checkout.success');
+	Route::get('orders/checkout/success/{id}', 'OrdersController@success')->name('orders.checkout.success');
 	Route::get('orders/card/create', 'OrdersController@cardCreate')->name('orders.card.create');
 	Route::get('orders/find/{id}', 'OrdersController@find')->name('orders.find');
 	Route::get('orders/form/address', 'OrdersController@formAddress')->name('orders.form.address');
 	Route::get('orders/delivery/cost', 'OrdersController@calcDeliveryCost')->name('orders.delivery.cost');
 	Route::put('orders/item/method', 'OrdersController@changeItemMethod')->name('orders.item.method.change');
+	Route::put('orders/item/installment', 'OrdersController@changeItemInstallment')->name('orders.item.installment.change');
 	Route::post('orders/checkout', 'OrdersController@postCheckout')->name('orders.checkout.post');
 	Route::post('orders/item/{product_id}', 'OrdersController@addItem')->name('orders.item.add');
 	Route::post('orders/address', 'OrdersController@storeAddress')->name('orders.address.store');

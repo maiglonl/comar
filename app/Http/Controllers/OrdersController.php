@@ -204,24 +204,9 @@ class OrdersController extends Controller{
 	}
 
 	/**
-	 * Conver Installmento array to json
-	 */
-	private function convertInstallments(Array $installments){
-		$result = [];
-		foreach ($installments as $key => $value) {
-			$result[$key] = [
-				"quantity" => $value->getQuantity(),
-				"amount" => $value->getAmount(),
-				"totalAmount" => $value->getTotalAmount(),
-			];
-		}
-		return json_encode($result);
-	}
-
-	/**
 	 * Display the specified resource.
 	 */
-	public function cardCreate(){
+	public function createCard(){
 		$order = $this->repository->current();
 		$cards = $this->cardRepository->all();
 		if(!$this->orderIsReady($order)){
@@ -315,10 +300,10 @@ class OrdersController extends Controller{
 	/**
 	 * Display the specified resource.
 	 */
-	public function success(){
-		$order = $this->repository->current();
-		if(!$this->orderIsReady($order) || $order->payment_method == null){
-			return view('app.orders.cart', compact('order'));
+	public function success($id){
+		$order = $this->repository->find($id);
+		if($order->user_id != Auth::id()){
+			return view('app.errors.permission');
 		}
 		return view('app.orders.success', compact('order'));
 	}
@@ -338,67 +323,71 @@ class OrdersController extends Controller{
 	/**
 	 * Return formatted data to checkout request
 	 */
-	public function getCheckoutData($order, $senderHash){
+	public function getCheckoutData($order, $senderHash, $installments, $token){
 		$base = []; $data = [];
 		$cpType = strlen($order->client->cp) == 14 ? "CPF" : "CNPJ"; 
 		$paymentMethod = $order->payment_method == PAYMENT_METHOD_BILLET ? "boleto" : "creditCard";
 
-		$base['email'] = PAGSEGURO_EMAIL;
-		$base['token'] = PAGSEGURO_TOKEN;
-		$base['paymentMode'] = 'default';
-		$base['paymentMethod'] = $paymentMethod;
-		$base['currency'] = 'BRL';
-		$base['receiverEmail'] = PAGSEGURO_EMAIL;
-		$base['senderHash'] = $senderHash;
-		$base['senderName'] = $order->client->name;
-		$base['sender'.$cpType] = preg_replace('/\W/', '', $order->client->cp);
-		$base['senderAreaCode'] = substr($order->client->phone1, 0, 2);;
-		$base['senderPhone'] = substr($order->client->phone1, 2, strlen($order->client->phone1));
-		$base['senderEmail'] = 'c06040234054953856267@sandbox.pagseguro.com.br';
-		$base['shippingAddressStreet'] = $order->street;
-		$base['shippingAddressNumber'] = $order->number;
-		$base['shippingAddressComplement'] = $order->complement ? $order->complement : "";
-		$base['shippingAddressDistrict'] = $order->district;
-		$base['shippingAddressPostalCode'] = $order->zipcode;
-		$base['shippingAddressCity'] = $order->city;
-		$base['shippingAddressState'] = $order->state;
-		$base['shippingAddressCountry'] = 'BRA';
-		$base['shippingType'] = '3';
-		$base['shippingCost'] = number_format($order->total_delivery, 2, '.', '');
-		foreach ($order->items as $key => $item) {
-			$index = $key+1;
-			$base['itemId'.$index] = $item->id;
-			$base['itemDescription'.$index] = $item->product->name;
-			$base['itemAmount'.$index] = number_format($item->value, 2, '.', '');
-			$base['itemQuantity'.$index] = $item->quantity;
+		foreach ($order->payment_groups as $key => $group) {
+			$data[$key]['email'] = PAGSEGURO_EMAIL;
+			$data[$key]['token'] = PAGSEGURO_TOKEN;
+			$data[$key]['paymentMode'] = 'default';
+			$data[$key]['paymentMethod'] = $paymentMethod;
+			$data[$key]['currency'] = 'BRL';
+			$data[$key]['receiverEmail'] = PAGSEGURO_EMAIL;
+			$data[$key]['senderHash'] = $senderHash;
+			$data[$key]['senderName'] = $order->client->name;
+			$data[$key]['sender'.$cpType] = preg_replace('/\W/', '', $order->client->cp);
+			$data[$key]['senderAreaCode'] = substr($order->client->phone1, 0, 2);
+			$data[$key]['senderPhone'] = substr($order->client->phone1, 2, strlen($order->client->phone1));
+			$data[$key]['senderEmail'] = 'c06040234054953856267@sandbox.pagseguro.com.br';
+			$data[$key]['shippingAddressStreet'] = $order->street;
+			$data[$key]['shippingAddressNumber'] = $order->number;
+			$data[$key]['shippingAddressComplement'] = $order->complement ? $order->complement : "";
+			$data[$key]['shippingAddressDistrict'] = $order->district;
+			$data[$key]['shippingAddressPostalCode'] = $order->zipcode;
+			$data[$key]['shippingAddressCity'] = $order->city;
+			$data[$key]['shippingAddressState'] = $order->state;
+			$data[$key]['shippingAddressCountry'] = 'BRA';
+			$data[$key]['shippingType'] = '3';
+			$shippingCost = 0.0;
+			foreach ($group['items'] as $keyItem => $item) {
+				$index = $keyItem+1;
+				$shippingCost += $item->delivery_cost;
+				$data[$key]['itemId'.$index] = $item->id;
+				$data[$key]['itemDescription'.$index] = $item->product->name;
+				$data[$key]['itemAmount'.$index] = number_format($item->value, 2, '.', '');
+				$data[$key]['itemQuantity'.$index] = $item->quantity;
+			}
+			$data[$key]['shippingCost'] = number_format($shippingCost, 2, '.', '');
+			if($order->payment_method == PAYMENT_METHOD_CREDIT_CARD){
+				$insts = $installments[$key]['installments'];
+				$value = $insts[$group['selected']-1]['installmentAmount'];
+				$bdate = explode("-", $order->client->birthdate);
+				$interest_free = explode('_', $key)[1];
+				$data[$key]['creditCardToken'] = $token;
+				$data[$key]['installmentQuantity'] = $group['selected'];
+				$data[$key]['installmentValue'] = number_format($value, 2, '.', '');;
+				$data[$key]['noInterestInstallmentQuantity'] = $interest_free;
+				$data[$key]['creditCardHolderName'] = $order->client->name;
+				$data[$key]['creditCardHolder'.$cpType] = preg_replace('/\W/', '', $order->client->cp);
+				$data[$key]['creditCardHolderBirthDate'] = "$bdate[2]/$bdate[1]/$bdate[0]";
+				$data[$key]['creditCardHolderAreaCode'] = substr($order->client->phone1, 0, 2);;
+				$data[$key]['creditCardHolderPhone'] = substr($order->client->phone1, 2, strlen($order->client->phone1));;
+				$data[$key]['billingAddressStreet'] =  $order->street;
+				$data[$key]['billingAddressNumber'] =  $order->number;
+				$data[$key]['billingAddressComplement'] =  $order->complement ? $order->complement : "";
+				$data[$key]['billingAddressDistrict'] =  $order->district;
+				$data[$key]['billingAddressPostalCode'] =  $order->zipcode;
+				$data[$key]['billingAddressCity'] =  $order->city;
+				$data[$key]['billingAddressState'] =  $order->state;
+				$data[$key]['billingAddressCountry'] =  'BRA';
+			}
+			$data[$key]['reference'] = "ORDER_".$order->id."/".$key;
 		}
-		return $base;
+
+		return $data;
 		//$base['notificationURL'] = 'https://sualoja.com.br/notifica.html';
-		//$base['reference'] = 'REF1234';
-
-		// Boleto
-
-		// CC
-
-		/*
-		$data['creditCardToken'] = '4as56d4a56d456as456dsa';
-		$data['installmentQuantity'] = '5';
-		$data['installmentValue'] = '125.22';
-		$data['noInterestInstallmentQuantity'] = '2';
-		$data['creditCardHolderName'] = 'Jose Comprador';
-		$data['creditCardHolderCPF'] = '22111944785';
-		$data['creditCardHolderBirthDate'] = '27/10/1987';
-		$data['creditCardHolderAreaCode'] = '11';
-		$data['creditCardHolderPhone'] = '56273440';
-		$data['billingAddressStreet'] = 'Av. Brig. Faria Lima';
-		$data['billingAddressNumber'] = '1384';
-		$data['billingAddressComplement'] = '5o andar';
-		$data['billingAddressDistrict'] = 'Jardim Paulistano';
-		$data['billingAddressPostalCode'] = '01452002';
-		$data['billingAddressCity'] = 'Sao Paulo';
-		$data['billingAddressState'] = 'SP';
-		$data['billingAddressCountry'] = 'BRA';
-		 */
 	}
 
 	/**
@@ -419,18 +408,19 @@ class OrdersController extends Controller{
 					'message' => "Falha na conexão com o PagSeguro"
 				]);
 			}
-			$data = $this->getCheckoutData($order, $request->senderHash);
+			$data = $this->getCheckoutData($order, $request->senderHash, $request->installments, $request->token);
 			try{
-				$request = (new PagSeguro)->request(PagSeguro::CHECKOUT_SANDBOX, $data);
+				foreach ($data as $key => $value) {
+					$request = (new PagSeguro)->request(PagSeguro::CHECKOUT_SANDBOX, $value);
+					$order->payment_link = $request->paymentLink ? $request->paymentLink : "";
+				}
 				$order->status_id = STATUS_ORDER_AG_PAG;
-				$order->payment_link = $request->paymentLink ? $request->paymentLink : "";
 				$this->repository->update($order->toArray(), $order->id);
 				$response = [
 					'error'   => false,
 					'message' => "Compra finalizada"
 				];
 				return response()->json($response);
-				//dd($response);
 			} catch (\Exception $e) {
 				$response = [
 					'error'   => true,
@@ -442,6 +432,46 @@ class OrdersController extends Controller{
 			return response()->json([
 				'error'   => true,
 				'message' => $e->getMessageBag()
+			]);
+		}
+	}
+
+	/**
+	 * Change delivery form from item.
+	 */
+	public function changeItemInstallment(Request $request){
+		try {
+			$order = $this->repository->current();
+			if(!$this->orderIsReady($order)){
+				return response()->json([
+					'error'   => true,
+					'message' => "Pedido não encontrado"
+				]);
+			}
+			foreach ($request->ids as $id) {
+				$item = null;
+				foreach ($order->items as $key => $val) {
+					if($val->id == $id){
+						$item = $val;
+					}
+				}
+				if($item == null){
+					return response()->json([
+						'error'   => true,
+						'message' => "Item não encontrado"
+					]);
+				}
+				$item->payment_installments = $request->quantity;
+				$this->itemRepository->update($item->toArray(), $item->id);
+			}
+			return response()->json([
+				'message' => 'Forma de entrega alterada'
+			]);
+			
+		} catch (\Exception $e) {
+			return response()->json([
+				'error' => true,
+				'message' => "Falha ao alterar forma de entrega"
 			]);
 		}
 	}
@@ -524,7 +554,8 @@ class OrdersController extends Controller{
 		$product = $this->productRepository->find($product_id);
 		$data = [
 			'order_id' => $order->id,
-			'product_id' => $product->id
+			'product_id' => $product->id,
+			'payment_installments' => 1
 		];
 		$items = $this->itemRepository->findWhere($data);
 		if(count($items) > 0){
