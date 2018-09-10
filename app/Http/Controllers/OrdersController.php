@@ -54,6 +54,28 @@ class OrdersController extends Controller{
 	}
 
 	/**
+	 * Display the specified resource.
+	 */
+	public function home($id){
+		$order = $this->repository->find($id);
+		if($order->user_id != Auth::id() && !PermHelper::isAdmin()){
+			return view('app.errors.permission');
+		}
+		return view('app.orders.home', compact('order'));
+	}
+
+	/**
+	 * Display the specified resource.
+	 */
+	public function list(){
+		$orders = $this->repository->orderBy('id', 'desc')->findWhere([
+			'user_id' => Auth::id(),
+			['status_id', '<>', STATUS_ORDER_EM_ABERTO]
+		]);
+		return view('app.orders.list', compact('orders'));
+	}
+
+	/**
 	 * Verify if order is ready
 	 */
 	public function orderIsReady($order){

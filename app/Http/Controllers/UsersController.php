@@ -11,6 +11,7 @@ class UsersController extends Controller {
 	 * UsersController constructor.
 	 */
 	public function __construct(UserRepository $repository) {
+		$this->middleware('auth');
 		$this->repository = $repository;
 		$this->names = [
 			'plural' => 'users',
@@ -55,6 +56,14 @@ class UsersController extends Controller {
 			return view('app.users.show', compact('user'));
 		}
 		
+	}
+
+	/**
+	 * Show the form for create resource.
+	 */
+	public function network() {
+		$users = $this->repository->findWhere(['parent_id' => Auth::id()]);
+		return Auth::user() ? view('app.users.network', compact('users')) : view('auth.register', compact('users'));
 	}
 
 	/**

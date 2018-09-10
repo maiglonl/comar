@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.order')
 
 @section('content')
 <style type="text/css" media="screen">

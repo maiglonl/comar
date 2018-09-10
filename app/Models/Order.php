@@ -8,6 +8,7 @@ use Prettus\Repository\Traits\TransformableTrait;
 use App\Helpers\PermHelper;
 use App\Models\Item;
 use App\Models\User;
+use App\Models\Status;
 
 /**
  * Class Order.
@@ -38,7 +39,7 @@ class Order extends Model implements Transformable {
 		'session'
 	];
 
-	protected $with = ['items', 'client', 'card'];
+	protected $with = ['items', 'client', 'card', 'status'];
 	protected $appends = ['total', 'total_items', 'total_delivery', 'payment_groups'];
 
 	public function getTotalAttribute(){
@@ -110,6 +111,10 @@ class Order extends Model implements Transformable {
 
 	public function card(){
 		return $this->belongsTo(Card::class, 'card_id');
+	}
+
+	public function status(){
+		return $this->belongsTo(Status::class, 'status_id');
 	}
 
 }

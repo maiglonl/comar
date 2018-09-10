@@ -25,20 +25,9 @@
 <body>
 	<div id="app">
 		@include('app.menu')
-
-		@yield('body_top')
-
-		<main class="py-4">
-			<div class="container-fluid">
-				<div class="row justify-content-md-center">
-					<div class="col-md-10">
-						@yield('content')
-					</div>
-				</div>
-			</div>
-
-			@yield('scripts')
-
+		<main class="wrapper">
+			@include('app.sidebar')
+			@yield('content')
 		</main>
 	</div>
 </body>

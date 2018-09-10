@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.order')
 
 @section('body_top')
 	<div class="jumbotron-fluid">

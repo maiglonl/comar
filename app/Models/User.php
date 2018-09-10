@@ -39,11 +39,13 @@ class User extends Authenticatable implements Transformable{
 		'parent_id'
 	];
 
-	protected $hidden = [
-		'password', 'remember_token',
-	];
-
+	protected $hidden = ['password', 'remember_token'];
+	protected $with = ['childrens'];
 	//protected $appends = ['search'];
+
+	public function childrens(){
+		return $this->hasMany(User::class, 'parent_id');
+	}
 
 	public function getSearchAttribute(){
 		return "$this->id - $this->name [$this->city]";

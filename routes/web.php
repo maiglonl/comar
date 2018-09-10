@@ -59,8 +59,10 @@ Route::group(['middleware' => ['auth', 'can:access-admin']], function () {
 Route::group(['middleware' => ['auth']], function () {
 	Route::get('users/find/{id}', 'UsersController@find')->name('users.find');
 	Route::get('users/all', 'UsersController@all')->name('users.all');
+	Route::get('users/network', 'UsersController@network')->name('users.network');
 
 	// Orders
+	Route::get('orders/list', 'OrdersController@list')->name('orders.list');
 	Route::get('orders/home/{id}', 'OrdersController@home')->name('orders.home');
 	Route::get('orders/cart', 'OrdersController@cart')->name('orders.cart');
 	Route::get('orders/current', 'OrdersController@current')->name('orders.current');
@@ -70,7 +72,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('orders/payment/card', 'OrdersController@card')->name('orders.payment.card');
 	Route::get('orders/checkout', 'OrdersController@checkout')->name('orders.checkout');
 	Route::get('orders/checkout/success/{id}', 'OrdersController@success')->name('orders.checkout.success');
-	Route::get('orders/card/create', 'OrdersController@cardCreate')->name('orders.card.create');
+	Route::get('orders/card/create', 'OrdersController@createCard')->name('orders.card.create');
 	Route::get('orders/find/{id}', 'OrdersController@find')->name('orders.find');
 	Route::get('orders/form/address', 'OrdersController@formAddress')->name('orders.form.address');
 	Route::get('orders/delivery/cost', 'OrdersController@calcDeliveryCost')->name('orders.delivery.cost');

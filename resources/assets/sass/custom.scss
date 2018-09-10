@@ -7,6 +7,15 @@ sup {
     font-size: .6em !important;
 }
 
+.page-title{
+	padding: 40px 5px 15px 25px;
+}
+.wrapper {
+	display: flex;
+	align-items: stretch;
+	perspective: 1500px;
+}
+
 .toogle-value{
 	position: fixed; 
 	bottom: 20px; 

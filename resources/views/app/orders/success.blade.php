@@ -39,8 +39,8 @@
 		<div class="row justify-content-md-center">
 			<div class="col-12 col-sm-7 pb-4">
 				<div class="col-sm-10 pt-5 pb-3 px-sm-4 mt-3 text-white">
-					<a class="btn p-3 px-4 btn-primary" href="{{ order->payment_link }}" role="button" v-if="order.payment_method != '{{ PAYMENT_METHOD_BILLET }}'"><i class="fas fa-download"></i> Download do Boleto</a>
-					<a class="btn p-3 px-4 btn-primary" href="{{ route('app.') }}" role="button">Ver detalhes do pedido</a>
+					<a class="btn p-3 px-4 btn-primary" href="{{ $order->payment_link }}" role="button" v-if="order.payment_method != '{{ PAYMENT_METHOD_BILLET }}'"><i class="fas fa-download"></i> Download do Boleto</a>
+					<a class="btn p-3 px-4 btn-primary" href="{ { route('app.') }}" role="button">Ver detalhes do pedido</a>
 					<a class="btn p-3 px-4 btn-outline-primary" href="{{ route('products.shop') }}" role="button">Voltar às compras</a>
 				</div>
 			</div>
