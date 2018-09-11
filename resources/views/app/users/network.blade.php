@@ -32,30 +32,16 @@
 			opacity: 1;
 			margin: 5px auto;
 		}
-		@media (max-width: 768px) {
-
-			#networkCollapse span:first-of-type,
-			#networkCollapse span:nth-of-type(2),
-			#networkCollapse span:last-of-type {
-				transform: none;
-				opacity: 1;
-				margin: 5px auto;
-			}
-			#networkCollapse.active span {
-				margin: 0 auto;
-			}
-			#networkCollapse.active span:first-of-type {
-				transform: rotate(45deg) translate(2px, 2px);
-			}
-			#networkCollapse.active span:last-of-type {
-				transform: rotate(-45deg) translate(1px, -1px);
-			}
-		}
 	</style>
 
 	<div class="container-fluid p-0 bg-white" id="appOrdersList">
 		<div class="page-title">
-			<h3>Minha Rede | <small>Lista de parceiros cadastrados</small></h3>
+			<h3>
+				Minha Rede | <small>Lista de parceiros cadastrados</small>
+				<button type="button" class="btn btn-primary float-right" title="Adicionar novo Parceiro">
+					<i class="fas fa-plus"></i>
+				</button>
+			</h3>
 		</div>
 		<div class="card p-4 m-4" v-for="user in users">
 			<network-menu
@@ -67,12 +53,12 @@
 
 	<script type="text/x-template" id="network-menu">
 		<div class="network-menu">
-			<div class="name-wrapper" @click="toggleChildren">
-				<div :style="indent" :class="nameClasses">	
-					<button :class="{'invisible': obj.childrens.length == 0 }" type="button" id="networkCollapse" class="btn-link pointer" :class="iconClasses">
+			<div class="name-wrapper">
+				<div :style="indent" :class="nameClasses" class="row align-items-center">	
+					<button :class="{'invisible': obj.childrens.length == 0, 'active': showChildren }" type="button" id="networkCollapse" class="btn-link pointer" @click="toggleChildren">
 						<span></span> <span></span>
 					</button>
-					@{{ obj.name }}
+					<b>@{{ obj.name }}</b>
 				</div>
 			</div>
 			<network-menu 

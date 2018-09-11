@@ -1,10 +1,10 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
 	<div class="page-title">
 		<h3>
 			Usuários | <small class="text-muted">Listagem de Usuários cadastrados</small>
-			<button type="button" class="btn btn-sm btn-primary float-right" title="Novo Usuário" onclick="openFormUser()">{!! ICONS_ADD !!}</button>
+			<button type="button" class="btn btn-primary float-right" title="Novo Usuário" onclick="openFormUser()">{!! ICONS_ADD !!}</button>
 		</h3>
 	</div>
 	<nav aria-label="breadcrumb">
