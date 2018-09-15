@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Repositories\StatusRepository;
+use App\Repositories\StageRepository;
 
 class StagesTableSeeder extends Seeder {
 	/**
@@ -10,13 +10,10 @@ class StagesTableSeeder extends Seeder {
 	 * @return void
 	 */
 	public function run(){
-		$repository = app(StatusRepository::class);
-		$repository->create(['name' => 'Em aberto', 'type' => 'order']);
-		$repository->create(['name' => 'Cancelado', 'type' => 'order']);
-		$repository->create(['name' => 'Aguardando pagamento', 'type' => 'order']);
-		$repository->create(['name' => 'Pagamento aprovado', 'type' => 'order']);
-		$repository->create(['name' => 'Aguardando envio', 'type' => 'order']);
-		$repository->create(['name' => 'Envio realizado', 'type' => 'order']);
-		$repository->create(['name' => 'Entregue', 'type' => 'order']);
+		$repository = app(StageRepository::class);
+
+		$repository->create(['name' => 'Pagamento', 'status_id' => STATUS_ORDER_AG_ENV]);
+		$repository->create(['name' => 'Envio', 'status_id' => STATUS_ORDER_ENV]);
+		$repository->create(['name' => 'Entrega', 'status_id' => STATUS_ORDER_ETREGUE]);
 	}
 }
