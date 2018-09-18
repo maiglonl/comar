@@ -3,6 +3,22 @@
 }
 
 
+.tab-content {
+	border-left: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+	padding: 10px;
+	background-color: $white;
+}
+
+.nav-tabs {
+	margin-bottom: 0;
+	.nav-item.active {
+    	background-color: $white;
+    }
+}
+
+
 // LINE TABS
 /***
 Bootstrap Line Tabs by @keenthemes

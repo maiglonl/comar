@@ -45,6 +45,10 @@ Route::group(['middleware' => ['auth', 'can:access-admin']], function () {
 
 	// Tasks
 	Route::get('tasks/workflow', 'TasksController@workflow')->name('tasks.workflow');
+	Route::post('tasks/finish/{id}', 'TasksController@finishTask')->name('tasks.finish');
+
+	// Stages
+	Route::get('stages/all_with_tasks', 'StagesController@allWithTasks')->name('stages.all_with_tasks');
 
 	// Products
 	Route::put('products/image/pull/{id}/{index}', 'ProductsController@pullImage')->name('products.image.pull');

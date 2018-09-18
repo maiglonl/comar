@@ -15420,6 +15420,22 @@ table.dataTable tbody td.selected a {
   display: none !important;
 }
 
+.tab-content {
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  padding: 10px;
+  background-color: #ffffff;
+}
+
+.nav-tabs {
+  margin-bottom: 0;
+}
+
+.nav-tabs .nav-item.active {
+  background-color: #ffffff;
+}
+
 /***
 Bootstrap Line Tabs by @keenthemes
 A component of Metronic Theme - #1 Selling Bootstrap 3 Admin Theme in Themeforest: http://j.mp/metronictheme

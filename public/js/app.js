@@ -118310,6 +118310,15 @@ window.toogleItem = function (elItem, handler) {
 /***/ (function(module, exports) {
 
 window.filters = {
+	payment_name: function payment_name(cod) {
+		if (cod == null) return '-';
+		switch (cod) {
+			case 'billet':
+				return "Boleto";break;
+			default:
+				return "Cartão de Crédito";break;
+		}
+	},
 	delivery_form: function delivery_form(cod) {
 		if (cod == null) return '-';
 		switch (parseInt(cod)) {

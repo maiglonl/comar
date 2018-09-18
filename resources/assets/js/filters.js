@@ -1,4 +1,11 @@
 window.filters = {
+	payment_name: function (cod){
+		if (cod == null) return '-';
+		switch(cod){
+			case 'billet': return "Boleto"; break;
+			default: return "Cartão de Crédito"; break;
+		}
+	},
 	delivery_form: function (cod){
 		if (cod == null) return '-';
 		switch(parseInt(cod)){

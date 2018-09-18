@@ -25,4 +25,8 @@ class StagesController extends Controller{
         ControllerTrait::trait_all as all;
     }
 
+	public function allWithTasks(){
+		return $this->repository->with(['open_tasks'])->all();
+	}
+
 }

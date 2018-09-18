@@ -24,6 +24,7 @@
 
 					<li><a class="nav-link" href="{{ route('products.shop') }}">Shop</a></li>
 					@if(Auth::user()->role == USER_ROLES_ADMIN) 
+						<li><a class="nav-link" href="{{ route('tasks.workflow') }}">Workflow</a></li>
 						<li><a class="nav-link" href="{{ route('products.index') }}">Produtos</a></li>
 					@endif
 					<li><a class="nav-link" href="{{ route('users.index') }}">Usuários</a></li>

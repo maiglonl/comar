@@ -35,12 +35,13 @@ class Order extends Model implements Transformable {
 		'complement',
 		'payment_method',
 		'payment_link',
+		'payment_brief',
 		'card_id',
 		'session'
 	];
 
 	protected $with = ['items', 'client', 'card', 'status'];
-	protected $appends = ['total', 'total_items', 'total_delivery', 'payment_groups'];
+	protected $appends = ['total', 'total_items', 'total_delivery', 'payment_groups', 'payment'];
 
 	public function getTotalAttribute(){
 		return $this->total_delivery + $this->total_items;
@@ -62,6 +63,10 @@ class Order extends Model implements Transformable {
 		return $result;
 	}
 
+	public function getPaymentAttribute(){
+		return $this->payment_brief != null ? json_decode($this->payment_brief) : null;
+	}
+
 	public function getPaymentGroupsAttribute(){
 		$result = [];
 		if($this->payment_method != PAYMENT_METHOD_CREDIT_CARD){
@@ -79,7 +84,6 @@ class Order extends Model implements Transformable {
 		}
 		foreach ($this->items as $item) {
 			$index = "free_".$item['interest_free'];
-			error_log($index." -> ".$item['total']);
 			if(!isset($result[$index])){
 				$result[$index] = [
 					'items' => [],

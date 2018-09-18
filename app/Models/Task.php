@@ -23,10 +23,10 @@ class Task extends Model implements Transformable {
 		'user_id',
 		'order_id',
 		'stage_id',
-		'conclusion'
+		'date_conclusion'
 	];
 
-	protected $with = ['order', 'stage', 'user'];
+	protected $with = ['order', 'user'];
 
 	public function order(){
 		return $this->belongsTo(Order::class);

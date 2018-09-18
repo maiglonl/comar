@@ -175,12 +175,6 @@ class OrdersController extends Controller{
 	}
 
 	public function card(){
-		\PagSeguro\Configuration\Configure::setEnvironment('sandbox');//production or sandbox
-		\PagSeguro\Configuration\Configure::setAccountCredentials( PAGSEGURO_EMAIL, PAGSEGURO_TOKEN );
-		\PagSeguro\Configuration\Configure::setCharset('UTF-8');// UTF-8 or ISO-8859-1
-		\PagSeguro\Library::initialize();
-		$credentials = \PagSeguro\Configuration\Configure::getAccountCredentials();
-
 		$order = $this->repository->current();
 		if(!$this->orderIsReady($order)){
 			return view('app.orders.cart', compact('order'));
@@ -373,13 +367,34 @@ class OrdersController extends Controller{
 					'message' => "Falha na conexão com o PagSeguro"
 				]);
 			}
-			$data = $this->getCheckoutData($order, $request->senderHash, $request->installments, $request->token);
+			$installmentList = $request->installments;
+			$data = $this->getCheckoutData($order, $request->senderHash, $installmentList, $request->token);
 			try{
 				foreach ($data as $key => $value) {
 					$request = (new PagSeguro)->request(PagSeguro::CHECKOUT_SANDBOX, $value);
 					$order->payment_link = $request->paymentLink ? $request->paymentLink : "";
+					$brief = [];
+					if($order->payment_method != PAYMENT_METHOD_CREDIT_CARD){
+						$brief = ['free_1' => [
+							'quantity' => 1, 
+							'installment' => $order->total, 
+							'total' => $order->total
+						]];
+					}else{	
+						foreach ($order->payment_groups as $key => $group) {
+							$insts = $installmentList[$key]['installments'];
+							$value = $insts[$group['selected']-1]['installmentAmount'];
+							$total = $insts[$group['selected']-1]['totalAmount'];
+							$brief[$key] = [
+								'quantity' => $group['selected'], 
+								'installment' => $value, 
+								'total' => $total];
+						}
+					}
+					$order->payment_brief = json_encode($brief);
 				}
 				$order->status_id = STATUS_ORDER_AG_PAG;
+				$order->created_at = date('Y-m-d H:i:s');
 				$this->repository->update($order->toArray(), $order->id);
 				$this->taskRepository->createStarterTask($order->id);
 				$response = [

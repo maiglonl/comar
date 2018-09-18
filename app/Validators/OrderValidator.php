@@ -18,6 +18,6 @@ class OrderValidator extends LaravelValidator {
 	 */
 	protected $rules = [
 		'user_id' => 'required|exists:users,id',
-		'status_id' => 'required|exists:users,id'
+		'status_id' => 'required|exists:status,id'
 	];
 }
