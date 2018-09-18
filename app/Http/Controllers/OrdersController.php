@@ -9,15 +9,13 @@ use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\OrderCheckoutRequest;
 use App\Repositories\OrderRepository;
 use App\Repositories\CardRepository;
+use App\Repositories\TaskRepository;
 use App\Repositories\ItemRepository;
 use App\Repositories\ProductRepository;
 use App\PagSeguro\PagSeguro;
 use App\Helpers\PermHelper;
 use \Correios;
 
-/**
- * Class OrdersController.
- */
 class OrdersController extends Controller{
 	protected $repository;
 
@@ -25,12 +23,14 @@ class OrdersController extends Controller{
 		OrderRepository $repository, 
 		ItemRepository $itemRepository, 
 		ProductRepository $productRepository,
-		CardRepository $cardRepository
+		CardRepository $cardRepository,
+		TaskRepository $taskRepository
 	){
 		$this->repository = $repository;
 		$this->itemRepository = $itemRepository;
 		$this->productRepository = $productRepository;
 		$this->cardRepository = $cardRepository;
+		$this->taskRepository = $taskRepository;
 
 		$this->names = [
 			'plural' => 'orders',
@@ -42,9 +42,6 @@ class OrdersController extends Controller{
 		];
 	}
 
-	/**
-	 * Disponible methods from Trait.
-	 */
 	use ControllerTrait {
 		ControllerTrait::trait_index as index;
 		ControllerTrait::trait_show as show;
@@ -53,9 +50,6 @@ class OrdersController extends Controller{
 		ControllerTrait::trait_all as all;
 	}
 
-	/**
-	 * Display the specified resource.
-	 */
 	public function home($id){
 		$order = $this->repository->find($id);
 		if($order->user_id != Auth::id() && !PermHelper::isAdmin()){
@@ -64,9 +58,6 @@ class OrdersController extends Controller{
 		return view('app.orders.home', compact('order'));
 	}
 
-	/**
-	 * Display the specified resource.
-	 */
 	public function list(){
 		$orders = $this->repository->orderBy('id', 'desc')->findWhere([
 			'user_id' => Auth::id(),
@@ -75,25 +66,16 @@ class OrdersController extends Controller{
 		return view('app.orders.list', compact('orders'));
 	}
 
-	/**
-	 * Verify if order is ready
-	 */
 	public function orderIsReady($order){
 		$isReady = $order && $order->status_id == STATUS_ORDER_EM_ABERTO && count($order->items) > 0;
 		return $isReady;
 	}
 
-	/**
-	 * Display the address form.
-	 */
 	public function formAddress(){
 		$order = $this->repository->current();
 		return view('app.orders.forms.address', compact('order'));
 	}
 
-	/**
-	 * Display the specified resource.
-	 */
 	public function cart(){
 		$order = $this->repository->current();
 		if($this->orderIsReady($order)){
@@ -103,9 +85,6 @@ class OrdersController extends Controller{
 		return view('app.orders.cart', compact('order'));
 	}
 
-	/**
-	 * Calculate delivery cost
-	 */
 	public function updateDeliveryCost($order){
 		try {
 			$deliveryMethods = [];
@@ -172,9 +151,6 @@ class OrdersController extends Controller{
 		}
 	}
 
-	/**
-	 * Display the specified resource.
-	 */
 	public function delivery(){
 		$deliveryMethods = [];
 		$order = $this->repository->current();
@@ -184,9 +160,6 @@ class OrdersController extends Controller{
 		return view('app.orders.delivery', compact('order'));
 	}
 
-	/**
-	 * Display the specified resource.
-	 */
 	public function billet(){
 		$order = $this->repository->current();
 		if(!$this->orderIsReady($order)){
@@ -201,9 +174,6 @@ class OrdersController extends Controller{
 		return redirect(route('orders.checkout'));
 	}
 
-	/**
-	 * Display the specified resource.
-	 */
 	public function card(){
 		\PagSeguro\Configuration\Configure::setEnvironment('sandbox');//production or sandbox
 		\PagSeguro\Configuration\Configure::setAccountCredentials( PAGSEGURO_EMAIL, PAGSEGURO_TOKEN );
@@ -225,9 +195,6 @@ class OrdersController extends Controller{
 		return view('app.orders.card', compact(['order']));
 	}
 
-	/**
-	 * Display the specified resource.
-	 */
 	public function createCard(){
 		$order = $this->repository->current();
 		$cards = $this->cardRepository->all();
@@ -237,9 +204,6 @@ class OrdersController extends Controller{
 		return view('app.orders.card_create', compact(['order']));
 	}
 
-	/**
-	 * Display the specified resource.
-	 */
 	public function selectCard(Request $request){
 		$req = $request->all();
 		$order = $this->repository->current();
@@ -257,9 +221,6 @@ class OrdersController extends Controller{
 		return response()->json($response);
 	}
 
-	/**
-	 * Display the specified resource.
-	 */
 	public function payment(){
 		$order = $this->repository->current();
 		if(!$this->orderIsReady($order)){
@@ -272,9 +233,6 @@ class OrdersController extends Controller{
 		return view('app.orders.payment', compact(['order', 'cards', 'session']));
 	}
 
-	/**
-	 * Update Address data.
-	 */
 	public function storeAddress(Request $request){
 		try {
 			$order = $this->repository->current();
@@ -308,9 +266,6 @@ class OrdersController extends Controller{
 		}
 	}
 
-	/**
-	 * Display the specified resource.
-	 */
 	public function checkout(){
 		$order = $this->repository->current();
 		if(!$this->orderIsReady($order) || $order->payment_method == null){
@@ -319,9 +274,6 @@ class OrdersController extends Controller{
 		return view('app.orders.checkout', compact('order'));
 	}
 
-	/**
-	 * Display the specified resource.
-	 */
 	public function success($id){
 		$order = $this->repository->find($id);
 		if($order->user_id != Auth::id()){
@@ -330,9 +282,6 @@ class OrdersController extends Controller{
 		return view('app.orders.success', compact('order'));
 	}
 
-	/**
-	 * Display the specified resource.
-	 */
 	private function getSession(){
 		$data = [
 			'email' => PAGSEGURO_EMAIL,
@@ -342,9 +291,6 @@ class OrdersController extends Controller{
 		return $response->id;
 	}
 
-	/**
-	 * Return formatted data to checkout request
-	 */
 	public function getCheckoutData($order, $senderHash, $installments, $token){
 		$base = []; $data = [];
 		$cpType = strlen($order->client->cp) == 14 ? "CPF" : "CNPJ"; 
@@ -412,9 +358,6 @@ class OrdersController extends Controller{
 		//$base['notificationURL'] = 'https://sualoja.com.br/notifica.html';
 	}
 
-	/**
-	 * Update the specified resource in storage.
-	 */
 	public function postCheckout(OrderCheckoutRequest $request){
 		try {
 			$order = $this->repository->current();
@@ -438,6 +381,7 @@ class OrdersController extends Controller{
 				}
 				$order->status_id = STATUS_ORDER_AG_PAG;
 				$this->repository->update($order->toArray(), $order->id);
+				$this->taskRepository->createStarterTask($order->id);
 				$response = [
 					'error'   => false,
 					'message' => "Compra finalizada"
@@ -458,9 +402,6 @@ class OrdersController extends Controller{
 		}
 	}
 
-	/**
-	 * Change delivery form from item.
-	 */
 	public function changeItemInstallment(Request $request){
 		try {
 			$order = $this->repository->current();
@@ -498,9 +439,6 @@ class OrdersController extends Controller{
 		}
 	}
 
-	/**
-	 * Change delivery form from item.
-	 */
 	public function changeItemMethod(Request $request){
 		try {
 			$order = $this->repository->current();
@@ -545,9 +483,6 @@ class OrdersController extends Controller{
 		}
 	}
 
-	/**
-	 * Update the specified resource in storage.
-	 */
 	public function calcDeliveryCost(){
 		try {
 			$order = $this->repository->current();
@@ -568,9 +503,6 @@ class OrdersController extends Controller{
 		}
 	}
 
-	/**
-	 * Add Item to current order.
-	 */
 	public function addItem($product_id){
 		$order = $this->repository->current();
 		$product = $this->productRepository->find($product_id);
@@ -595,9 +527,6 @@ class OrdersController extends Controller{
 		return $result;
 	}
 
-	/**
-	 * Remove Item from current order.
-	 */
 	public function removeItem($item_id){
 		$item = $this->itemRepository->find($item_id);
 		$order = $this->repository->find($item->order_id);

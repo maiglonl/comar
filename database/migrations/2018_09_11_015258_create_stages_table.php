@@ -12,12 +12,14 @@ class CreateStagesTable extends Migration{
 	 */
 	public function up(){
 		Schema::create('stages', function(Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
+			$table->increments('id');
+			$table->string('name');
 			$table->integer('status_id')->nullable()->unsigned();
+			$table->integer('next_stage_id')->nullable()->unsigned();
 			$table->timestamps();
 
 			$table->foreign('status_id')->references('id')->on('status');
+			$table->foreign('next_stage_id')->references('id')->on('stages');
 		});
 	}
 

@@ -43,6 +43,9 @@ Route::group(['middleware' => ['auth', 'can:access-admin']], function () {
 	// Categories
 	Route::get('categories/edit/{id}', 'CategoriesController@edit')->name('categories.edit');
 
+	// Tasks
+	Route::get('tasks/workflow', 'TasksController@workflow')->name('tasks.workflow');
+
 	// Products
 	Route::put('products/image/pull/{id}/{index}', 'ProductsController@pullImage')->name('products.image.pull');
 	Route::put('products/image/push/{id}/{index}', 'ProductsController@pushImage')->name('products.image.push');

@@ -11,5 +11,5 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface TaskRepository extends RepositoryInterface
 {
-    //
+    public function createStarterTask($orderId);
 }

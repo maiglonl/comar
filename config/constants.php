@@ -37,6 +37,11 @@
 	define('STATUS_ORDER_ENV',			'6');
 	define('STATUS_ORDER_ETREGUE',		'7');
 
+	/* STAGES */
+	define('STAGE_PAYMENT',		'1');
+	define('STAGE_SEND',		'2');
+	define('STAGE_DELIVERY',	'3');
+
 	/* DEFAULT_IMAGES */
 	define('DEFAULT_IMAGE_PRODUCTS', 	'/storage/products/default.png');
 	define('DEFAULT_IMAGE_USERS_FEMALE','/storage/users/user_female.png');

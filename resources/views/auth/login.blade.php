@@ -54,7 +54,8 @@
 		mounted: function(){
 			var self = this;
 			$("#formLogin").cValidate({
-				data: self.login
+				data: self.login,
+				redirect: "{{ route('home') }}"
 			});
 		}
 	});

@@ -103,7 +103,9 @@
 			mounted: function(){
 				let self = this;
 				PagSeguroDirectPayment.setSessionId('{!! $order->session !!}');
-				self.loadGroups();
+				if(self.order.payment_method == '{{ PAYMENT_METHOD_CREDIT_CARD }}'){
+					self.loadGroups();
+				}
 				self.reloadTotal();
 			},
 			methods:{

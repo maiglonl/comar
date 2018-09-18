@@ -34,5 +34,16 @@ class TaskRepositoryEloquent extends BaseRepository implements TaskRepository{
     public function boot(){
         $this->pushCriteria(app(RequestCriteria::class));
     }
-    
+
+    /**
+     * Create the first task to the order
+     */
+    public function createStarterTask($orderId){
+        $stage = [
+            'order_id' => $orderId,
+            'stage_id' => STAGE_PAYMENT
+        ];
+        return $this->create($stage);
+    }
+
 }

@@ -23,7 +23,7 @@
 	<link href="{{ mix('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
-	<main class="wrapper h-100 bg-green-l ">
+	<main class="wrapper h-100 bg-blue-l ">
 		@yield('content')
 	</main>
 </body>

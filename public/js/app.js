@@ -118191,6 +118191,18 @@ $.widget("custom.wAutocomplete", $.ui.autocomplete, {
 					error = data.message && typeof data.message === "string" ? data.message : error;
 					toastr.error(error);
 				}
+			} else if (data.errors) {
+				var msgs = {};
+				$.each(data.errors, function (index, val) {
+					msgs[prefix + index] = val[0];
+				});
+				form.validate().showErrors(msgs);
+				if (typeof error === "function") {
+					error();
+				} else {
+					error = data.message && typeof data.message === "string" ? data.message : error;
+					toastr.error(error);
+				}
 			} else {
 				if (redirect != null && redirect != false) {
 					location.href = redirect;
@@ -118213,18 +118225,21 @@ $.widget("custom.wAutocomplete", $.ui.autocomplete, {
 			errorClass: 'invalid-feedback',
 			errorElement: 'div',
 			submitHandler: function submitHandler() {
+				console.log(321);
 				$.each(unmask, function (index, el) {
 					options.data[el] = options.data[el] ? options.data[el].replace(/\W/g, '') : "";
 				});
 				if (isPut) {
-					$.put(action, options.data, handler);
+					$.put(action, options.data, handler).fail(function (error) {
+						handler(error.responseJSON);
+					});
 				} else {
-					$.post(action, options.data, handler);
+					$.post(action, options.data, handler).fail(function (error) {
+						handler(error.responseJSON);
+					});
 				}
 			},
 			highlight: function highlight(element) {
-				console.log(form);
-				console.log(element);
 				if (!element) {
 					element = form;
 				}

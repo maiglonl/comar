@@ -11,15 +11,33 @@ use Prettus\Repository\Traits\TransformableTrait;
  *
  * @package namespace App\Models;
  */
-class Task extends Model implements Transformable
-{
-    use TransformableTrait;
+class Task extends Model implements Transformable {
+	use TransformableTrait;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [];
+	/**
+	 * The attributes that are mass assignable.
+	 *
+	 * @var array
+	 */
+	protected $fillable = [
+		'user_id',
+		'order_id',
+		'stage_id',
+		'conclusion'
+	];
+
+	protected $with = ['order', 'stage', 'user'];
+
+	public function order(){
+		return $this->belongsTo(Order::class);
+	}
+
+	public function stage(){
+		return $this->belongsTo(Stage::class);
+	}
+
+	public function user(){
+		return $this->belongsTo(User::class);
+	}
 
 }
