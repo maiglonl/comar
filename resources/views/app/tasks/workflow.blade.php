@@ -8,7 +8,7 @@
 			</h3>
 		</div>
 		<nav class="nav nav-tabs nav-fill nav-inside-tabs">
-			<a class="nav-item nav-link" data-toggle="tab" v-for="stage in stages" :href="'#stageTabContent_'+stage.id" :id="'stageTab_'+stage.id" >@{{ stage.name }} (@{{ stage.open_tasks.length }})</a>
+			<a class="nav-item nav-link py-3" data-toggle="tab" v-for="stage in stages" :href="'#stageTabContent_'+stage.id" :id="'stageTab_'+stage.id" :title="stage.description">@{{ stage.name }} (@{{ stage.open_tasks.length }})</a>
 		</nav>
 		<div class="tab-content">
 			<div id="home" class="tab-pane fade" v-for="stage in stages" :id="'stageTabContent_'+stage.id">

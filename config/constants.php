@@ -41,6 +41,8 @@
 	define('STAGE_PAYMENT',		'1');
 	define('STAGE_SEND',		'2');
 	define('STAGE_DELIVERY',	'3');
+	define('STAGE_CREDIT',		'4');
+	define('STAGE_REWARDS',		'5');
 
 	/* DEFAULT_IMAGES */
 	define('DEFAULT_IMAGE_PRODUCTS', 	'/storage/products/default.png');

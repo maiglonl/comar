@@ -5,9 +5,9 @@
 	<div class="row justify-content-center">
 		<div class="col-10 col-sm-8 col-md-5">
 			<div class="shadow">
-				<div class="card border-0 ">
-					<div class="card-body border rounded-2 rounded-top border-primary">
-						<form action="{{ route('login') }}" id="formLogin" data-prefix="login">
+				<form action="{{ route('login') }}" id="formLogin" data-prefix="login">
+					<div class="card border-0 ">
+						<div class="card-body border rounded-2 rounded-top border-primary">
 							<div class="row">
 								<div class="col-sm-12">
 									<div class="form-label-group">
@@ -25,21 +25,18 @@
 								</div>
 							</div>
 							<div class="form-group row mb-0">
-								<div class="col-md-8 offset-md-4">
-									<button type="submit" class="btn btn-primary">
-										{{ __('Login') }}
-									</button>
+								<div class="col text-center">
 									<a class="btn btn-link" href="{{ route('password.request') }}">
-										{{ __('Forgot Your Password?') }}
+										Esqueceu a senha?
 									</a>
 								</div>
 							</div>
-						</form>
+						</div>
 					</div>
-				</div>
-				<button type="submit" class="shadow btn btn-primary btn-block p-3" style="border-top-left-radius: unset; border-top-right-radius: unset">
-					{{ __('Login') }}
-				</button>
+					<button type="submit" class="shadow btn btn-primary btn-block p-3" style="border-top-left-radius: unset; border-top-right-radius: unset">
+						Login
+					</button>
+				</form>
 			</div>
 		</div>
 	</div>
