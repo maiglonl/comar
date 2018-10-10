@@ -15538,6 +15538,10 @@ sup {
           perspective: 1500px;
 }
 
+.pointer:hover {
+  cursor: pointer;
+}
+
 .toogle-value {
   position: fixed;
   bottom: 20px;
@@ -15557,11 +15561,13 @@ sup {
   color: #5C66FC;
 }
 
-.list-group-item:hover {
-  background-color: #f4f5f6;
+.list-item-lb:hover {
   -webkit-box-shadow: inset 4px 0 0 0px #5C66FC;
           box-shadow: inset 4px 0 0 0px #5C66FC;
-  cursor: pointer;
+}
+
+.list-item-bg:hover {
+  background-color: #f4f5f6;
 }
 
 .list-group-item {

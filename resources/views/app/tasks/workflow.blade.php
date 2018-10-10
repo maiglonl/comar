@@ -9,15 +9,18 @@
 		</div>
 		<nav class="nav nav-tabs nav-fill nav-inside-tabs">
 			<a class="nav-item nav-link py-3" data-toggle="tab" v-for="stage in stages" :href="'#stageTabContent_'+stage.id" :id="'stageTab_'+stage.id" :title="stage.description">@{{ stage.name }} (@{{ stage.open_tasks.length }})</a>
+			<a class="nav-item nav-link py-3" data-toggle="tab" href="#creditTabContent" id="creditTab" title="Contas à receber">Créditos (@{{ credit_bills.length }})</a>
+			<a class="nav-item nav-link py-3" data-toggle="tab" href="#debitTabContent" id="debitTab" title="Contas à pagar">Débitos (@{{ debit_bills.length }})</a>
 		</nav>
 		<div class="tab-content">
-			<div id="home" class="tab-pane fade" v-for="stage in stages" :id="'stageTabContent_'+stage.id">
+			<div class="tab-pane fade" v-for="stage in stages" :id="'stageTabContent_'+stage.id">
 				<div :class="{'card' : stage.open_tasks.length > 0 }">
 					<div class="list-group list-group-flush">
-						<div class="list-group-item" :id="'taskItem_'+task.id" v-for="task in stage.open_tasks">
+						<div class="list-group-item list-item-lb list-item-bg pointer" v-for="task in stage.open_tasks" :id="'taskItem_'+task.id" data-toggle="collapse" :data-target="'#taskItemDesc_'+task.id">
 							<div class="row">
-								<div class="col-11">
-									<h5 class="w-100">
+								<div class="col">
+									<h5 class="m-0 w-100">
+										<button type="button" class="btn btn-outline-primary float-right ml-4" style="height: 50px; width: 50px;" @click="finishTask(task.id, 'task')"><i class="fas fa-check"></i></button>
 										<span class="float-right">@{{ task.order.client.name | name }}</span>
 										<span v-for="(payment, id, key) in task.order.payment">
 											<span v-if="key > 0"> + </span>
@@ -25,23 +28,20 @@
 										</span>
 										<span class="text-primary strong"> - @{{ task.order.payment_method | payment_name }}</span><br><small>@{{ task.order.created_at | datetime }}</small>
 									</h5>
-									<!--
-									<label class="small">Produtos:</label>
-									<div class="row align-items-center" v-for="item in task.order.items">
-										<div class="col-auto text-center" style="width: 60px">
-											<img v-if="item.product.thumbnails.length > 0" :src="item.product.thumbnails[0]" class="img-fluid">
-											<img v-else src="{{ DEFAULT_IMAGE_PRODUCTS }}" class="img-fluid">
-										</div>
-										<div class="col pl-0">
-											<p class="m-0 p-0">
-												<span class="text-muted">@{{ item.quantity }} x @{{ item.product.name }}</span><br>
-											</p>
-										</div>
-									</div>
-								-->
 								</div>
-								<div class="col">
-									<button type="button" class="btn btn-outline-primary h-100 w-100" @click="finishTask(task.id)"><i class="fas fa-check"></i></button>
+							</div>
+							<div class="collapse" :id="'taskItemDesc_'+task.id">
+								<label class="small">Produtos:</label>
+								<div class="row align-items-center" v-for="item in task.order.items">
+									<div class="col-auto text-center" style="width: 60px">
+										<img v-if="item.product.thumbnails.length > 0" :src="item.product.thumbnails[0]" class="img-fluid">
+										<img v-else src="{{ DEFAULT_IMAGE_PRODUCTS }}" class="img-fluid">
+									</div>
+									<div class="col pl-0">
+										<p class="m-0 p-0">
+											<span class="text-muted">@{{ item.quantity }} x @{{ item.product.name }}</span><br>
+										</p>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -53,29 +53,87 @@
 					</div>
 				</div>
 			</div>
+			<div class="tab-pane fade" id="creditTabContent">
+				<div :class="{'card' : credit_bills.length > 0 }">
+					<div class="list-group list-group-flush">
+						<div class="list-group-item" :id="'credit_billItem_'+credit_bill.id" v-for="credit_bill in credit_bills">
+							<div class="row">
+								<div class="col">
+									<h5 class="m-0 w-100">
+										<button type="button" class="btn btn-outline-primary float-right ml-4" style="height: 50px; width: 50px;" @click="finishTask(credit_bill.id, 'credit')"><i class="fas fa-check"></i></button>
+										<span class="float-right text-right">@{{ credit_bill.order.client.name | name }}<br><small>@{{ credit_bill.name | name }}</small></span>
+										<span class="h4" v-html="$options.filters.currency_sup(credit_bill.value)"></span>
+									</h5>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row" v-if="credit_bills.length == 0">
+					<div class="col text-center p-4">
+						<h4>Nenhuma tarefa pendente nesta etapa!</h4>
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="debitTabContent">
+				<div :class="{'card' : debit_bills.length > 0 }">
+					<div class="list-group list-group-flush">
+						<div class="list-group-item" :id="'debit_billItem_'+debit_bill.id" v-for="debit_bill in debit_bills">
+							<div class="row">
+								<div class="col">
+									<h5 class="m-0 w-100">
+										<button type="button" class="btn btn-outline-primary float-right ml-4" style="height: 50px; width: 50px;" @click="finishTask(credit_bill.id, 'debit')"><i class="fas fa-check"></i></button>
+										<span class="float-right text-right">@{{ debit_bill.user.name | name }}<br><small>@{{ debit_bill.name | name }}</small></span>
+										<span class="h4" v-html="$options.filters.currency_sup(debit_bill.value)"></span>
+									</h5>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row" v-if="debit_bills.length == 0">
+					<div class="col text-center p-4">
+						<h4>Nenhuma tarefa pendente nesta etapa!</h4>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<script type="text/javascript">
 		new Vue({
 			el: '#workflowApp',
 			data: {
-				stages: {!! json_encode($stages) !!}
+				stages: {!! json_encode($stages) !!},
+				credit_bills: {!! json_encode($credit_bills) !!},
+				debit_bills: {!! json_encode($debit_bills) !!}
 			},
 			mounted: function(){
+				console.log(this.credit_bills);
 				$('#stageTab_1').click();
 			},
 			methods:{
-				finishTask: function (id){ 
+				finishTask: function (id, type){ 
 					var self = this;
-					$.post('{{route('tasks.finish', [''])}}/'+id, null, function(data) {
-						// $('#taskItem_'+id).hide('400');
-						self.reloadData();
-					});
+					switch(type){
+						case 'task': 
+							$.post('{{route('tasks.finish', [''])}}/'+id, null, function(data) {
+								self.reloadData();
+							});
+							break;
+						case 'credit': console.log(123); break;
+						case 'debit': console.log(123); break;
+					}
 				},
 				reloadData: function(){
 					var self = this;
 					$.get('{{route('stages.all_with_tasks', [''])}}', null, function(data) {
 						self.stages = data;
+					});	
+					$.get('{{route('bills.all_open_credit')}}', null, function(data) {
+						self.credit_bills = data;
+					});	
+					$.get('{{route('bills.all_open_debit')}}', null, function(data) {
+						self.debit_bills = data;
 					});	
 				}
 			},

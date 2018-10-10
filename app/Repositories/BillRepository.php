@@ -9,7 +9,6 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  *
  * @package namespace App\Repositories;
  */
-interface BillRepository extends RepositoryInterface
-{
-    //
+interface BillRepository extends RepositoryInterface {
+    public function generateBills($order_id);
 }

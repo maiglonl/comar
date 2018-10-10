@@ -5,6 +5,7 @@ PGTO
 
 TODO
 	CRUD Contas Bancarias
+	CRUD Financeiro
 	CRUD Pedidos
 	Controle Envio
 	Controle Financeiro
@@ -129,33 +130,9 @@ Buy Process:
 
 
 
-order
-	id
-	user_id
-	status_id
-	delivery_cep
-	delivery_address
 
-item_order
-	id
-	order_ir
-	price
 
-task
-	id
-	name
 
-	- Pagamento
-	- Envio
-	- Entrega
 
-action
-	id
-	user_id
-	task_id
-	order_id
-	date
 
-Forma de entrega
-	- 1 para cada produto
-Forma de pagamento
+Confirma Pagamento -> Envia -> Conf Entrega -> Conf Crédito -> Paga Comissões

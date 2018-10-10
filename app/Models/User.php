@@ -47,6 +47,10 @@ class User extends Authenticatable implements Transformable{
 		return $this->hasMany(User::class, 'parent_id');
 	}
 
+	public function parent(){
+		return $this->belongsTo(User::class, 'parent_id');
+	}
+
 	public function getSearchAttribute(){
 		return "$this->id - $this->name [$this->city]";
 	}

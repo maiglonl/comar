@@ -63,6 +63,7 @@ class UsersController extends Controller {
 	 */
 	public function network() {
 		$users = $this->repository->findWhere(['parent_id' => Auth::id()]);
+		$teste = $this->repository->with(['parent'])->findWhere(['id' => 1]);
 		return Auth::user() ? view('app.users.network', compact('users')) : view('auth.register', compact('users'));
 	}
 

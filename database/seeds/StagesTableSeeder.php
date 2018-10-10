@@ -13,24 +13,10 @@ class StagesTableSeeder extends Seeder {
 		$repository = app(StageRepository::class);
 
 		$repository->create([
-			'id' => 5,
-			'name' => 'Remunerações', 
-			'description' => 'Realizar o pagamento das remunerações',
-			'next_stage_id' => null,
-			'status_id' => STATUS_ORDER_ETREGUE
-		]);
-		$repository->create([
-			'id' => 4,
-			'name' => 'Crédito', 
-			'description' => 'Confirmar crédito do valor do pedido na conta',
-			'next_stage_id' => 5,
-			'status_id' => STATUS_ORDER_ETREGUE
-		]);
-		$repository->create([
 			'id' => 3,
 			'name' => 'Entrega', 
 			'description' => 'Confirmar entrega do pedito',
-			'next_stage_id' => 4,
+			'next_stage_id' => null,
 			'status_id' => STATUS_ORDER_ETREGUE
 		]);
 		$repository->create([

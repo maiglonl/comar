@@ -50,6 +50,10 @@ Route::group(['middleware' => ['auth', 'can:access-admin']], function () {
 	// Stages
 	Route::get('stages/all_with_tasks', 'StagesController@allWithTasks')->name('stages.all_with_tasks');
 
+	// Bills
+	Route::get('bills/all_open_credit', 'BillsController@allOpenCredit')->name('bills.all_open_credit');
+	Route::get('bills/all_open_debit', 'BillsController@allOpenDebit')->name('bills.all_open_debit');
+
 	// Products
 	Route::put('products/image/pull/{id}/{index}', 'ProductsController@pullImage')->name('products.image.pull');
 	Route::put('products/image/push/{id}/{index}', 'ProductsController@pushImage')->name('products.image.push');

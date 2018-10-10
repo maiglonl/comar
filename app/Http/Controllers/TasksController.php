@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Repositories\TaskRepository;
 use App\Repositories\StageRepository;
 use App\Repositories\OrderRepository;
+use App\Repositories\BillRepository;
 use Illuminate\Http\Request;
 use Auth;
 
@@ -13,10 +14,12 @@ class TasksController extends Controller{
 	public function __construct(
 		TaskRepository $repository,
 		StageRepository $stageRepository,
+		BillRepository $billRepository,
 		OrderRepository $orderRepository
 	){
 		$this->repository = $repository;
 		$this->stageRepository = $stageRepository;
+		$this->billRepository = $billRepository;
 		$this->orderRepository = $orderRepository;
 		$this->names = [
 			'plural' => 'tasks',
@@ -37,7 +40,10 @@ class TasksController extends Controller{
 
 	public function workflow(){
 		$stages = $this->stageRepository->with(['open_tasks'])->all();
-		return view('app.tasks.workflow', compact('tasks', 'stages'));
+		$credit_bills = $this->billRepository->findWhere(['done' => false, 'type' => 'credit']);
+		$debit_bills = $this->billRepository->findWhere(['done' => false, 'type' => 'debit']);
+		$stages = $this->stageRepository->with(['open_tasks'])->all();
+		return view('app.tasks.workflow', compact('tasks', 'stages', 'credit_bills', 'debit_bills'));
 	}
 
 	public function finishTask($id){
@@ -54,6 +60,12 @@ class TasksController extends Controller{
 				"order_id" => $task->order_id,
 				"stage_id" => $task->stage->next_stage_id
 			]);
+		}
+
+		switch ($task->stage_id) {
+			case STAGE_PAYMENT:
+				$this->billRepository->generateBills($task->order);
+				break;
 		}
 
 		return response()->json([

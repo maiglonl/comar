@@ -41,7 +41,11 @@ class Order extends Model implements Transformable {
 	];
 
 	protected $with = ['items', 'client', 'card', 'status'];
-	protected $appends = ['total', 'total_items', 'total_delivery', 'payment_groups', 'payment'];
+	protected $appends = ['total', 'net_value', 'total_items', 'total_delivery', 'payment_groups', 'payment'];
+
+	public function getNetValueAttribute(){
+		return $this->total;
+	}
 
 	public function getTotalAttribute(){
 		return $this->total_delivery + $this->total_items;

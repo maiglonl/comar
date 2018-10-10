@@ -99,6 +99,10 @@ sup {
 	perspective: 1500px;
 }
 
+.pointer:hover{
+	cursor: pointer;
+}
+
 .toogle-value{
 	position: fixed; 
 	bottom: 20px; 
@@ -116,10 +120,11 @@ sup {
 	color: $primary;
 }
 
-.list-group-item:hover{
-	background-color: $gray-50;
+.list-item-lb:hover{
 	box-shadow: inset 4px 0 0 0px $primary;
-	cursor: pointer;
+}
+.list-item-bg:hover{
+	background-color: $gray-50;
 }
 
 .list-group-item{

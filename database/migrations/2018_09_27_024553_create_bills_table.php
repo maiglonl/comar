@@ -13,15 +13,19 @@ class CreateBillsTable extends Migration {
 	public function up(){
 		Schema::create('bills', function(Blueprint $table) {
 			$table->increments('id');
-			$table->string('name');
-			$table->text('description');
-			$table->date('date_due');
-			$table->float('value');
+			$table->string('name')->nullable();
+			$table->string('type'); //['debit', 'credit']
+			$table->text('description')->nullable();
+			$table->date('date_due')->nullable();
+			$table->float('value')->nullable();
+			$table->float('tax')->nullable();
 			$table->boolean('done')->default(false);
 			$table->integer('order_id')->unsigned();
+			$table->integer('user_id')->nullable()->unsigned();
 			$table->timestamps();
 
 			$table->foreign('order_id')->references('id')->on('orders');
+			$table->foreign('user_id')->references('id')->on('users');
 		});
 	}
 
