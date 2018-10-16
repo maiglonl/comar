@@ -15,7 +15,7 @@
 							<br>
 							<label>Data: @{{ order.created_at | datetime }}</label>
 							<br>
-							<a href="#">Mais detalhes</a>
+							<a :href="'{{ route('orders.home', ['']) }}/'+order.id">Mais detalhes</a>
 						</div>
 					</div>
 				</div>

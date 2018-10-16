@@ -6,6 +6,16 @@ use Auth;
 
 class PermHelper{
 
+	public static function isAdmin(){
+		if(!Auth::user()){
+			return false;
+		}
+		switch (Auth::user()->role){
+			case USER_ROLES_ADMIN: return true; break;
+			default: return false; break;
+		}
+	}
+
 	public static function viewValues(){
 		if(!Auth::user()){
 			return false;

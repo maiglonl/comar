@@ -14,6 +14,13 @@ use App\Validators\ProductValidator;
  * @package namespace App\Repositories;
  */
 class ProductRepositoryEloquent extends BaseRepository implements ProductRepository{
+
+	protected $fieldSearchable = [
+		'name' => 'like',
+		'description' => 'like',
+		'categorie.name' => 'like'
+	];
+
 	/**
 	 * Specify Model class name
 	 */

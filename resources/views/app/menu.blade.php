@@ -1,17 +1,16 @@
 <nav class="navbar navbar-expand-md bg-warning navbar-light navbar-laravel shadow-sm">
 	<div class="container">
 		@if(Auth::user())
-			<a class="navbar-brand" href="{{ route('home') }}">{{ config('app.name', 'Laravel') }}</a>
+			<a class="navbar-brand" href="{{ route('home') }}">Comar</a>
 		@else
-			<a class="navbar-brand" href="{{ route('index') }}">{{ config('app.name', 'Laravel') }}</a>
+			<a class="navbar-brand" href="{{ route('index') }}">Comar</a>
 		@endif
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
-
-		<div class="collapse navbar-collapse" id="navbarSupportedContent">
-			<!-- Left Side Of Navbar -->
-			<ul class="navbar-nav mr-auto">
+		<div class="collapse navbar-collapse " id="navbarSupportedContent">
+			<ul class="navbar-nav w-100 pr-4">
+				<input type="searchProduct" class="form-control ml-4 w-100" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Buscar produtos">
 			</ul>
 
 			<!-- Right Side Of Navbar -->
@@ -22,14 +21,14 @@
 					<li><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
 				@else
 
-					<li><a class="nav-link" href="{{ route('products.shop') }}">Shop</a></li>
+					<li><a class="nav-link " href="{{ route('products.shop') }}">Shop</a></li>
 					@if(Auth::user()->role == USER_ROLES_ADMIN) 
 						<li><a class="nav-link" href="{{ route('tasks.workflow') }}">Workflow</a></li>
 						<li><a class="nav-link" href="{{ route('products.index') }}">Produtos</a></li>
 					@endif
 					<li><a class="nav-link" href="{{ route('users.index') }}">Usuários</a></li>
 					<li class="nav-item dropdown">
-						<a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+						<a id="navbarDropdown" class="nav-link dropdown-toggle text-nowrap" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
 							{{ Auth::user()->name }} <span class="caret"></span>
 						</a>
 

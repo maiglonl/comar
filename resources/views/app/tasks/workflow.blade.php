@@ -43,6 +43,11 @@
 										</p>
 									</div>
 								</div>
+								<div class="row">
+									<div class="col text-center">
+										<a :href="'{{ route('orders.home', ['']) }}/'+task.order.id">Acessar detalhes do pedido</a>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -56,7 +61,7 @@
 			<div class="tab-pane fade" id="creditTabContent">
 				<div :class="{'card' : credit_bills.length > 0 }">
 					<div class="list-group list-group-flush">
-						<div class="list-group-item" :id="'credit_billItem_'+credit_bill.id" v-for="credit_bill in credit_bills">
+						<div class="list-group-item list-item-lb list-item-bg pointer" :id="'credit_billItem_'+credit_bill.id" v-for="credit_bill in credit_bills" data-toggle="collapse" :data-target="'#creditBillItemDesc_'+credit_bill.id">
 							<div class="row">
 								<div class="col">
 									<h5 class="m-0 w-100">
@@ -65,6 +70,9 @@
 										<span class="h4" v-html="$options.filters.currency_sup(credit_bill.value)"></span>
 									</h5>
 								</div>
+							</div>
+							<div class="collapse" :id="'creditBillItemDesc_'+credit_bill.id">
+								<label class="small">Dados do pedido:</label>
 							</div>
 						</div>
 					</div>
@@ -78,7 +86,7 @@
 			<div class="tab-pane fade" id="debitTabContent">
 				<div :class="{'card' : debit_bills.length > 0 }">
 					<div class="list-group list-group-flush">
-						<div class="list-group-item" :id="'debit_billItem_'+debit_bill.id" v-for="debit_bill in debit_bills">
+						<div class="list-group-item list-item-lb list-item-bg pointer" :id="'debit_billItem_'+debit_bill.id" v-for="debit_bill in debit_bills" data-toggle="collapse" :data-target="'#debitBillItemDesc_'+debit_bill.id">
 							<div class="row">
 								<div class="col">
 									<h5 class="m-0 w-100">
@@ -87,6 +95,9 @@
 										<span class="h4" v-html="$options.filters.currency_sup(debit_bill.value)"></span>
 									</h5>
 								</div>
+							</div>
+							<div class="collapse" :id="'debitBillItemDesc_'+debit_bill.id">
+								<label class="small">Dados do pedido:</label>
 							</div>
 						</div>
 					</div>
