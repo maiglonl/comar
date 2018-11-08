@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\OrderRepository;
 use App\Repositories\UserRepository;
+use Illuminate\Support\Facades\DB;
+use App\Helpers\DateHelper;
 use Auth;
 
 class UsersController extends Controller {
@@ -10,8 +13,9 @@ class UsersController extends Controller {
 	/**
 	 * UsersController constructor.
 	 */
-	public function __construct(UserRepository $repository) {
+	public function __construct(OrderRepository $orderRepository, UserRepository $repository) {
 		$this->middleware('auth');
+		$this->orderRepository = $orderRepository;
 		$this->repository = $repository;
 		$this->names = [
 			'plural' => 'users',
@@ -61,10 +65,43 @@ class UsersController extends Controller {
 	/**
 	 * Show the form for create resource.
 	 */
-	public function network() {
-		$users = $this->repository->findWhere(['parent_id' => Auth::id()]);
-		$teste = $this->repository->with(['parent'])->findWhere(['id' => 1]);
-		return Auth::user() ? view('app.users.network', compact('users')) : view('auth.register', compact('users'));
+	public function network($id = null) {
+		$id = $id == null ? Auth::id() : $id;
+		$user = $this->repository->with(['childrens', 'parent'])->find($id);
+		$user->sales = $this->getUserLastSales($id, 6);
+		if($user->parent){
+			$user->parent->sales = $this->getUserLastSales($user->parent->id);
+		}
+		foreach ($user->childrens as $key => $value) {
+			$user->childrens[$key]->sales = $this->getUserLastSales($value->id);
+		}
+		return Auth::user() ? view('app.users.network', compact(['user'])) : view('auth.register', compact('users'));
+	}
+
+	/**
+	 * Get the user sales by period.
+	 */
+	public function getUserLastSales($userId, $months = 1) {
+		//DB::enableQueryLog();
+		$months--;
+		$dateStart = DateHelper::subDate(date('Y-m-01'), 'P'.$months.'M');
+		$dateEnd = DateHelper::addDate(date('Y-m-01'), 'P1M');
+		$sales = $this->orderRepository->findWhere([
+			'user_id' => $userId,
+			[ 'created_at', '<=', $dateEnd ],
+			[ 'created_at', '>=', $dateStart ]
+		]);
+		$monthList = [];
+		for ($i=$months; $i >= 0; $i--) {
+			$monthList["'".DateHelper::subDate(date('Ym'), 'P'.$i.'M', 'Ym')."'"] = 0.0;
+		}
+		foreach ($sales as $key => $sale) {
+			$date = date_create($sale->created_at);
+			$monthList["'".$date->format('Ym')."'"] += $sale->total_items;
+			error_log($userId." => ".$sale->total_items);
+		}
+
+		return $monthList;
 	}
 
 	/**
