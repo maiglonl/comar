@@ -118830,11 +118830,19 @@ window.pagSeguro = {
 
 /***/ }),
 
+/***/ "./resources/assets/sass/charts.scss":
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
 /***/ 0:
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__("./resources/assets/js/app.js");
-module.exports = __webpack_require__("./resources/assets/sass/app.scss");
+__webpack_require__("./resources/assets/sass/app.scss");
+module.exports = __webpack_require__("./resources/assets/sass/charts.scss");
 
 
 /***/ }),

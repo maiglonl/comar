@@ -15420,6 +15420,14 @@ table.dataTable tbody td.selected a {
   display: none !important;
 }
 
+[v-cloak] > * {
+  display: none;
+}
+
+[v-cloak]::before {
+  content: "";
+}
+
 .tab-content {
   border-left: 1px solid #ddd;
   border-right: 1px solid #ddd;

@@ -1,42 +1,40 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('content')
-	<div class="page-title">
-		<h3>
-			Usuários | <small class="text-muted">Listagem de Usuários cadastrados</small>
-			<button type="button" class="btn btn-primary float-right" title="Novo Usuário" onclick="openFormUser()">{!! ICONS_ADD !!}</button>
-		</h3>
-	</div>
-	<nav aria-label="breadcrumb">
-		<ol class="breadcrumb">
-			<li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-			<li class="breadcrumb-item active" aria-current="page">Usuários</li>
-		</ol>
-	</nav>
-	<div class="row justify-content-center">
-		<div class="col">
-			<div class="card">
-				<div class="card-body">
-					<table id="table-users" class="table table-striped table-hover table-pointer">
-						<thead>
-							<tr>
-								<th>Nome</th>
-								<th>E-mail</th>
-								<th>Nascimento</th>
-								<th>Categoria</th>
-								<th>Status</th>
-							</tr>
-						</thead>
-						<tfoot>
-							<tr>
-								<th>Nome</th>
-								<th>E-mail</th>
-								<th>Nascimento</th>
-								<th>Categoria</th>
-								<th>Status</th>
-							</tr>
-						</tfoot>
-					</table>
+	<div class="container-fluid" id="appUsersList">
+		<div class="row">
+			<div class="col">
+				<div class="page-title">
+					<h3>
+						Usuários | <small class="text-muted">Listagem de Usuários cadastrados</small>
+						<button type="button" class="btn btn-primary float-right" title="Adicionar novo Usuário" onclick="openFormUser()">{!! ICONS_ADD !!}</button>
+					</h3>
+				</div>
+				<div class="card p-4">
+					<div class="row">
+						<div class="col">
+							<table id="table-users" class="table table-striped table-hover table-pointer">
+								<thead>
+									<tr>
+										<th>Nome</th>
+										<th>E-mail</th>
+										<th>Nascimento</th>
+										<th>Categoria</th>
+										<th>Status</th>
+									</tr>
+								</thead>
+								<tfoot>
+									<tr>
+										<th>Nome</th>
+										<th>E-mail</th>
+										<th>Nascimento</th>
+										<th>Categoria</th>
+										<th>Status</th>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

@@ -40,7 +40,7 @@ class User extends Authenticatable implements Transformable{
 	];
 
 	protected $hidden = ['password', 'remember_token'];
-	protected $with = ['childrens'];
+	protected $with = [];
 	//protected $appends = ['search'];
 
 	public function childrens(){

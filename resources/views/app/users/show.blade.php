@@ -1,20 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
-	<div id="userShowApp">
-		<div class="page-title">
-			<h3>
-				Usuários | <small class="text-muted">Descrição do usuário</small>
-				<button type="button" class="btn btn-sm btn-primary float-right" title="Alterar Cadastro" @click="openFormEditUser()">{!! ICONS_EDIT !!}</button>
-			</h3>
+	<div class="container-fluid" id="userShowApp">
+		<div class="row">
+			<div class="col">
+				<div class="page-title">
+					<h3>
+						Usuários | <small class="text-muted">Listagem de Usuários cadastrados</small>
+						<button type="button" class="btn btn-sm btn-primary float-right" title="Alterar Cadastro" @click="openFormEditUser()">{!! ICONS_EDIT !!}</button>
+					</h3>
+				</div>
+			</div>
 		</div>
-		<nav aria-label="breadcrumb">
-			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-				<li class="breadcrumb-item"><a href="{{ route('users.index') }}">Usuários</a></li>
-				<li class="breadcrumb-item active" aria-current="page">{{ $user->name }}</li>
-			</ol>
-		</nav>
 		<div class="row justify-content-center">
 			<div class="col-sm-3">
 				<div class="card">

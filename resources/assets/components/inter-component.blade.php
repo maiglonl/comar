@@ -1,10 +1,40 @@
 @extends('layouts.app')
 
 @section('content')
-	<script type="text/javascript" src="{{ mix('js/charts.js') }}"></script>
-	<link href="{{ mix('css/charts.css') }}" rel="stylesheet">
+	<style type="text/css">
+		#networkCollapse {
+			width: 40px;
+			height: 40px;
+			border:none;
+		}
+		#networkCollapse span {
+			width: 12px;
+			height: 2px;
+			margin: 0 auto;
+			display: block;
+			background: #555;
+			transition: all 0.8s cubic-bezier(0.810, -0.330, 0.345, 1.375);
+		}
+		#networkCollapse span:first-of-type {
+			transform: translate(-4px, 1px) rotate(45deg);
+		}
+		#networkCollapse span:last-of-type {
+			transform: translate(4px, -1px) rotate(-45deg);
+		}
+		#networkCollapse.active span:first-of-type {
+			transform: translate(-4px, 4px) rotate(-45deg);
+		}
+		#networkCollapse.active span:last-of-type {
+			transform: translate(4px, -3px) rotate(45deg);
+		}
+		#networkCollapse.active span {
+			transform: none;
+			opacity: 1;
+			margin: 5px auto;
+		}
+	</style>
 
-	<div class="container-fluid" id="appOrdersList">
+	<dov class="container-fluid" id="appOrdersList">
 		<div class="row">
 			<div class="col">
 				<div class="page-title">
@@ -15,30 +45,7 @@
 						</button>
 					</h3>
 				</div>
-				<div class="card p-4" v-cloak>
-					<div v-if="user.parent">
-						<div class="row">
-							<div class="col">
-								<div class="list-group">
-									<div @click="goToNetwork(user.parent.id)" class="list-group-item  list-item-lb list-item-bg pointer">
-										<div class="row">
-											<div class="col">
-												<h5 class="m-0 w-100">
-													@{{ user.parent.name | name }}
-													<span class="float-right" v-html="$options.filters.currency_sup(user.parent.sales[Object.keys(user.parent.sales)[0]], true)"></span>
-												</h5>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col">
-								<hr>
-							</div>
-						</div>
-					</div>
+				<div class="card p-4">
 					<div class="row">
 						<div class="p-3" style="width: 12rem!important;">
 							@if(count(Illuminate\Support\Facades\Storage::files($path = env('FILES_PATH_USERS')."/".$user->id."/")) > 0)
@@ -66,8 +73,18 @@
 									<p class="form-control-plaintext" id="usr_birthdate">@{{ user.birthdate | date }}</p>
 								</div>
 								<div class="col">
+									<label class="label-plaintext label-sm" for="usr_zipcode">CEP:</label>
+									<p class="form-control-plaintext" id="usr_zipcode">@{{ user.zipcode | cep }}</p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
 									<label class="label-plaintext label-sm" for="usr_city">Bairro - Cidade/UF:</label>
 									<p class="form-control-plaintext" id="usr_city">@{{ user.district | default }} - @{{ user.city | default }}/@{{ user.state | default }}</p>
+								</div>
+								<div class="col">
+									<label class="label-plaintext label-sm" for="usr_complement">Complemento:</label>
+									<p class="form-control-plaintext" id="usr_complement">@{{ user.complement | default }}</p>
 								</div>
 							</div>
 							<div class="row">
@@ -78,7 +95,8 @@
 							</div>
 						</div>
 						<div class="col">
-							<div id="userChart"></div>
+							Compras do mês:
+							<h1 class="text-success"><strong>R$ 1.500,00</strong></h1>
 						</div>
 					</div>
 					<div class="row">
@@ -86,81 +104,79 @@
 							<hr>
 						</div>
 					</div>
-					<div class="row">
-						<div class="col">
-							<div class="list-group">
-								<div @click="goToNetwork(children.id)" class="list-group-item  list-item-lb list-item-bg pointer" v-for="children in user.childrens" >
-									<div class="row">
-										<div class="col">
-											<h5 class="m-0 w-100">
-												@{{ children.name | name }}
-												<span class="float-right" v-html="$options.filters.currency_sup(children.sales[Object.keys(children.sales)[0]], true)"></span>
-											</h5>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
+					<div class="card p-4 m-4" v-for="user in users">
+						<network-menu
+							:depth="0"
+							:obj=user
+						></network-menu>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="row">
-			
+	</dov>
+
+
+	<script type="text/x-template" id="network-menu">
+		<div class="network-menu">
+			<div class="name-wrapper">
+				<div :style="indent" :class="nameClasses" class="row align-items-center">	
+					<button :class="{'invisible': obj.childrens.length == 0, 'active': showChildren }" type="button" id="networkCollapse" class="btn-link pointer" @click="toggleChildren">
+						<span></span> <span></span>
+					</button>
+					<b>@{{ obj.name }}</b>
+				</div>
+			</div>
+			<network-menu 
+				v-if="showChildren"
+				v-for="(children, key) in obj.childrens"  
+				:obj="children"
+				:depth="depth + 1"
+			>
+			</network-menu>
 		</div>
-	</div>
+	</script>
 	<script type="text/javascript">
+		Vue.component('network-menu', { 
+			template: '#network-menu',
+			props: [ 'obj', 'depth' ],
+			data() {
+				 return {
+					showChildren: false,
+				 }
+			},
+			computed: {
+				nameClasses() {
+					return { 
+						'has-children': this.obj.childrens,
+						'border-top': this.depth > 0,
+					}
+				},
+				iconClasses() {
+					return { 
+						'active': this.showChildren
+					}
+				},
+				indent() {
+					return { 'margin-left': `${this.depth * 30}px` }
+				}
+			},
+			methods: {
+				toggleChildren() {
+					 this.showChildren = !this.showChildren;
+				}
+			}
+		});
+
 		new Vue({
 			el: '#appOrdersList',
 			data: {
-				user: {!! $user->toJson() !!}
+				user: {!! $user->toJson() !!},
+				users: {!! $user->childrens->toJson() !!}
 			},
 			mounted: function(){
-				let self = this;
-				let categories = [];
-				let serie = [];
-				$.each(self.user.sales, function(index, val) {
-					let date = moment(index, 'YYYYMM');
-					categories.push(date.format('MMM'));
-					serie.push(val);
-				});
-				Highcharts.chart('userChart', {
-					chart: {
-						type: 'areaspline',
-						width: 320,
-						height: 180,
-						margin: [0, 0, 20, 0],
-					},
-					plotOptions: {
-						areaspline: { fillOpacity: 0.5 }
-					},
-					title: '',
-					legend: '',
-					credits: { enabled: false },
-					yAxis: { 
-						endOnTick: false,
-						startOnTick: false,
-						labels: {
-							enabled: false
-						},
-						title: {
-							text: null
-						},
-						tickPositions: [0]
-					},
-					xAxis: {
-						categories: categories
-					},
-					series: [{
-						data: serie,
-						name: 'Total'
-					}]
-				});
+				console.log(this.users);
 			},
 			methods:{
-				goToNetwork: function(id){
-					location.href = '{{ route('users.network', ['']) }}/'+id;
-				}
 			},
 			filters: filters
 		});

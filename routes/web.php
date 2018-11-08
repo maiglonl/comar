@@ -70,7 +70,7 @@ Route::group(['middleware' => ['auth', 'can:access-admin']], function () {
 Route::group(['middleware' => ['auth']], function () {
 	Route::get('users/find/{id}', 'UsersController@find')->name('users.find');
 	Route::get('users/all', 'UsersController@all')->name('users.all');
-	Route::get('users/network', 'UsersController@network')->name('users.network');
+	Route::get('users/network/{id?}', 'UsersController@network')->name('users.network');
 
 	// Orders
 	Route::get('orders/list', 'OrdersController@list')->name('orders.list');

@@ -123,25 +123,25 @@
 	</div>
 
 	<ul class="list-unstyled components">
-		<li class="first-level active">
-			<a href="#" class="">
+		<li class="first-level {!! \App\Helpers\NavHelper::classActivePath(['home']) !!}">
+			<a href="{{ route('home') }}" class="">
 				<i class="icon-chart icons h4 align-middle"></i>
 				<span class="align-middle">Resumo</span>
 			</a>
 		</li>
-		<li class="first-level">
+		<li class="first-level ">
 			<a href="#" class="">
 				<i class="icon-docs icons h4 align-middle"></i>
 				<span class="align-middle">Faturas</span>
 			</a>
 		</li>
-		<li class="first-level">
+		<li class="first-level {!! \App\Helpers\NavHelper::classActivePath(['users.network']) !!}">
 			<a href="{{ route('users.network') }}">
 				<i class="icon-organization icons h4 align-middle"></i>
 				<span class="align-middle">Minha rede</span>
 			</a>
 		</li>
-		<li class="first-level">
+		<li class="first-level {!! \App\Helpers\NavHelper::classActivePath(['orders.list']) !!}">
 			<a href="#comprasSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
 				<i class="icon-wallet icons h4 align-middle"></i>
 				<span class="align-middle">Compras</span>
@@ -155,18 +155,7 @@
 				<li class="child"><a href="#">Arremates</a></li>
 			</ul>
 		</li>
-		<li class="first-level">
-			<a href="#vendasSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-				<i class="icon-chart icons h4 align-middle"></i>
-				<span class="align-middle">Vendas</span>
-			</a>
-			<ul class="collapse list-unstyled" id="vendasSubmenu">
-				<li class="child"><a href="#">Anúncios</a></li>
-				<li class="child"><a href="#">Perguntas</a></li>
-				<li class="child"><a href="#">Vendas</a></li>
-			</ul>
-		</li>
-		<li class="first-level">
+		<li class="first-level {!! \App\Helpers\NavHelper::classActivePath(['colab.home']) !!}">
 			<a href="#configSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
 				<i class="icon-settings icons h4 align-middle"></i>
 				<span class="align-middle">Resumo</span>
@@ -179,9 +168,11 @@
 		</li>
 	</ul>
 </nav>
+<!--
 <button type="button" id="sidebarCollapse" class="btn-link pointer">
 	<span></span> <span></span> <span></span>
 </button>
+-->
 <script type="text/javascript">
 	$(document).ready(function () {
 		$('#sidebarCollapse').on('click', function () {
