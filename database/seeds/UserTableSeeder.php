@@ -137,5 +137,14 @@ class UserTableSeeder extends Seeder {
 			'role' => 'seller',
 			'parent_id' => 2
 		]);
+
+		foreach(range(1,15) as $k){
+			factory(App\Models\User::class, 1)->create()->each(function($user) use($repository){
+				$users = $repository->all();
+				$parent = $users->random();
+				$user->parent()->associate($parent);
+				$user->save();
+			});
+		}
 	}
 }

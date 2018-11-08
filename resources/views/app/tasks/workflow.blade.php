@@ -119,7 +119,6 @@
 				debit_bills: {!! json_encode($debit_bills) !!}
 			},
 			mounted: function(){
-				console.log(this.credit_bills);
 				$('#stageTab_1').click();
 			},
 			methods:{

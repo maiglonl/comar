@@ -42,8 +42,7 @@ class TasksController extends Controller{
 		$stages = $this->stageRepository->with(['open_tasks'])->all();
 		$credit_bills = $this->billRepository->findWhere(['done' => false, 'type' => 'credit']);
 		$debit_bills = $this->billRepository->findWhere(['done' => false, 'type' => 'debit']);
-		$stages = $this->stageRepository->with(['open_tasks'])->all();
-		return view('app.tasks.workflow', compact('tasks', 'stages', 'credit_bills', 'debit_bills'));
+		return view('app.tasks.workflow', compact('stages', 'credit_bills', 'debit_bills'));
 	}
 
 	public function finishTask($id){
