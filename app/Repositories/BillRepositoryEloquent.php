@@ -49,7 +49,8 @@ class BillRepositoryEloquent extends BaseRepository implements BillRepository{
 			'date_due' => DateHelper::addDate(date('Y-m-d'), 'P1M'),
 			'value' => $order->net_value,
 			'done' => false,
-			'order_id' => $order->id
+			'order_id' => $order->id,
+			'user_id' => $order->user_id
 		];
 		$this->create($bill);
 		// Para cada Comissao, se houver usuário pai, registrar conta a pagar

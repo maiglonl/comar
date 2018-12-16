@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\BillRepository;
+use Auth;
 
 class BillsController extends Controller{
 
@@ -23,6 +24,13 @@ class BillsController extends Controller{
      */
     use ControllerTrait {
         ControllerTrait::trait_all as all;
+    }
+
+    public function finishBill($id){
+        $bill = $this->repository->find($id);
+        $bill->done = 1;
+        $bill->user_id = Auth::id();
+        return $this->repository->update($bill->toArray(), $bill->id);
     }
 
 	public function allOpenCredit(){

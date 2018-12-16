@@ -10,9 +10,7 @@
 				<div class="page-title">
 					<h3>
 						Minha Rede | <small>Lista de parceiros cadastrados</small>
-						<button type="button" class="btn btn-primary float-right" title="Adicionar novo Parceiro">
-							<i class="fas fa-plus"></i>
-						</button>
+						<button type="button" class="btn btn-primary float-right" title="Adicionar novo Usuário" onclick="openFormUser()">{!! ICONS_ADD !!}</button>
 					</h3>
 				</div>
 				<div class="card p-4" v-cloak>
@@ -20,11 +18,11 @@
 						<div class="row">
 							<div class="col">
 								<div class="list-group">
-									<div @click="goToNetwork(user.parent.id)" class="list-group-item  list-item-lb list-item-bg pointer">
+									<div @click="goToNetwork(user.parent.id, user.parent.position)" class="list-group-item  list-item-lb list-item-bg pointer">
 										<div class="row">
 											<div class="col">
 												<h5 class="m-0 w-100">
-													@{{ user.parent.name | name }}
+													@{{ user.parent.position <= 0 ? '' : user.parent.position+" - " }}@{{ user.parent.name | name }}
 													<span class="float-right" v-html="$options.filters.currency_sup(user.parent.sales[Object.keys(user.parent.sales)[0]], true)"></span>
 												</h5>
 											</div>
@@ -49,7 +47,7 @@
 							@endif
 						</div>
 						<div class="col-6">
-							<h5>@{{ user.name | name }} <small>[ @{{ user.id | default }} |  @{{ user.role | name }} ]</small></h5>
+							<h5>@{{ user.position <= 0 ? '' : user.position+" - " }}@{{ user.name | name }} <small>[ @{{ user.id | default }} |  @{{ user.role | name }} ]</small></h5>
 							<div class="row">
 								<div class="col">
 									<label class="label-plaintext label-sm" for="usr_email">E-mail:</label>
@@ -89,11 +87,11 @@
 					<div class="row">
 						<div class="col">
 							<div class="list-group">
-								<div @click="goToNetwork(children.id)" class="list-group-item  list-item-lb list-item-bg pointer" v-for="children in user.childrens" >
+								<div @click="goToNetwork(children.id, children.position)" class="list-group-item  list-item-lb list-item-bg pointer" v-for="children in user.childrens" >
 									<div class="row">
 										<div class="col">
 											<h5 class="m-0 w-100">
-												@{{ children.name | name }}
+												@{{ children.position }} - @{{ children.name | name }}
 												<span class="float-right" v-html="$options.filters.currency_sup(children.sales[Object.keys(children.sales)[0]], true)"></span>
 											</h5>
 										</div>
@@ -119,6 +117,19 @@
 				let self = this;
 				let categories = [];
 				let serie = [];
+				$.get('{{route('users.position', [''])}}/'+self.user.id, null, function(data) {
+					self.user.position = data;
+				});
+				if(self.user.parent){
+					$.get('{{route('users.position', [''])}}/'+self.user.parent_id, null, function(data) {
+						self.user.parent.position = data;
+					});
+				}
+				$.each(self.user.childrens, function(index, val) {
+					$.get('{{route('users.position', [''])}}/'+val.id, null, function(data) {
+						self.user.childrens[index].position = data;
+					});
+				});
 				$.each(self.user.sales, function(index, val) {
 					let date = moment(index, 'YYYYMM');
 					categories.push(date.format('MMM'));
@@ -158,11 +169,26 @@
 				});
 			},
 			methods:{
-				goToNetwork: function(id){
-					location.href = '{{ route('users.network', ['']) }}/'+id;
+				goToNetwork: function(id, position){
+					if(position >= 0){
+						location.href = '{{ route('users.network', ['']) }}/'+id;
+					}
 				}
 			},
 			filters: filters
 		});
+		function openFormUser(){
+			$.fancybox.open({
+				src: '{{ route('users.create') }}',
+				type: 'ajax',
+				opts: { 
+					clickOutside: false,
+					clickSlide: false,
+					afterClose : function(){
+						$('#table-users').DataTable().ajax.reload(null, false); 
+					},
+				}
+			});
+		}
 	</script>
 @endsection

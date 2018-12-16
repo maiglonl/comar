@@ -1,9 +1,9 @@
-<nav class="navbar navbar-expand-md bg-warning navbar-light navbar-laravel shadow-sm">
+<nav class="navbar navbar-expand-md bg-cyan navbar-dark navbar-laravel shadow-sm">
 	<div class="container">
 		@if(Auth::user())
-			<a class="navbar-brand" href="{{ route('home') }}">Comar</a>
+			<a class="navbar-brand" href="{{ route('home') }}">PhysicalShop</a>
 		@else
-			<a class="navbar-brand" href="{{ route('index') }}">Comar</a>
+			<a class="navbar-brand" href="{{ route('index') }}">PhysicalShop</a>
 		@endif
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
@@ -17,16 +17,16 @@
 			<ul class="navbar-nav ml-auto">
 				<!-- Authentication Links -->
 				@guest
-					<li><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
-					<li><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
+					<li><a class="nav-link" href="{{ route('login') }}">Login</a></li>
+					<li><a class="nav-link" href="{{ route('register') }}">Cadastrar</a></li>
 				@else
 
-					<li><a class="nav-link " href="{{ route('products.shop') }}">Shop</a></li>
+					<li><a class="nav-link " href="{{ route('products.shop') }}">Comprar</a></li>
+					<li><a class="nav-link" href="{{ route('home') }}">Início</a></li>
 					@if(Auth::user()->role == USER_ROLES_ADMIN) 
 						<li><a class="nav-link" href="{{ route('tasks.workflow') }}">Workflow</a></li>
 						<li><a class="nav-link" href="{{ route('products.index') }}">Produtos</a></li>
 					@endif
-					<li><a class="nav-link" href="{{ route('users.index') }}">Usuários</a></li>
 					<li class="nav-item dropdown">
 						<a id="navbarDropdown" class="nav-link dropdown-toggle text-nowrap" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
 							{{ Auth::user()->name }} <span class="caret"></span>

@@ -51,7 +51,7 @@ class OrdersController extends Controller{
 	}
 
 	public function home($id){
-		$order = $this->repository->find($id);
+		$order = $this->repository->with(['tasks', 'bills'])->find($id);
 		if($order->user_id != Auth::id() && !PermHelper::isAdmin()){
 			return view('app.errors.permission');
 		}

@@ -14,7 +14,7 @@ class UsersController extends Controller {
 	 * UsersController constructor.
 	 */
 	public function __construct(OrderRepository $orderRepository, UserRepository $repository) {
-		$this->middleware('auth');
+		//$this->middleware('auth');
 		$this->orderRepository = $orderRepository;
 		$this->repository = $repository;
 		$this->names = [
@@ -67,6 +67,9 @@ class UsersController extends Controller {
 	 */
 	public function network($id = null) {
 		$id = $id == null ? Auth::id() : $id;
+		if(Auth::user()->role != USER_ROLES_ADMIN && $this->getNetworkPosition($id) < 0){
+			return view('app.errors.permission');
+		}
 		$user = $this->repository->with(['childrens', 'parent'])->find($id);
 		$user->sales = $this->getUserLastSales($id, 6);
 		if($user->parent){
@@ -98,10 +101,27 @@ class UsersController extends Controller {
 		foreach ($sales as $key => $sale) {
 			$date = date_create($sale->created_at);
 			$monthList["'".$date->format('Ym')."'"] += $sale->total_items;
-			error_log($userId." => ".$sale->total_items);
 		}
 
 		return $monthList;
+	}
+
+	/**
+	 * Get the network position from user.
+	 */
+	public function getNetworkPosition($userId, $level = 0) {
+		$user = $this->repository->find($userId);
+		if($user->id == Auth::id()){
+			return $level;
+		}
+		if($user->parent_id == null){
+			return -1;
+		}
+		if($user->parent_id == Auth::id()){
+			return $level+1;
+		}else{
+			return $this->getNetworkPosition($user->parent_id, $level+1);
+		}
 	}
 
 	/**

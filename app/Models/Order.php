@@ -7,6 +7,7 @@ use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 use App\Helpers\PermHelper;
 use App\Models\Item;
+use App\Models\Task;
 use App\Models\User;
 use App\Models\Status;
 
@@ -111,6 +112,14 @@ class Order extends Model implements Transformable {
 
 	public function items(){
 		return $this->hasMany(Item::class);
+	}
+
+	public function tasks(){
+		return $this->hasMany(Task::class);
+	}
+
+	public function bills(){
+		return $this->hasMany(Bill::class);
 	}
 
 	public function client(){

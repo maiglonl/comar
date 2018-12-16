@@ -119,7 +119,7 @@
 <nav id="sidebar">
 	<div class="sidebar-header">
 		<i class="icon-menu icons h4 align-middle"></i>
-		<span class="align-middle">Minha conta</span>
+		<span class="align-middle">Categorias</span>
 	</div>
 
 	<ul class="list-unstyled components">
@@ -129,14 +129,12 @@
 				<span class="align-middle">Resumo</span>
 			</a>
 		</li>
-		<!--
 		<li class="first-level ">
 			<a href="#" class="">
 				<i class="icon-docs icons h4 align-middle"></i>
 				<span class="align-middle">Faturas</span>
 			</a>
 		</li>
-		-->
 		<li class="first-level {!! \App\Helpers\NavHelper::classActivePath(['users.network']) !!}">
 			<a href="{{ route('users.network') }}">
 				<i class="icon-organization icons h4 align-middle"></i>
@@ -150,16 +148,13 @@
 			</a>
 			<ul class="collapse list-unstyled" id="comprasSubmenu">
 				<li class="child"><a href="{{ route('orders.list') }}">Compras</a></li>
-				<!--
 				<li class="child"><a href="#">Favoritos</a></li>
 				<li class="child"><a href="#">Perguntas</a></li>
 				<li class="child"><a href="#">Cotações</a></li>
 				<li class="child"><a href="#">Assinaturas</a></li>
 				<li class="child"><a href="#">Arremates</a></li>
-				-->
 			</ul>
 		</li>
-		<!--
 		<li class="first-level {!! \App\Helpers\NavHelper::classActivePath(['colab.home']) !!}">
 			<a href="#configSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
 				<i class="icon-settings icons h4 align-middle"></i>
@@ -171,7 +166,6 @@
 				<li class="child"><a href="#">E-mails</a></li>
 			</ul>
 		</li>
-	-->
 	</ul>
 </nav>
 <!--

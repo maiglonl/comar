@@ -4,16 +4,16 @@
 	<div id="workflowApp">
 		<div class="page-title pb-3">
 			<h3>
-				Tarefas | <small class="text-muted">Listagem de Tarefas pendentes</small>
+				Faturas | <small class="text-muted">Listagem de Contas</small>
 			</h3>
 		</div>
 		<nav class="nav nav-tabs nav-fill nav-inside-tabs">
-			<a class="nav-item nav-link py-3" data-toggle="tab" v-for="stage in stages" :href="'#stageTabContent_'+stage.id" :id="'stageTab_'+stage.id" :title="stage.description">@{{ stage.name }} (@{{ stage.open_tasks.length }})</a>
-			<a class="nav-item nav-link py-3" data-toggle="tab" href="#creditTabContent" id="creditTab" title="Contas à receber">Créditos (@{{ credit_bills.length }})</a>
-			<a class="nav-item nav-link py-3" data-toggle="tab" href="#debitTabContent" id="debitTab" title="Contas à pagar">Débitos (@{{ debit_bills.length }})</a>
+			<a class="nav-item nav-link py-3" data-toggle="tab" href="#debitTabContent" id="debitTab" title="Contas à pagar">À pagar (@{{ toPay.length }})</a>
+			<a class="nav-item nav-link py-3" data-toggle="tab" href="#creditTabContent" id="creditTab" title="Contas à receber">À receber (@{{ toReceive.length }})</a>
+			<a class="nav-item nav-link py-3" data-toggle="tab" href="#debitTabContent" id="debitTab" title="Contas Recebidas">Recebido (@{{ received.length }})</a>
 		</nav>
 		<div class="tab-content">
-			<div class="tab-pane fade" v-for="stage in stages" :id="'stageTabContent_'+stage.id">
+			<div class="tab-pane fade" id="toPayTabContent">
 				<div :class="{'card' : stage.open_tasks.length > 0 }">
 					<div class="list-group list-group-flush">
 						<div class="list-group-item list-item-lb list-item-bg pointer" v-for="task in stage.open_tasks" :id="'taskItem_'+task.id" data-toggle="collapse" :data-target="'#taskItemDesc_'+task.id">
@@ -58,7 +58,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="tab-pane fade" id="creditTabContent">
+			<div class="tab-pane fade" id="toReceiveTabContent">
 				<div :class="{'card' : credit_bills.length > 0 }">
 					<div class="list-group list-group-flush">
 						<div class="list-group-item list-item-lb list-item-bg pointer" :id="'credit_billItem_'+credit_bill.id" v-for="credit_bill in credit_bills" data-toggle="collapse" :data-target="'#creditBillItemDesc_'+credit_bill.id">
@@ -72,7 +72,7 @@
 								</div>
 							</div>
 							<div class="collapse" :id="'creditBillItemDesc_'+credit_bill.id">
-								<a :href="'{{ route('orders.home', ['']) }}/'+credit_bill.order_id">Acessar detalhes do pedido</a>
+								<label class="small">Dados do pedido:</label>
 							</div>
 						</div>
 					</div>
@@ -83,21 +83,21 @@
 					</div>
 				</div>
 			</div>
-			<div class="tab-pane fade" id="debitTabContent">
+			<div class="tab-pane fade" id="receivedTabContent">
 				<div :class="{'card' : debit_bills.length > 0 }">
 					<div class="list-group list-group-flush">
 						<div class="list-group-item list-item-lb list-item-bg pointer" :id="'debit_billItem_'+debit_bill.id" v-for="debit_bill in debit_bills" data-toggle="collapse" :data-target="'#debitBillItemDesc_'+debit_bill.id">
 							<div class="row">
 								<div class="col">
 									<h5 class="m-0 w-100">
-										<button type="button" class="btn btn-outline-primary float-right ml-4" style="height: 50px; width: 50px;" @click="finishTask(debit_bill.id, 'debit')"><i class="fas fa-check"></i></button>
+										<button type="button" class="btn btn-outline-primary float-right ml-4" style="height: 50px; width: 50px;" @click="finishTask(credit_bill.id, 'debit')"><i class="fas fa-check"></i></button>
 										<span class="float-right text-right">@{{ debit_bill.user.name | name }}<br><small>@{{ debit_bill.name | name }}</small></span>
 										<span class="h4" v-html="$options.filters.currency_sup(debit_bill.value)"></span>
 									</h5>
 								</div>
 							</div>
 							<div class="collapse" :id="'debitBillItemDesc_'+debit_bill.id">
-								<a :href="'{{ route('orders.home', ['']) }}/'+debit_bill.order_id">Acessar detalhes do pedido</a>
+								<label class="small">Dados do pedido:</label>
 							</div>
 						</div>
 					</div>
@@ -114,16 +114,15 @@
 		new Vue({
 			el: '#workflowApp',
 			data: {
-				stages: {!! json_encode($stages) !!},
-				credit_bills: {!! json_encode($credit_bills) !!},
-				debit_bills: {!! json_encode($debit_bills) !!}
+				toPay: {!! json_encode($toPay) !!},
+				toReceive: {!! json_encode($toReceive) !!},
+				received: {!! json_encode($received) !!}
 			},
 			mounted: function(){
 				$('#stageTab_1').click();
 			},
 			methods:{
 				finishTask: function (id, type){ 
-					event.stopPropagation();
 					var self = this;
 					switch(type){
 						case 'task': 
@@ -131,12 +130,8 @@
 								self.reloadData();
 							});
 							break;
-						case 'credit':
-						case 'debit':
-							$.post('{{route('bills.finish', [''])}}/'+id, null, function(data) {
-								self.reloadData();
-							});
-							break;
+						case 'credit': console.log(123); break;
+						case 'debit': console.log(123); break;
 					}
 				},
 				reloadData: function(){

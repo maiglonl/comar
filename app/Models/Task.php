@@ -26,7 +26,7 @@ class Task extends Model implements Transformable {
 		'date_conclusion'
 	];
 
-	protected $with = ['order', 'user'];
+	protected $with = ['order', 'user', 'stage'];
 
 	public function order(){
 		return $this->belongsTo(Order::class);

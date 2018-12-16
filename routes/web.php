@@ -53,6 +53,7 @@ Route::group(['middleware' => ['auth', 'can:access-admin']], function () {
 	// Bills
 	Route::get('bills/all_open_credit', 'BillsController@allOpenCredit')->name('bills.all_open_credit');
 	Route::get('bills/all_open_debit', 'BillsController@allOpenDebit')->name('bills.all_open_debit');
+	Route::post('bills/finish/{id}', 'BillsController@finishBill')->name('bills.finish');
 
 	// Products
 	Route::put('products/image/pull/{id}/{index}', 'ProductsController@pullImage')->name('products.image.pull');
@@ -71,6 +72,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('users/find/{id}', 'UsersController@find')->name('users.find');
 	Route::get('users/all', 'UsersController@all')->name('users.all');
 	Route::get('users/network/{id?}', 'UsersController@network')->name('users.network');
+	Route::get('users/position/{id?}', 'UsersController@getNetworkPosition')->name('users.position');
 
 	// Orders
 	Route::get('orders/list', 'OrdersController@list')->name('orders.list');

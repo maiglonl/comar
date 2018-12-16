@@ -33,6 +33,7 @@ class CreateUsersTable extends Migration {
 			$table->string('role')->notNull()->default(USER_ROLES_PARTNER);
 			$table->integer('parent_id')->nullable()->unsigned();
 			$table->foreign('parent_id')->references('id')->on('users');
+			$table->integer('position')->nullable();
 			$table->rememberToken();
 			$table->timestamps();
 		});

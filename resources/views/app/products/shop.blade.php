@@ -7,25 +7,8 @@
 @endsection
 
 @section('content')
+	
 	<div class="row" id="productShopApp">
-		<!--
-		<div class="col-sm-5 col-md-4 col-lg-3 invisible">
-			<div class="content">
-				<h4>Pesquisa de produtos</h4>
-				<p>@{{ products.length }} resultados</p>
-			</div>
-			<div class="content">
-				<h5>Categorias</h5>
-				<p>
-					Categoria a (123)<br>
-				</p>
-			</div>
-			<div class="content">
-				<h5>Preço</h5>
-				<p>De R$[___] até R$[___]</p>
-			</div>
-		</div>
-	-->
 		<div class="col-sm-12 p-4">
 			<div class="row">
 				<div class="col-12 col-sm-6 col-md-4 col-lg-3 pl-2 pr-2 pb-3" v-for="product in products">

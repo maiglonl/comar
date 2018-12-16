@@ -79,7 +79,6 @@
 									<a href="{{ route('orders.payment') }}" class="btn btn-link">Alterar pagamento</a>
 								</div>
 							</div>
-
 						</div>
 					</div>
 				</div>

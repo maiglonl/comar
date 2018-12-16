@@ -14,11 +14,13 @@
 						-->
 					</h3>
 				</div>
+				<!--
 				<nav class="nav nav-tabs nav-fill nav-inside-tabs">
 					<a class="nav-item nav-link py-3 active" data-toggle="tab" href="#openTabContent" title="Pedidos em andamento">Em andamento</a>
 					<a class="nav-item nav-link py-3" data-toggle="tab" href="#endedTabContent" title="Pedidos finalizados">Finalizados</a>
 					<a class="nav-item nav-link py-3" data-toggle="tab" href="#allTabContent" title="Todos os pedidos">Todos</a>
 				</nav>
+				-->
 				<div class="tab-content">
 					<div class="tab-pane fade active show" id="openTabContent">
 						<div class="card p-4 m-4" v-for="order in orders">
@@ -51,10 +53,12 @@
 							</div>
 						</div>
 					</div>
+					<!--
 					<div class="tab-pane fade" id="endedTabContent">
 					</div>
 					<div class="tab-pane fade" id="allTabContent">
 					</div>
+					-->
 				</div>
 				<div class="card">
 					
