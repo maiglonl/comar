@@ -36,7 +36,8 @@ class User extends Authenticatable implements Transformable{
 		'complement',
 		'status',
 		'role',
-		'parent_id'
+		'parent_id',
+		'password_changed_at'
 	];
 
 	protected $hidden = ['password', 'remember_token'];

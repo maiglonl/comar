@@ -1,9 +1,9 @@
 <nav class="navbar navbar-expand-md bg-cyan navbar-dark navbar-laravel shadow-sm">
 	<div class="container">
 		@if(Auth::user())
-			<a class="navbar-brand" href="{{ route('home') }}">PhysicalShop</a>
+			<a class="navbar-brand" href="{{ route('home') }}">PhysicalSul</a>
 		@else
-			<a class="navbar-brand" href="{{ route('index') }}">PhysicalShop</a>
+			<a class="navbar-brand" href="{{ route('index') }}">PhysicalSul</a>
 		@endif
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
@@ -25,6 +25,7 @@
 					<li><a class="nav-link" href="{{ route('home') }}">Início</a></li>
 					@if(Auth::user()->role == USER_ROLES_ADMIN) 
 						<li><a class="nav-link" href="{{ route('tasks.workflow') }}">Workflow</a></li>
+						<li><a class="nav-link" href="{{ route('users.index') }}">Usuários</a></li>
 						<li><a class="nav-link" href="{{ route('products.index') }}">Produtos</a></li>
 					@endif
 					<li class="nav-item dropdown">
@@ -33,9 +34,11 @@
 						</a>
 
 						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+							<a class="dropdown-item" href="{{ route('password.expired') }}">Alterar Senha</a>
 							<a class="dropdown-item" href="{{ route('logout') }}"
 							   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-								{{ __('Logout') }}
+								Sair
 							</a>
 
 							<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

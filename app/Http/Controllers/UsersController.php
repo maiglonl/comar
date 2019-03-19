@@ -34,6 +34,7 @@ class UsersController extends Controller {
 		ControllerTrait::trait_edit as edit;
 		ControllerTrait::trait_store as store;
 		ControllerTrait::trait_update as update;
+		ControllerTrait::trait_find as find;
 	}
 
 	/**

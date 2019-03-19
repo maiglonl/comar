@@ -109,6 +109,13 @@
 			},
 			methods:{
 				confirmBuy: function (){
+					if($("#btn-confirmBuy").hasClass('disabled')){
+						return true;
+					}
+					$("#btn-confirmBuy").html(`
+						<i class="fa fa-spinner fa-pulse fa-fw"></i>
+						<span class="sr-only">Loading...</span>
+					`).addClass('disabled');
 					var self = this;
 					pagSeguro.getSenderHash().then(function(data){
 						self.senderHash = data ? data : "";
@@ -119,7 +126,11 @@
 						};
 						let postCallback = function(data) {
 							if(data.error){
-								toastr.error('Falha ao realizar operação!');
+								toastr.error('Falha ao realizar operação! Tente novamente mais tarde.');
+								$("#btn-confirmBuy").html(`
+									<i class="fa fa-exclamation"></i>
+									<span class="sr-only">Loading...</span>
+								`);
 							}else{
 								location.href = '{{ route('orders.checkout.success', [$order->id])}}';
 							}
@@ -136,7 +147,7 @@
 									$.post('{{ route('orders.checkout') }}', postData , postCallback);
 								},
 								error: function(response){
-									toastr.error('Falha na validação do cartão!');
+									toastr.error('Falha na validação do cartão! Tente novamente mais tarde.');
 								}
 							});
 						}else{
@@ -189,6 +200,7 @@
 					let result = parseFloat(0);
 					$.each(self.order.payment_groups, function(index, group){
 						if(group.installments.length >= group.selected-1){
+							console.log(123);
 							result += parseFloat(group.installments[group.selected-1].totalAmount);
 						}else{
 							result += parseFloat(group.total);

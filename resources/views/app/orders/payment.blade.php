@@ -11,7 +11,7 @@
 							<p>Cartões registrados</p>
 							<div class="card shadow-sm">
 								<ul class="list-group list-group-flush">
-									<li class="list-group-item" v-for="card in cards" @click="setCard(card.id)">
+									<a href="#" class="list-group-item text-dark" v-for="card in cards" @click="setCard(card.id)">
 										<div class="row py-2 align-items-center">
 											<div class="col-auto px-4 text-center">
 												<div class="text-primary rounded bg-white"><i class="fab fa-cc-mastercard fa-2x rounded px-3 py-2 border border-primary"></i></div>
@@ -23,7 +23,7 @@
 												</p>
 											</div>
 										</div>
-									</li>
+									</a>
 								</ul>
 							</div>
 						</div>	

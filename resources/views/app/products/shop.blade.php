@@ -1,4 +1,4 @@
-@extends('layouts.order')
+@extends('layouts.shop')
 
 @section('body_top')
 	<div class="jumbotron-fluid">
@@ -7,9 +7,48 @@
 @endsection
 
 @section('content')
-	
+	<style type="text/css">
+		.categories-container > h3 {
+			margin-top: 50px;
+			margin-bottom: 50px;
+			font-weight: bold;
+		}
+		.categories-container > h5 {
+			padding-left: 30px;
+		}
+		.categories-container > h5.active {
+			font-weight: bold;
+		}
+		.categories-container > h5.category-item {
+			cursor: pointer;
+		}
+		.categories-container > h5:hover {
+			font-weight: bold;
+			text-decoration: none !important;
+			padding-left: 33px;
+		}
+		.categories-container > h5 > a {
+			text-decoration: none !important;
+		}
+		.categories-container > h5.category-item > a {
+			cursor: pointer;
+			color: #444b53 !important;
+		}
+		.loading-page{
+
+		}
+	</style>
 	<div class="row" id="productShopApp">
-		<div class="col-sm-12 p-4">
+		<div class="col-2 m-2 categories-container">
+			<h4 style="padding: 30px 0px 50px 0px; "><i class="icon-menu icons h4 align-middle"></i> Categorias</h4>
+			<h5 v-for="category in categories" :class="{ active : activeCategory == category.id}" class="category-item">
+				<a :href="'{{ route('products.shop', ['']) }}/'+category.id">@{{ category.name }}</a>
+			</h5>
+			<h5 v-if="activeCategory != 0">
+				<a href="{{ route('products.shop') }}" class="text-primary">Ver todos</a>
+			</h5>
+		</div>
+		<div class="col p-4">
 			<div class="row">
 				<div class="col-12 col-sm-6 col-md-4 col-lg-3 pl-2 pr-2 pb-3" v-for="product in products">
 					<div class="card pointer h-shadow" @click="openProductDescription(product.id)">
@@ -57,6 +96,8 @@
 		new Vue({
 			el: '#productShopApp',
 			data: {
+				activeCategory: {!! $activeCategory !!},
+				categories: {!! $categories->toJson() !!},
 				products: {!! $products->toJson() !!},
 				showVals: false
 			},

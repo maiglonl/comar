@@ -47,8 +47,13 @@
 							@endif
 						</div>
 						<div class="col-6">
-							<h5>@{{ user.position <= 0 ? '' : user.position+" - " }}@{{ user.name | name }} <small>[ @{{ user.id | default }} |  @{{ user.role | name }} ]</small></h5>
+							<h5>@{{ user.position <= 0 ? '' : user.position+" - " }}@{{ user.name | name }} <small>[ @{{ user.role | role }} ]</small></h5>
 							<div class="row">
+								<div class="col">
+									<label class="label-plaintext label-sm" for="usr_id">Código de usuário:</label>
+									<p class="form-control-plaintext" id="usr_id">@{{ user.id | default }}</p>
+								</div>
+							</div><div class="row">
 								<div class="col">
 									<label class="label-plaintext label-sm" for="usr_email">E-mail:</label>
 									<p class="form-control-plaintext" id="usr_email">@{{ user.email | default }}</p>

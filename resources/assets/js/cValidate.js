@@ -62,7 +62,6 @@
 			errorClass: 'invalid-feedback',
 			errorElement: 'div',
 			submitHandler: function(){
-				console.log(321);
 				$.each(unmask, function(index, el) {
 					options.data[el] = options.data[el] ? options.data[el].replace(/\W/g, '') : "";
 				});

@@ -9,7 +9,7 @@
 						<strong>Compra efetuada com sucesso!</strong><br>
 					</h3>
 					Avisaremos quando seus produtos estiverem a caminho. 
-					<span v-if="order.payment_method != '{{ PAYMENT_METHOD_BILLET }}'">
+					<span v-if="order.payment_method == '{{ PAYMENT_METHOD_BILLET }}'">
 						<a :href="order.payment_link" class="text-blue"><strong>Clique aqui</strong></a> para acessar o boleto do pedido.
 					</span>
 				</div>
@@ -39,8 +39,8 @@
 		<div class="row justify-content-md-center">
 			<div class="col-12 col-sm-7 pb-4">
 				<div class="col-sm-10 pt-5 pb-3 px-sm-4 mt-3 text-white">
-					<a class="btn p-3 px-4 btn-primary" href="{{ $order->payment_link }}" role="button" v-if="order.payment_method != '{{ PAYMENT_METHOD_BILLET }}'"><i class="fas fa-download"></i> Download do Boleto</a>
-					<a class="btn p-3 px-4 btn-primary" href="{ { route('app.') }}" role="button">Ver detalhes do pedido</a>
+					<a class="btn p-3 px-4 btn-primary" href="{{ $order->payment_link }}" role="button" v-if="order.payment_method == '{{ PAYMENT_METHOD_BILLET }}'"><i class="fas fa-download"></i> Download do Boleto</a>
+					<a class="btn p-3 px-4 btn-primary" href="{{ route('orders.home', [$order->id]) }}" role="button">Ver detalhes do pedido</a>
 					<a class="btn p-3 px-4 btn-outline-primary" href="{{ route('products.shop') }}" role="button">Voltar às compras</a>
 				</div>
 			</div>

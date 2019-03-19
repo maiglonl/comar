@@ -166,6 +166,7 @@
 				<li class="child"><a href="#">E-mails</a></li>
 			</ul>
 		</li>
+		<hr>
 	</ul>
 </nav>
 <!--

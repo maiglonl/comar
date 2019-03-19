@@ -28,19 +28,25 @@
 	</div>
 	<div class="col-xs-12 col-sm-6 col-md-3">
 		<div class="form-label-group">
+			<input type="text" class="form-control" autocomplete="off" id="usr_username" name="usr_username" placeholder="Login" v-model="user.username" required minlength="6" maxlength="20">
+			<label for="usr_username">Nome de usuário</label>
+		</div>
+	</div>
+	<div class="col-xs-12 col-sm-6 col-md-3">
+		<div class="form-label-group">
+			<input type="password" class="form-control" id="usr_password" name="usr_password" placeholder="Senha" v-model="user.password" minlength="6" required autocomplete="new-password">
+			<label for="usr_password">Senha</label>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-12 col-sm-6 col-md-3">
+		<div class="form-label-group">
 			<input type="text" class="form-control" id="usr_cp" name="usr_cp" placeholder="CPF/CNPJ" v-model="user.cp" v-mask="['###.###.###-##', '##.###.###/####-##']" required>
 			<label for="usr_cp">CPF/CNPJ</label>
 		</div>
 	</div>
 	<div class="col-xs-12 col-sm-6 col-md-3">
-		<div class="form-label-group">
-			<input type="text" class="form-control" autocomplete="off" id="usr_username" name="usr_username" placeholder="Login" v-model="user.username" required minlength="6" maxlength="20">
-			<label for="usr_username">Login</label>
-		</div>
-	</div>
-</div>
-<div class="row">
-	<div class="col-xs-12 col-sm-6">
 		<div class="form-label-group">
 			<input type="date" class="form-control" id="usr_birthdate" name="usr_birthdate" placeholder="Data de Nascimento" v-model="user.birthdate" required>
 			<label for="usr_birthdate">Data de Nascimento</label>

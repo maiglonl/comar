@@ -34,6 +34,7 @@ class CreateUsersTable extends Migration {
 			$table->integer('parent_id')->nullable()->unsigned();
 			$table->foreign('parent_id')->references('id')->on('users');
 			$table->integer('position')->nullable();
+			$table->timestamp('password_changed_at')->nullable();
 			$table->rememberToken();
 			$table->timestamps();
 		});

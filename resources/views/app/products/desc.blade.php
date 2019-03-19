@@ -91,17 +91,16 @@
 										@if(!Auth::user())
 											<div class="alert alert-light text-center" role="alert">
 												<p>Para continuar com a compra é neccessário estar <a href="{{ route('login') }}">logado</a> no sistema!</p>
-												<a href="{{ route('register') }}">Ainda não possui cadastro?</p>
+												<a href="{{ route('register') }}">Ainda não possui cadastro?</a>
 											</div>
 										@else
 											<div v-if="!added">
-												<a class="btn p-2 btn-primary" href="#" role="button" @click.prevent="buyItem">Comprar Agora</a>
+												<!-- <a class="btn p-2 btn-primary" href="#" role="button" @click.prevent="buyItem">Comprar Agora</a> -->
 												<a class="btn p-2 btn-outline-primary" href="#" role="button" @click.prevent="addItem">Adicionar ao carrinho</a>
 											</div>
 											<div v-else>
-												<div class="alert alert-success text-center" role="alert">
+												<div class="alert text-center" role="alert">
 													<h4 class="alert-heading">Produto adicionado ao carrinho!</h4>
-													<p>O que deseja fazer agora?</p>
 													<hr>
 													<a class="btn p-2 btn-success" href="{{ route('products.shop') }}" role="button">Continuar comprando</a>
 													<a class="btn p-2 btn-outline-success" href="{{ route('orders.cart') }}" role="button">Ver meu carrinho</a>
@@ -110,17 +109,6 @@
 										@endif
 									</div>
 								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col">
-								<hr>
-							</div>
-						</div>
-						<div class="row" v-if="product.attributes" v-for="attribute in product.attributes">
-							<div class="col">	
-								<label class="label-plaintext label-sm">@{{ attribute.name | name }}:</label>
-								<p class="form-control-plaintext">@{{ attribute.value | default }}</p>
 							</div>
 						</div>
 					</div>

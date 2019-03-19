@@ -57,7 +57,7 @@
 				order: [],
 				fnRowCallback: function( row, data, index, indexFull ) {
 					$(row).on('click', function(evt) {
-						window.open("{{ route('users.show', ['']) }}/"+data.id, evt.ctrlKey ? '_blank' : '_self');
+						window.open("{{ route('users.network', ['']) }}/"+data.id, evt.ctrlKey ? '_blank' : '_self');
 					});
 				}
 			});

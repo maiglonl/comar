@@ -31,7 +31,7 @@
 
 		<div class="container-fluid min-100 align-items-stretch">
 			<div class="row justify-content-md-center">
-				<div class="col-md-10">
+				<div class="col-md-12">
 					@yield('content')
 				</div>
 			</div>

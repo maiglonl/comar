@@ -118225,7 +118225,6 @@ $.widget("custom.wAutocomplete", $.ui.autocomplete, {
 			errorClass: 'invalid-feedback',
 			errorElement: 'div',
 			submitHandler: function submitHandler() {
-				console.log(321);
 				$.each(unmask, function (index, el) {
 					options.data[el] = options.data[el] ? options.data[el].replace(/\W/g, '') : "";
 				});
@@ -118310,6 +118309,19 @@ window.toogleItem = function (elItem, handler) {
 /***/ (function(module, exports) {
 
 window.filters = {
+	role: function role(cod) {
+		if (cod == null) return '-';
+		switch (cod) {
+			case 'admin':
+				return "Administrador";break;
+			case 'seller':
+				return "Distribuidor";break;
+			case 'partner':
+				return "Parceiro";break;
+			default:
+				return "Cliente";break;
+		}
+	},
 	payment_name: function payment_name(cod) {
 		if (cod == null) return '-';
 		switch (cod) {
@@ -118461,6 +118473,9 @@ window.filters = {
 
 /* Define por padrão o csrf_token em todas as requisições ajax */
 $(function () {
+	$(window).bind("load", function () {
+		$('.load-page').hide();
+	});
 	$.ajaxSetup({
 		headers: {
 			'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')

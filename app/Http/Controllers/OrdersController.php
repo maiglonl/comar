@@ -311,7 +311,6 @@ class OrdersController extends Controller{
 			$data[$key]['shippingAddressCity'] = $order->city;
 			$data[$key]['shippingAddressState'] = $order->state;
 			$data[$key]['shippingAddressCountry'] = 'BRA';
-			$data[$key]['shippingType'] = '3';
 			$shippingCost = 0.0;
 			foreach ($group['items'] as $keyItem => $item) {
 				$index = $keyItem+1;
@@ -327,6 +326,7 @@ class OrdersController extends Controller{
 				$value = $insts[$group['selected']-1]['installmentAmount'];
 				$bdate = explode("-", $order->client->birthdate);
 				$interest_free = explode('_', $key)[1];
+				$data[$key]['shippingType'] = '3';
 				$data[$key]['creditCardToken'] = $token;
 				$data[$key]['installmentQuantity'] = $group['selected'];
 				$data[$key]['installmentValue'] = number_format($value, 2, '.', '');;
@@ -344,6 +344,9 @@ class OrdersController extends Controller{
 				$data[$key]['billingAddressCity'] =  $order->city;
 				$data[$key]['billingAddressState'] =  $order->state;
 				$data[$key]['billingAddressCountry'] =  'BRA';
+			}else{
+				$data[$key]['shippingType'] = '1';
+				$data[$key]['extraAmount'] = '0.00';
 			}
 			$data[$key]['reference'] = "ORDER_".$order->id."/".$key;
 		}

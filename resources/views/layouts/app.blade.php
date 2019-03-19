@@ -23,6 +23,7 @@
 	<link href="{{ mix('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
+	<div class="load-page"><div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div></div>
 	<div id="app">
 		@include('app.menu')
 		<main class="wrapper">

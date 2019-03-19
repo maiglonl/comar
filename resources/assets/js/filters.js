@@ -1,4 +1,13 @@
 window.filters = {
+	role: function (cod){
+		if (cod == null) return '-';
+		switch(cod){
+			case 'admin': return "Administrador"; break;
+			case 'seller': return "Distribuidor"; break;
+			case 'partner': return "Parceiro"; break;
+			default: return "Cliente"; break;
+		}
+	},
 	payment_name: function (cod){
 		if (cod == null) return '-';
 		switch(cod){

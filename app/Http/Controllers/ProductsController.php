@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Repositories\ProductRepository;
+use App\Repositories\CategoryRepository;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 
@@ -16,8 +17,9 @@ class ProductsController extends Controller {
 
 	protected $repository;
 
-	public function __construct(ProductRepository $repository) {
+	public function __construct(ProductRepository $repository, CategoryRepository $categRepository) {
 		$this->repository = $repository;
+		$this->categRepository = $categRepository;
 		$this->names = [
 			'plural' => 'products',
 			'singular' => 'product',
@@ -46,11 +48,17 @@ class ProductsController extends Controller {
 	/**
 	 * Display a listing of the resource.
 	 */
-	public function shop() {
+	public function shop($id=null) {
 		$this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-		$products = $this->repository->all();
+		if($id == null){
+			$products = $this->repository->all();
+		}else{
+			$products = $this->repository->findWhere(['category_id' => $id]);
+		}
+		$categories = $this->categRepository->all();
+		$activeCategory = $id != null ? $id : 0;
 
-		return view('app.products.shop', compact('products'));
+		return view('app.products.shop', compact(['products', 'categories', 'activeCategory']));
 	}
 
 	/**

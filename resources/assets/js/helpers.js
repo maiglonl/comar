@@ -12,6 +12,9 @@
 
 /* Define por padrão o csrf_token em todas as requisições ajax */
 $(function() {
+	$(window).bind("load", function() {
+		$('.load-page').hide();
+	});
 	$.ajaxSetup({
 		headers: {
 			'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')

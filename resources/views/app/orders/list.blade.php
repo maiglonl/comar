@@ -7,11 +7,6 @@
 				<div class="page-title">
 					<h3>
 						Compras | <small>Pedidos realizados</small>
-						<!--
-							<button type="button" class="btn btn-primary float-right" title="Adicionar novo Parceiro">
-								<i class="fas fa-plus"></i>
-							</button>
-						-->
 					</h3>
 				</div>
 				<!--
@@ -23,7 +18,14 @@
 				-->
 				<div class="tab-content">
 					<div class="tab-pane fade active show" id="openTabContent">
-						<div class="card p-4 m-4" v-for="order in orders">
+						<div class="p-4 m-4" v-if="orders.length == 0">
+							<div class="row">
+								<div class="col text-center">
+									<h3>Nenhuma compra efetuada!</h3>
+								</div>
+							</div>
+						</div>
+						<div class="card p-4 m-4" v-else v-for="order in orders">
 							<div class="row">
 								<div class="col-sm-12 col-md-6 col-lg-4">
 									<div class="row">

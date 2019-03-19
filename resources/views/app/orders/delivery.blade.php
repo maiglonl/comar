@@ -84,7 +84,7 @@
 					</div>
 				</div>
 				<div class="px-sm-4 text-right">
-					<a href="{{ route('orders.payment') }}" class="btn btn-primary">Continuar</a>
+					<a href="{{ route('orders.payment') }}" class="btn btn-primary" @click="changeBtnStatus" id="btnDeliverySubmit" style="width: 150px">Continuar</a>
 				</div>
 			</div>
 			@include('app.orders._resume')
@@ -106,6 +106,12 @@
 				this.setupItemGroups();
 			},
 			methods:{
+				changeBtnStatus: function (){
+					$("#btnDeliverySubmit").html(`
+						<i class="fa fa-spinner fa-pulse fa-fw"></i>
+						<span class="sr-only">Loading...</span>
+					`).addClass('disabled');
+				},
 				reloadData: function (){
 					var self = this;
 					$.get('{{ route('orders.find', [$order->id]) }}', function(data) {

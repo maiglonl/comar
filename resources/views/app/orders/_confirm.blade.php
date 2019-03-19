@@ -22,6 +22,6 @@
 		<p>Total <span class="float-right" v-html="$options.filters.currency_sup(total)"></span></p>
 	</div>
 	<div class="px-sm-4 text-right">
-		<button class="btn btn-block btn-primary" @click="confirmBuy">Confirmar compra</button>
+		<button class="btn btn-block btn-primary" @click="confirmBuy" id="btn-confirmBuy">Confirmar compra</button>
 	</div>
 </div>
