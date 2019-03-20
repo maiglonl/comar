@@ -8,6 +8,7 @@ use Prettus\Repository\Traits\TransformableTrait;
 use Illuminate\Support\Facades\Storage;
 use Folklore\Image\Facades\Image;
 use App\Models\Attribute;
+use Auth;
 
 /**
  * Class Product.
@@ -39,7 +40,7 @@ class Product extends Model implements Transformable {
 		'status'
 	];
 
-	protected $appends = ['files', 'thumbnails', 'value'];
+	protected $appends = ['files', 'thumbnails', 'value', 'value_show'];
 	protected $with = ['attributes', 'category'];
 
 	public function attributes(){
@@ -68,7 +69,18 @@ class Product extends Model implements Transformable {
 	}
 
 	public function getValueAttribute(){
+		if(!Auth::user() || Auth::user()->role == USER_ROLES_PARTNER){
+			$value = $this->value_partner;
+			$value = $this->discount > 0 ? (1-($this->discount/100))*$this->value_partner : $this->value_partner;
+			return $value;
+		}
 		return $this[\App\Helpers\PermHelper::lowerValueText()];
+	}
+
+	public function getValueShowAttribute(){
+		$value = $this->value_partner;
+		$value = $this->discount > 0 ? (1-($this->discount/100))*$this->value_partner : $this->value_partner;
+		return $value;
 	}
 
 }

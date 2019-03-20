@@ -13,6 +13,7 @@ class UserTableSeeder extends Seeder {
 		$faker = Faker\Factory::create('pt_BR');
 		$repository = app(UserRepository::class);
 		$repository->create([
+			'id' => 1,
 			'name' => 'Maiglon Alexandre',
 			'username' => 'maiglon',
 			'password' => '948571',
@@ -33,6 +34,7 @@ class UserTableSeeder extends Seeder {
 			'role' => 'admin'
 		]);
 		$repository->create([
+			'id' => 2,
 			'name' => 'Airton Wietholter',
 			'username' => 'airton.wietholter',
 			'password' => '12345',
@@ -54,6 +56,7 @@ class UserTableSeeder extends Seeder {
 			'parent_id' => 1
 		]);
 		$repository->create([
+			'id' => 3,
 			'name' => 'Daniel Wietholter',
 			'username' => 'daniel.wietholter',
 			'password' => '12345',
@@ -75,6 +78,7 @@ class UserTableSeeder extends Seeder {
 			'parent_id' => 2
 		]);
 		$repository->create([
+			'id' => 4,
 			'name' => 'Beatriz Wietholter',
 			'username' => 'beatriz.wietholter',
 			'password' => '12345',
@@ -96,6 +100,7 @@ class UserTableSeeder extends Seeder {
 			'parent_id' => 2
 		]);
 		$repository->create([
+			'id' => 5,
 			'name' => 'Adelir Schneider',
 			'username' => 'adelir.schneider',
 			'password' => '12345',
@@ -117,6 +122,7 @@ class UserTableSeeder extends Seeder {
 			'parent_id' => 4
 		]);
 		$repository->create([
+			'id' => 6,
 			'name' => 'Odário Pfeifenberg',
 			'username' => 'odario',
 			'password' => '12345',

@@ -22,6 +22,7 @@ $factory->define(App\Models\Product::class, function () {
 		'category_id' => $faker->numberBetween(1, 5),
 		'value_partner' => $value,
 		'value_seller' => $value*0.7,
+		'discount' => $faker->randomElements([0,5,10,15], 1)[0],
 		'weight' => $faker->randomFloat(2, 0.1, 5),
 		'height' => $faker->numberBetween(2,65),
 		'width' => $faker->numberBetween(11,65),

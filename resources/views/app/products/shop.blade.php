@@ -59,20 +59,25 @@
 							<img src="{{ DEFAULT_IMAGE_PRODUCTS }}" class="img-fluid border-bottom p-1">
 						</div>
 						<div class="card-body mt_height_product" v-if="product">
+								<h5 style="font-size:12px">
+									&nbsp;
+									<strike v-html="$options.filters.currency(product.value_partner, true)" class="text-gray" v-if="product.discount > 0"></strike>
+									<span class="pl-2 text-success" v-if="product.discount > 0">@{{ product.discount }}% OFF</span>
+								</h5>
 							<h4 class="card-price">
 								@if(\App\Helpers\PermHelper::viewValues())
+									<span v-html="$options.filters.currency_sup(product.value_show)"></span>
 									<span v-html="$options.filters.currency_sup(product.value_seller)" v-if="showVals"></span>
-									<span v-html="$options.filters.currency_sup(product.value_partner)"></span>
 								@else
-									<span v-html="$options.filters.currency_sup(product.value_partner)"></span>
+									<span v-html="$options.filters.currency_sup(product.value_show)"></span>
 								@endif
 							</h4>
-							<h5 :class="[ product.interest_free == 12 ? 'text-success' : 'text-muted' ]">
+							<h5 class="text-success" v-if="product.interest_free == 12">
 								@if(\App\Helpers\PermHelper::viewValues())
-									<span v-if="showVals"><i class="far fa-credit-card"></i><small> 12x <span v-html="$options.filters.currency_sup(product.value_seller/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small><br></span>
-									<span><i class="far fa-credit-card"></i><small> 12x <span v-html="$options.filters.currency_sup(product.value_partner/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small></span>
+									<span><i class="far fa-credit-card"></i><small> 12x <span v-html="$options.filters.currency_sup(product.value_show/12)"></span> s/ juros</small></span>
+									<span v-if="showVals"><i class="far fa-credit-card"></i><small> até 12x <span v-html="$options.filters.currency_sup(product.value_seller/12)"></span> s/ juros</small><br></span>
 								@else
-									<i class="far fa-credit-card"></i><small> 12x <span v-html="$options.filters.currency_sup(product.value_partner/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small>
+									<i class="far fa-credit-card"></i><small> 12x <span v-html="$options.filters.currency_sup(product.value_show/12)"></span><span v-if="product.interest_free == 12"> s/ juros</span></small>
 								@endif
 							</h5>
 							<h5 v-if="product.free_shipping" class="text-success">

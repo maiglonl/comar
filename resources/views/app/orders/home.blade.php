@@ -108,6 +108,7 @@
 						</p>
 					</div>
 				</div>
+				@if(Auth::user()->role != USER_ROLES_PARTNER)
 				<div class="card p-4 mt-4 mr-4 mb-4">
 					<div class="card-body">
 						<p class="mb-2" v-for="bill in order.bills">
@@ -119,6 +120,7 @@
 						</p>
 					</div>
 				</div>
+				@endif
 			</div>
 		</div>	
 	</div>

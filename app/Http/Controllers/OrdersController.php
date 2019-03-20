@@ -533,11 +533,11 @@ class OrdersController extends Controller{
 		if(count($items) > 0){
 			$item = $items[0];
 			$item->quantity++;
-			$item->value = $product[PermHelper::lowerValueText()];
+			$item->value = $product->value;
 			$result = $this->itemRepository->update($item->toArray(), $item->id);
 		}else{
 			$data['quantity'] = 1;
-			$data['value'] = $product[PermHelper::lowerValueText()];
+			$data['value'] = $product->value;
 			$data['interest_free'] = $product->interest_free;
 			$data['free_shipping'] = $product->free_shipping;
 			$result = $this->itemRepository->create($data);

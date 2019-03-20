@@ -67,6 +67,9 @@ class UsersController extends Controller {
 	 * Show the form for create resource.
 	 */
 	public function network($id = null) {
+		if(Auth::user()->role == USER_ROLES_PARTNER){
+			return redirect('home');
+		};
 		$id = $id == null ? Auth::id() : $id;
 		if(Auth::user()->role != USER_ROLES_ADMIN && $this->getNetworkPosition($id) < 0){
 			return view('app.errors.permission');
@@ -129,7 +132,7 @@ class UsersController extends Controller {
 	 * Show the form for create resource.
 	 */
 	public function create() {
-		$users = $this->repository->all();
+		$users = $this->repository->findWhere([['role', '!=', 'partner']]);
 		return Auth::user() ? view('app.users.create', compact('users')) : view('auth.register', compact('users'));
 	}
 

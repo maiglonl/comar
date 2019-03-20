@@ -9,9 +9,12 @@
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="collapse navbar-collapse " id="navbarSupportedContent">
+			
+			<!-- 
 			<ul class="navbar-nav w-100 pr-4">
 				<input type="searchProduct" class="form-control ml-4 w-100" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Buscar produtos">
-			</ul>
+			</ul> 
+			-->
 
 			<!-- Right Side Of Navbar -->
 			<ul class="navbar-nav ml-auto">

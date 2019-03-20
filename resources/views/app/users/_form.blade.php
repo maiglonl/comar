@@ -39,20 +39,31 @@
 		</div>
 	</div>
 </div>
+@if(!Auth::user())
+	<div class="row" v-if="user.role != '{{ USER_ROLES_ADMIN }}'">
+		<div class="col">
+			<div class="form-label-group">
+				<input type="text" class="form-control" id="usr_parent_name" name="usr_parent_name" placeholder="Responsável">
+				<label for="usr_parent_id">Responsável</label>
+			</div>
+			<input type="hidden" id="usr_parent_id" v-model="user.parent_id">
+		</div>
+	</div>
+@endif
 <div class="row">
-	<div class="col-xs-12 col-sm-6 col-md-3">
+	<div class="col-xs-12 col-sm-6 col-md-4">
 		<div class="form-label-group">
 			<input type="text" class="form-control" id="usr_cp" name="usr_cp" placeholder="CPF/CNPJ" v-model="user.cp" v-mask="['###.###.###-##', '##.###.###/####-##']" required>
 			<label for="usr_cp">CPF/CNPJ</label>
 		</div>
 	</div>
-	<div class="col-xs-12 col-sm-6 col-md-3">
+	<div class="col-xs-12 col-sm-6 col-md-4">
 		<div class="form-label-group">
 			<input type="date" class="form-control" id="usr_birthdate" name="usr_birthdate" placeholder="Data de Nascimento" v-model="user.birthdate" required>
 			<label for="usr_birthdate">Data de Nascimento</label>
 		</div>
 	</div>
-	<div class="col-xs-12 col-sm-6">
+	<div class="col-xs-12 col-sm-4">
 		<div class="form-group">
 			<div class="btn-group btn-group-toggle border rounded d-flex" role="group" data-toggle="buttons" style="width: 100%; height: 49px;">
 				<label class="btn btn-light w-100" :class="{active : user.gender == 'male'}" style="padding-top:12px;">
@@ -131,17 +142,6 @@
 		</div>
 	</div>
 </div>
-@if(!Auth::user())
-	<div class="row" v-if="user.role != '{{ USER_ROLES_ADMIN }}'">
-		<div class="col">
-			<div class="form-label-group">
-				<input type="text" class="form-control" id="usr_parent_name" name="usr_parent_name" placeholder="Responsável">
-				<label for="usr_parent_id">Responsável</label>
-			</div>
-			<input type="hidden" id="usr_parent_id" v-model="user.parent_id">
-		</div>
-	</div>
-@endif
 <div class="row">
 	<div class="col-sm-12">
 		<div class="form-group">

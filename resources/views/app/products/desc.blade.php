@@ -60,12 +60,16 @@
 								<div class="row">
 									<div class="col">
 										<label class="label-plaintext label-sm" for="prod_value">Valor:</label>
-										<p class="form-control-plaintext" id="prod_value">
-											@{{ product.value_partner | currency(true) }} 
+											<p style="font-size:12px" v-if="product.discount > 0">
+												<span class="text-success" v-if="product.discount > 0">@{{ product.discount }}% OFF</span>
+												<strike v-html="$options.filters.currency(product.value_partner, true)" class="text-gray" v-if="product.discount > 0"></strike>
+											</p>
+										<h4 class="form-control-plaintext" id="prod_value">
+											@{{ product.value_show | currency(true) }} 
 											@if(\App\Helpers\PermHelper::viewValues()) 
 												/ @{{ product.value_seller | currency(true) }}
 											@endif
-										</p>
+										</h4>
 									</div>
 								</div>
 								<div class="row">

@@ -81,8 +81,8 @@
 				<div class="input-group-text">R$</div>
 			</div>
 			<div class="form-label-group form-control">
-				<input type="number" step="0.01" class="form-control" id="prod_value_seller" name="prod_value_seller" placeholder="Valor - Vendedor" v-model="product.value_seller">
-				<label for="prod_value_seller">Valor - Vendedor</label>
+				<input type="number" step="0.01" class="form-control" id="prod_value_seller" name="prod_value_seller" placeholder="Valor - Distribuidor" v-model="product.value_seller">
+				<label for="prod_value_seller">Valor - Distribuidor</label>
 			</div>
 		</div>
 	</div>
@@ -92,8 +92,19 @@
 				<div class="input-group-text">R$</div>
 			</div>
 			<div class="form-label-group form-control">
-				<input type="number" step="0.01" class="form-control" id="prod_value_partner" name="prod_value_partner" placeholder="Valor - Parceiro" v-model="product.value_partner">
-				<label for="prod_value_partner">Valor - Parceiro</label>
+				<input type="number" step="0.01" class="form-control" id="prod_value_partner" name="prod_value_partner" placeholder="Valor - Cliente" v-model="product.value_partner">
+				<label for="prod_value_partner">Valor - Cliente</label>
+			</div>
+		</div>
+	</div>
+	<div class="col">
+		<div class="input-group appends">
+			<div class="form-label-group form-control">
+				<input type="number" step="1" class="form-control" id="prod_discount" name="prod_discount" placeholder="Desconto Cliente" v-model="product.discount" min="0" max="50">
+				<label for="prod_discount">Desconto Cliente</label>
+			</div>
+			<div class="input-group-append">
+				<div class="input-group-text">%</div>
 			</div>
 		</div>
 	</div>

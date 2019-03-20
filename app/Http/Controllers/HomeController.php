@@ -31,6 +31,9 @@ class HomeController extends Controller {
 	 * Show the app dashboard.
 	 */
 	public function appIndex(){
+		if(Auth::user()->role == USER_ROLES_PARTNER){
+			return redirect('orders/list');
+		}
 		$toPayAll = $this->taskRepository->findWhere([
 			"stage_id" => 1,
 			"date_conclusion" => null

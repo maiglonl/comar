@@ -27,7 +27,9 @@
 	<div id="app">
 		@include('app.menu')
 		<main class="wrapper">
-			@include('app.sidebar')
+			@if(Auth::user()->role != USER_ROLES_PARTNER)
+				@include('app.sidebar')
+			@endif
 			@yield('content')
 		</main>
 	</div>

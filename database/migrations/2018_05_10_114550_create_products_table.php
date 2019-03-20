@@ -19,6 +19,7 @@ class CreateProductsTable extends Migration {
 			$table->foreign('category_id')->references('id')->on('categories');
 			$table->float('value_partner', 9, 2)->nullable();
 			$table->float('value_seller', 9, 2)->nullable();
+			$table->integer('discount')->nullable()->default(0);
 			$table->float('weight', 5, 2)->nullable(); //peso
 			$table->integer('height')->nullable(); //altura
 			$table->integer('width')->nullable(); //largura
